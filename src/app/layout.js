@@ -1,27 +1,28 @@
-import { DM_Sans, Space_Grotesk } from "next/font/google";
+import { Roboto, Montserrat } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const roboto = Roboto({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-montserrat",
 });
 
 export const metadata = {
-  title: "DIU Semi-Annual Meeting 2026 | Daffodil International University",
+  title: "DIU Semi-Annual Meeting 2026 | Daffodil International University",    
   description:
-    "Join global academic leaders in Dhaka for DIU Semi-Annual Meeting 2026.",
+    "Join global academic leaders in Dhaka for DIU Semi-Annual Meeting 2026.",  
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${roboto.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #009688;
-  --primary-dark: #00796b;
-  --secondary: #1565c0;
-  --secondary-dark: #0d47a1;
+  --primary: #09509e;
+  --primary-dark: #063973;
+  --secondary: #39b24a;
+  --secondary-dark: #2a8a36;
   --accent: #ffc107;
   --dark: #1a1a2e;
   --muted: #546e7a;
@@ -24,8 +24,8 @@
   --color-light: var(--light);
   --color-card: var(--card);
   --color-border: var(--border);
-  --font-sans: var(--font-dm-sans);
-  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-roboto);
+  --font-display: var(--font-montserrat);
 }
 
 html {
@@ -47,7 +47,7 @@ html {
 }
 
 body {
-  font-family: var(--font-dm-sans), sans-serif;
+  font-family: var(--font-roboto), sans-serif;
   background: var(--card);
   color: var(--dark);
   overflow-x: hidden;
@@ -71,8 +71,8 @@ body {
 .geo-pattern {
   background-color: var(--dark);
   background-image:
-    radial-gradient(circle at 20% 50%, rgba(0, 150, 136, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(21, 101, 192, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 20% 50%, rgba(9, 80, 158, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(57, 178, 74, 0.15) 0%, transparent 50%),
     linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02)),
     linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02));
   background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
@@ -143,7 +143,7 @@ body {
 
 .card-hover:hover {
   transform: translateY(-12px) scale(1.01);
-  box-shadow: 0 25px 50px -12px rgba(0, 150, 136, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(9, 80, 158, 0.25);
 }
 
 .btn-primary {
@@ -152,7 +152,7 @@ body {
   padding: 16px 36px;
   border-radius: 12px;
   font-weight: 600;
-  font-family: var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
@@ -178,7 +178,7 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 150, 136, 0.4);
+  box-shadow: 0 10px 30px rgba(9, 80, 158, 0.4);
 }
 
 .btn-outline {
@@ -187,7 +187,7 @@ body {
   padding: 16px 36px;
   border-radius: 12px;
   font-weight: 600;
-  font-family: var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
   border: 2px solid rgba(255, 255, 255, 0.5);
   cursor: pointer;
   transition: all 0.3s ease;
@@ -229,13 +229,13 @@ body {
   font-size: 3rem;
   font-weight: 700;
   color: var(--primary);
-  font-family: var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
 }
 
 .pricing-featured {
   transform: scale(1.05);
   border: 3px solid var(--primary);
-  background: linear-gradient(180deg, rgba(0, 150, 136, 0.05) 0%, white 100%);
+  background: linear-gradient(180deg, rgba(9, 80, 158, 0.05) 0%, white 100%);
   position: relative;
 }
 

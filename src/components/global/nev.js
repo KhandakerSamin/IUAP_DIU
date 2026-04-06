@@ -32,7 +32,7 @@ export default function Nev() {
 
           <div className="hidden lg:flex items-center gap-8">
             {links.map((link) => (
-              <a key={link.href} href={link.href} className="text-slate-600 hover:text-teal-600 font-medium transition-colors">
+              <a key={link.href} href={link.href} className="text-slate-600 hover:text-secondary font-medium transition-colors">
                 {link.label}
               </a>
             ))}
@@ -60,7 +60,7 @@ export default function Nev() {
               key={link.href}
               href={link.href}
               onClick={closeMenu}
-              className="py-2 text-slate-800 font-medium hover:text-teal-600 transition-colors"
+              className="py-2 text-slate-800 font-medium hover:text-secondary transition-colors"
             >
               {link.label}
             </a>

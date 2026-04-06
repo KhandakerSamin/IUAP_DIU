@@ -12,8 +12,8 @@ export default function HeroSection() {
 
       {/* Floating Animated Orbs for Depth */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute w-140 h-140 bg-blue-300/20 rounded-full blur-3xl -top-20 -right-20 animate-pulse" style={{ animationDuration: "8s" }} />
-        <div className="absolute w-120 h-120 bg-teal-300/20 rounded-full blur-3xl -bottom-32 -left-20 animate-pulse" style={{ animationDuration: "12s", animationDelay: "2s" }} />
+        <div className="absolute w-140 h-140 bg-primary/20 rounded-full blur-3xl -top-20 -right-20 animate-pulse" style={{ animationDuration: "8s" }} />
+        <div className="absolute w-120 h-120 bg-secondary/20 rounded-full blur-3xl -bottom-32 -left-20 animate-pulse" style={{ animationDuration: "12s", animationDelay: "2s" }} />
       </div>
 
       <div className="relative z-10 max-w-340 mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
@@ -22,8 +22,8 @@ export default function HeroSection() {
             {/* Minimalist Live Badge */}
             <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/60 border border-slate-200/60 shadow-sm backdrop-blur-md mb-8 reveal">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
               </span>
               <span className="text-sm font-semibold text-slate-700 tracking-wide uppercase">Registration Now Open</span>
             </div>
@@ -31,7 +31,7 @@ export default function HeroSection() {
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 reveal reveal-delay-1 tracking-tight text-slate-900">
               DIU Semi-Annual
               <br />
-              <span className="bg-linear-to-r from-blue-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent pb-2">
+              <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent pb-2">
                 Meeting 2026
               </span>
             </h1>
@@ -55,11 +55,11 @@ export default function HeroSection() {
             
             <div className="mt-12 flex flex-wrap gap-6 reveal reveal-delay-4">
               <div className="flex items-center gap-2.5 text-slate-600 text-sm font-medium bg-white/40 px-4 py-2 rounded-lg border border-slate-200/50 backdrop-blur-sm">
-                <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 November 15-17, 2026
               </div>
               <div className="flex items-center gap-2.5 text-slate-600 text-sm font-medium bg-white/40 px-4 py-2 rounded-lg border border-slate-200/50 backdrop-blur-sm">
-                <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 Dhaka, Bangladesh
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function HeroSection() {
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-8">
                   <p className="uppercase text-xs font-bold tracking-[0.2em] text-slate-500">Event Spotlight</p>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
                     Live Onsite
                   </span>
                 </div>
@@ -94,11 +94,11 @@ export default function HeroSection() {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="rounded-2xl bg-white/60 border border-slate-100/60 p-4 text-center shadow-sm backdrop-blur-sm">
-                    <p className="font-display text-2xl font-black text-blue-600">35+</p>
+                    <p className="font-display text-2xl font-black text-primary">35+</p>
                     <p className="text-xs font-medium text-slate-500 mt-1">Countries</p>
                   </div>
                   <div className="rounded-2xl bg-white/60 border border-slate-100/60 p-4 text-center shadow-sm backdrop-blur-sm">
-                    <p className="font-display text-2xl font-black text-teal-600">50+</p>
+                    <p className="font-display text-2xl font-black text-secondary">50+</p>
                     <p className="text-xs font-medium text-slate-500 mt-1">Partners</p>
                   </div>
                   <div className="rounded-2xl bg-white/60 border border-slate-100/60 p-4 text-center shadow-sm backdrop-blur-sm">
