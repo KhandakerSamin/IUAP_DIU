@@ -22,12 +22,12 @@ export default function Nev() {
   return (
     <nav
       id="navbar"
-      className="fixed top-0 left-0 right-0 z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/50 transition-all duration-300 shadow-sm"
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-300 bg-white/80 border-b border-slate-200/50"
     >
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <a href="#hero" className="flex items-center gap-3" aria-label="Daffodil International University Home">
-            <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className="h-12 w-auto object-contain" />
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          <a href="#hero" className="flex items-center gap-3 shrink-0" aria-label="Daffodil International University Home">
+            <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className="h-8 sm:h-10 md:h-12 w-auto object-contain" />
           </a>
 
           <div className="hidden lg:flex items-center gap-8">

@@ -17,13 +17,13 @@ export default function Footer() {
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6 bg-white/10 p-2 rounded-xl">
+            <div className="flex items-center gap-3 mb-6 bg-white/10 p-2 rounded-xl inline-block max-w-max">
               <Image
                 src={logoUrl}
                 alt="DIU Logo"
                 width={180}
                 height={48}
-                className="h-12 w-auto object-contain"
+                className="h-10 sm:h-12 w-auto object-contain"
               />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">

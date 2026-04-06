@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const hotels = [
   {
     name: "Radisson Blu Dhaka",
@@ -5,6 +7,7 @@ const hotels = [
     travel: "45 min from venue | Shuttle included",
     single: "$140 / night",
     double: "$165 / night",
+    image: "/hotel1.jpg",
   },
   {
     name: "Le Meridien Dhaka",
@@ -12,6 +15,7 @@ const hotels = [
     travel: "40 min from venue | Shuttle included",
     single: "$155 / night",
     double: "$180 / night",
+    image: "/hotel2.jpg",
   },
   {
     name: "Pan Pacific Sonargaon",
@@ -19,13 +23,14 @@ const hotels = [
     travel: "35 min from venue | Shuttle included",
     single: "$110 / night",
     double: "$135 / night",
+    image: "/hotel3.jpg",
   },
 ];
 
 export default function HotelsSection() {
   return (
     <section id="hotels" className="py-24 lg:py-32 bg-white">
-      <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4 reveal">
             Book Your Stay
@@ -42,10 +47,17 @@ export default function HotelsSection() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {hotels.map((hotel, index) => (
-            <article key={hotel.name} className={`card-hover bg-white rounded-3xl border border-border overflow-hidden reveal ${index > 0 ? `reveal-delay-${index}` : ""}`}>
-              <div className="img-placeholder h-52 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <span className="text-sm opacity-75">{hotel.rating}</span>
+            <article key={hotel.name} className={`card-hover bg-white rounded-3xl border border-border overflow-hidden shadow-sm hover:shadow-xl transition-shadow reveal ${index > 0 ? `reveal-delay-${index}` : ""}`}>
+              <div className="relative h-64 overflow-hidden bg-slate-100">
+                <Image
+                  src={hotel.image}
+                  alt={hotel.name}
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/50">
+                  <span className="text-xs tracking-wide uppercase font-bold text-slate-800">{hotel.rating}</span>
                 </div>
               </div>
               <div className="p-6">
