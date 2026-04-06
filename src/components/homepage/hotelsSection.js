@@ -25,7 +25,7 @@ const hotels = [
 export default function HotelsSection() {
   return (
     <section id="hotels" className="py-24 lg:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4 reveal">
             Book Your Stay

@@ -28,7 +28,7 @@ const contactCards = [
 export default function VenueContactSection() {
   return (
     <section id="venue" className="py-24 lg:py-32 bg-light relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16">
           <div className="reveal">
             <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4">Venue</span>

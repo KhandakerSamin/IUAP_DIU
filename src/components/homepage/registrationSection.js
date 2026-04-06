@@ -45,7 +45,7 @@ export default function RegistrationSection() {
     <section id="registration" className="py-24 lg:py-32 bg-light relative">
       <div className="absolute top-0 left-0 w-full h-1 gradient-bg" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4 reveal">
             Fees and Conditions

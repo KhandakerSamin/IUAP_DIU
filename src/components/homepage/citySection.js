@@ -7,7 +7,7 @@ const cityHighlights = [
 export default function CitySection() {
   return (
     <section className="py-24 lg:py-32 bg-light relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="reveal order-2 lg:order-1">
             <div className="relative">
@@ -38,7 +38,7 @@ export default function CitySection() {
             <div className="space-y-4 reveal reveal-delay-3">
               {cityHighlights.map((highlight) => (
                 <div key={highlight} className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-1">
                     <span className="text-primary font-bold">✓</span>
                   </div>
                   <span className="text-muted">{highlight}</span>

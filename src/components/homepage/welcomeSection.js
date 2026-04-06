@@ -10,7 +10,7 @@ export default function WelcomeSection() {
     <section id="about" className="py-24 lg:py-32 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-light to-transparent opacity-50" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4 reveal">

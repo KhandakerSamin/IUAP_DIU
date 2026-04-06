@@ -8,15 +8,15 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,#e0f2fe,transparent_45%),radial-gradient(circle_at_100%_0%,#ccfbf1,transparent_45%),radial-gradient(circle_at_100%_100%,#fef08a,transparent_45%),radial-gradient(circle_at_0%_100%,#e0e7ff,transparent_45%)] opacity-80" />
       
       {/* Subtle Grid Pattern with Fade mask */}
-      <div className="absolute inset-0 opacity-[0.2] bg-[linear-gradient(#cbd5e1_1px,transparent_1px),linear-gradient(90deg,#cbd5e1_1px,transparent_1px)] [background-size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]" />
+      <div className="absolute inset-0 opacity-[0.2] bg-[linear-gradient(#cbd5e1_1px,transparent_1px),linear-gradient(90deg,#cbd5e1_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]" />
 
       {/* Floating Animated Orbs for Depth */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute w-[35rem] h-[35rem] bg-blue-300/20 rounded-full blur-3xl -top-20 -right-20 animate-pulse" style={{ animationDuration: "8s" }} />
-        <div className="absolute w-[30rem] h-[30rem] bg-teal-300/20 rounded-full blur-3xl -bottom-32 -left-20 animate-pulse" style={{ animationDuration: "12s", animationDelay: "2s" }} />
+        <div className="absolute w-140 h-140 bg-blue-300/20 rounded-full blur-3xl -top-20 -right-20 animate-pulse" style={{ animationDuration: "8s" }} />
+        <div className="absolute w-120 h-120 bg-teal-300/20 rounded-full blur-3xl -bottom-32 -left-20 animate-pulse" style={{ animationDuration: "12s", animationDelay: "2s" }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
+      <div className="relative z-10 max-w-340 mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
           <div className="max-w-3xl">
             {/* Minimalist Live Badge */}
@@ -31,7 +31,7 @@ export default function HeroSection() {
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 reveal reveal-delay-1 tracking-tight text-slate-900">
               DIU Semi-Annual
               <br />
-              <span className="bg-gradient-to-r from-blue-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent pb-2">
+              <span className="bg-linear-to-r from-blue-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent pb-2">
                 Meeting 2026
               </span>
             </h1>
@@ -67,7 +67,7 @@ export default function HeroSection() {
 
           <aside className="reveal reveal-delay-2 mt-8 lg:mt-0">
             <div className="relative rounded-3xl border border-white/70 bg-white/50 backdrop-blur-xl shadow-[0_24px_60px_-15px_rgba(0,0,0,0.08)] p-8 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/70 to-white/20 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-br from-white/70 to-white/20 pointer-events-none" />
               
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-8">
@@ -113,7 +113,7 @@ export default function HeroSection() {
       </div>
 
       {/* Smooth transition to the light section below */}
-      <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent to-light" />
+      <div className="absolute bottom-0 inset-x-0 h-32 bg-linear-to-b from-transparent to-light" />
     </section>
   );
 }
