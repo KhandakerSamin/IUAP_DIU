@@ -9,8 +9,7 @@ const quickLinks = [
 
 const resources = ["Event Schedule", "Speaker List", "Travel Guide", "FAQ"];
 
-const logoUrl =
-  "https://z-cdn-media.chatglm.cn/files/745e028a-624e-40ba-94b7-a2e49dad9a24.png?auth_key=1871536332-ef1eab32bf1448759e7aac24a309c0f8-0-7c22c8f492a6ceffe3d5266c124e6b6d";
+const logoUrl = "/diuLogo.png";
 
 export default function Footer() {
   return (

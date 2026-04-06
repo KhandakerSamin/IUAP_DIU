@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const cityHighlights = [
   "Rich Mughal architecture and UNESCO World Heritage sites nearby",
   "World-renowned Bengali cuisine and vibrant cultural scene",
@@ -11,10 +13,14 @@ export default function CitySection() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="reveal order-2 lg:order-1">
             <div className="relative">
-              <div className="img-placeholder rounded-3xl h-96 overflow-hidden">
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                  <span className="text-lg font-medium opacity-75">Dhaka Cityscape</span>
-                </div>
+              <div className="relative rounded-3xl h-96 overflow-hidden bg-slate-100 shadow-md">
+                <Image 
+                  src="/dhaka.jpg" 
+                  alt="Cityscape of Dhaka" 
+                  fill 
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-5 shadow-xl border border-border">
                 <div className="font-display font-bold text-dark text-lg">Capital City of Bangladesh</div>

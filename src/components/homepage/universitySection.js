@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const universityStats = [
   { value: "20+", label: "Years of Excellence" },
   { value: "25K+", label: "Students" },
@@ -7,7 +9,7 @@ const universityStats = [
 export default function UniversitySection() {
   return (
     <section id="university" className="py-24 lg:py-32 bg-white">
-      <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4 reveal">
@@ -38,10 +40,14 @@ export default function UniversitySection() {
 
           <div className="reveal">
             <div className="relative">
-              <div className="img-placeholder rounded-3xl h-96 overflow-hidden">
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                  <span className="text-lg font-medium opacity-75">DIU Campus</span>
-                </div>
+              <div className="relative rounded-3xl h-96 overflow-hidden bg-slate-100 shadow-md">
+                <Image 
+                  src="/campus.jpeg" 
+                  alt="DIU Campus Bird's Eye View" 
+                  fill 
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-xl border border-border">
                 <div className="font-display font-bold text-dark">Top Ranked in Bangladesh</div>
