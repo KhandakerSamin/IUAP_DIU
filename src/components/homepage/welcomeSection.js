@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const stats = [
   { value: 500, label: "Expected Attendees" },
   { value: 50, label: "Partner Institutions" },
@@ -39,8 +41,8 @@ export default function WelcomeSection() {
           <div className="grid grid-cols-2 gap-6 reveal">
             {stats.map((item) => (
               <div key={item.label} className="card-hover bg-light rounded-2xl p-8 border border-border">
-                <div className="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-5">
-                  <span className="text-white font-display font-bold text-xl">DIU</span>
+                <div className="w-14 h-14 flex items-center justify-center mb-5 ">
+                  <Image src="/diu.png" alt="DIU Logo" width={50} height={50} className="object-contain" />
                 </div>
                 <div className="stat-value" data-target={item.value}>
                   0
