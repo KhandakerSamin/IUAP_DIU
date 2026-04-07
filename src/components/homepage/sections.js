@@ -6,10 +6,10 @@ import Iaup2026Section from "@/components/homepage/iaup2026Section";
 import TentativeProgramSection from "@/components/homepage/tentativeProgramSection";
 import AboutDhakaSection from "@/components/homepage/aboutDhakaSection";
 import SpeakersSection from "@/components/homepage/speakersSection";
-import WelcomeSection from "@/components/homepage/welcomeSection";
+import ImportantDatesSection from "@/components/homepage/importantDatesSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
-import HotelsSection from "@/components/homepage/hotelsSection";
-import VenueContactSection from "@/components/homepage/venueContactSection";
+import VenuesSection from "@/components/homepage/venuesSection";
+import VisaGuidelineSection from "@/components/homepage/visaGuidelineSection";
 import CtaSection from "@/components/homepage/ctaSection";
 
 const homeSections = [
@@ -18,13 +18,13 @@ const homeSections = [
   IaupLeadersSection,
   AboutDiuSection,
   Iaup2026Section,
-  TentativeProgramSection,
-  SpeakersSection,
   AboutDhakaSection,
-  WelcomeSection,
+  SpeakersSection,
+  TentativeProgramSection,
+  ImportantDatesSection,
   RegistrationSection,
-  HotelsSection,
-  VenueContactSection,
+  VenuesSection,
+  VisaGuidelineSection,
   CtaSection,
 ];
 

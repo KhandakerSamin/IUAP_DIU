@@ -146,7 +146,7 @@ export default function TentativeProgramSection() {
               <div className="relative h-80 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
-                  src="/sundarbans.jpg"
+                  src="/sundorban.jpg"
                   alt="Visiting the Sundarbans"
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"

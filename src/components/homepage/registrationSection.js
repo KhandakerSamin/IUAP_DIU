@@ -1,42 +1,50 @@
 const pricingPlans = [
   {
-    name: "International",
-    subtitle: "Non-Bangladeshi Participants",
-    oldPrice: "$350",
-    price: "$280",
-    badge: "Early Bird",
-    features: [
-      "All conference sessions",
-      "Conference kit and materials",
-      "Lunch and coffee breaks",
-      "Gala dinner and cultural night",
+    name: "IAUP & AUAP Members",
+    subtitle: "Special rate for association members",
+    pricing: [
+      { label: "Early Bird", price: "USD 400" },
+      { label: "General", price: "USD 500" },
+      { label: "Late Registration", price: "USD 600" },
     ],
-    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors",
-  },
-  {
-    name: "Local Participant",
-    subtitle: "Bangladeshi Nationals",
-    oldPrice: "BDT 15,000",
-    price: "BDT 12,000",
-    badge: "Early Bird",
     features: [
       "All conference sessions",
       "Conference kit and materials",
       "Lunch and coffee breaks",
       "Gala dinner and cultural night",
-      "Certificate of participation",
     ],
     featured: true,
-    buttonClass: "btn-primary w-full text-center",
+    buttonClass: "btn-primary w-full text-center mt-8",
   },
   {
-    name: "Accompanying",
-    subtitle: "Family Members",
-    oldPrice: "BDT 8,000",
-    price: "BDT 6,000",
-    badge: "Early Bird",
-    features: ["Welcome reception", "Gala dinner", "Cultural program", "Sonargaon tour"],
-    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-secondary text-secondary font-semibold hover:bg-secondary hover:text-white transition-colors",
+    name: "Non-Members",
+    subtitle: "Standard registration rate",
+    pricing: [
+      { label: "Early Bird", price: "USD 500" },
+      { label: "General", price: "USD 600" },
+      { label: "Late Registration", price: "USD 700" },
+    ],
+    features: [
+      "All conference sessions",
+      "Conference kit and materials",
+      "Lunch and coffee breaks",
+      "Gala dinner and cultural night",
+    ],
+    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
+  },
+  {
+    name: "Participants' Family",
+    subtitle: "Accompanying persons",
+    pricing: [
+      { label: "Flat Rate", price: "USD 400" },
+    ],
+    features: [
+      "Welcome reception",
+      "Gala dinner",
+      "Cultural program",
+      "Dhaka city tour",
+    ],
+    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-secondary text-secondary font-semibold hover:bg-secondary hover:text-white transition-colors mt-8",
   },
 ];
 
@@ -55,16 +63,15 @@ export default function RegistrationSection() {
             Registration <span className="gradient-text">Options</span>
           </h2>
           <p className="text-lg text-muted reveal reveal-delay-2">
-            Registration to the meeting is now open. DIU 2026 will take place as an in-person event only. Early Bird
-            registration ends on September 30, 2026.
+            Registration to the meeting is now open. DIU 2026 will take place as an in-person event only.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-6 items-start">
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-6 items-stretch">
           {pricingPlans.map((plan) => (
             <article
               key={plan.name}
-              className={`card-hover bg-white rounded-3xl p-8 border border-border reveal ${
+              className={`card-hover bg-white rounded-3xl p-8 border border-border reveal flex flex-col h-full ${
                 plan.featured ? "pricing-featured reveal-delay-1" : ""
               }`}
             >
@@ -73,19 +80,24 @@ export default function RegistrationSection() {
                 <p className="text-muted text-sm">{plan.subtitle}</p>
               </div>
 
-              <div className="text-center mb-8">
-                <span className="text-muted line-through text-lg">{plan.oldPrice}</span>
-                <div className={`font-display text-5xl font-bold mt-2 ${plan.featured ? "gradient-text" : "text-dark"}`}>
-                  {plan.price}
+              <div className="mb-8 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                <div className="space-y-3">
+                  {plan.pricing.map((tier, idx) => (
+                    <div key={idx} className="flex justify-between items-center pb-3 last:pb-0 border-b border-slate-200 last:border-0 border-dashed">
+                      <span className="text-sm font-medium text-slate-600">{tier.label}</span>
+                      <span className={`font-display font-bold text-lg ${plan.featured && idx === 0 ? "text-primary" : "text-dark"}`}>
+                        {tier.price}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <span className="text-muted text-sm">{plan.badge}</span>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-auto">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3">
-                    <span className="text-primary font-bold">✓</span>
-                    <span className="text-muted">{feature}</span>
+                  <li key={feature} className="flex items-start gap-3">
+                    <span className="text-primary font-bold mt-[2px] shrink-0">✓</span>
+                    <span className="text-muted text-sm leading-relaxed">{feature}</span>
                   </li>
                 ))}
               </ul>
