@@ -4,10 +4,10 @@ export default function AboutDhakaSection() {
   return (
     <section className="py-24 lg:py-32 bg-light relative">
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          <div className="reveal order-2 lg:order-1 flex flex-col gap-12">
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20 lg:mb-24">
+          <div className="reveal order-2 lg:order-1">
             <div className="relative">
-              <div className="relative rounded-3xl h-96 overflow-hidden bg-slate-100 shadow-md">
+              <div className="relative rounded-3xl h-[500px] lg:h-[600px] overflow-hidden bg-slate-100 shadow-md">
                 <Image 
                   src="/dhaka.jpg" 
                   alt="Cityscape of Dhaka" 
@@ -18,20 +18,6 @@ export default function AboutDhakaSection() {
               </div>
               <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-5 shadow-xl border border-border hidden sm:block">
                 <div className="font-display font-bold text-dark text-lg">Capital City of Bangladesh</div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <h3 className="font-display font-semibold text-2xl text-dark">Beautiful Bangladesh</h3>
-              <div className="relative rounded-3xl overflow-hidden shadow-lg w-full" style={{ paddingBottom: '56.25%' }}>
-                <iframe 
-                  className="absolute top-0 left-0 w-full h-full"
-                  src="https://www.youtube.com/embed/QNUSIOMb6vI" 
-                  title="Beautiful Bangladesh" 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen
-                ></iframe>
               </div>
             </div>
           </div>
@@ -53,6 +39,24 @@ export default function AboutDhakaSection() {
             <p className="text-muted leading-relaxed reveal reveal-delay-4">
               The demographic features of the city are varied in character. Dhaka (North and South) city corporations are the most populated urban areas with the highest density accommodating over 22 million people including Muslims, Hindus, Christians, Buddhists and others.
             </p>
+          </div>
+        </div>
+
+        <div className="reveal reveal-delay-5">
+          <div className="text-center mb-8">
+            <h3 className="font-display text-3xl sm:text-4xl font-bold text-dark">
+              Beautiful <span className="gradient-text">Bangladesh</span>
+            </h3>
+          </div>
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl w-full aspect-video">
+            <iframe 
+              className="absolute top-0 left-0 w-full h-full"
+              src="https://www.youtube.com/embed/QNUSIOMb6vI" 
+              title="Beautiful Bangladesh" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
       </div>
