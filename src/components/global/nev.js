@@ -1,50 +1,67 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 const links = [
-  { href: "#about", label: "About" },
-  { href: "#university", label: "University" },
-  { href: "#registration", label: "Registration" },
-  { href: "#hotels", label: "Hotels" },
-  { href: "#venue", label: "Venue" },
+  { href: "#about", label: "About IAUP" },
+  { href: "#call-for-speakers", label: "Call for Panel Speakers" },
+  { href: "#speakers", label: "Speakers" },
+  { href: "#program", label: "Program" },
+  { href: "#important-dates", label: "Important Dates" },
+  { href: "#venues", label: "Venues" },
+  { href: "#contact", label: "Contact" },
 ];
 
 const logoUrl = "/diuLogo.png";
 
 export default function Nev() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const closeMenu = () => setIsOpen(false);
 
   return (
     <nav
       id="navbar"
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-300 bg-white/80 border-b border-slate-200/50"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200/0 shadow-sm" : "bg-transparent border-transparent"
+      }`}
     >
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          <a href="#hero" className="flex items-center gap-3 shrink-0" aria-label="Daffodil International University Home">
-            <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className="h-8 sm:h-10 md:h-12 w-auto object-contain" />
-          </a>
+          <div className="w-48 shrink-0 flex items-center">
+            <a href="#hero" className="flex items-center gap-3" aria-label="Daffodil International University Home">
+              <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className="h-8 sm:h-10 md:h-12 w-auto object-contain" />
+            </a>
+          </div>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden xl:flex items-center justify-center flex-1 gap-4 2xl:gap-8">
             {links.map((link) => (
-              <a key={link.href} href={link.href} className="text-slate-600 hover:text-secondary font-medium transition-colors">
+              <a key={link.href} href={link.href} className="text-slate-600 hover:text-secondary font-medium transition-colors text-xs xl:text-sm uppercase tracking-wide">
                 {link.label}
               </a>
             ))}
-            <a href="#registration" className="px-6 py-2.5 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 hover:-translate-y-0.5 text-sm">
-              Register Now
+          </div>
+
+          <div className="hidden xl:flex items-center justify-end w-48 shrink-0">
+            <a href="#registration" className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-sm hover:bg-primary-dark hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
+              <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-linear-to-b from-transparent via-transparent to-black"></span>
+              <span className="relative">Register Now</span>
             </a>
           </div>
 
           <button
             type="button"
             onClick={() => setIsOpen((prev) => !prev)}
-            className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-200/50 transition-colors"
+            className="xl:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-200/50 transition-colors"
             aria-label="Toggle menu"
             aria-expanded={isOpen}
           >
@@ -53,7 +70,7 @@ export default function Nev() {
         </div>
       </div>
 
-      <div id="mobileMenu" className={`lg:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+      <div id="mobileMenu" className={`xl:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}>
         <div className="flex flex-col gap-4 p-4 bg-slate-50/95 backdrop-blur-xl border-b border-slate-200/50">
           {links.map((link) => (
             <a
@@ -65,7 +82,7 @@ export default function Nev() {
               {link.label}
             </a>
           ))}
-          <a href="#registration" onClick={closeMenu} className="px-6 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-all text-center mt-2">
+          <a href="#registration" onClick={closeMenu} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-all text-center mt-2 shadow-sm">
             Register Now
           </a>
         </div>

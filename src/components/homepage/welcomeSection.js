@@ -9,7 +9,7 @@ const stats = [
 
 export default function WelcomeSection() {
   return (
-    <section id="about" className="py-24 lg:py-32 bg-white relative overflow-hidden">
+    <section id="welcome" className="py-24 lg:py-32 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-light to-transparent opacity-50" />
 
       <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 relative">

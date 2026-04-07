@@ -1,4 +1,6 @@
 import HeroSection from "@/components/homepage/heroSection";
+import AboutIaupSection from "@/components/homepage/aboutIaupSection";
+import IaupLeadersSection from "@/components/homepage/iaupLeadersSection";
 import WelcomeSection from "@/components/homepage/welcomeSection";
 import CitySection from "@/components/homepage/citySection";
 import UniversitySection from "@/components/homepage/universitySection";
@@ -9,6 +11,8 @@ import CtaSection from "@/components/homepage/ctaSection";
 
 const homeSections = [
   HeroSection,
+  AboutIaupSection,
+  IaupLeadersSection,
   WelcomeSection,
   CitySection,
   UniversitySection,
