@@ -4,7 +4,7 @@ import IaupLeadersSection from "@/components/homepage/iaupLeadersSection";
 import AboutDiuSection from "@/components/homepage/aboutDiuSection";
 import Iaup2026Section from "@/components/homepage/iaup2026Section";
 import WelcomeSection from "@/components/homepage/welcomeSection";
-import CitySection from "@/components/homepage/citySection";
+import AboutDhakaSection from "@/components/homepage/aboutDhakaSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
 import HotelsSection from "@/components/homepage/hotelsSection";
 import VenueContactSection from "@/components/homepage/venueContactSection";
@@ -17,7 +17,7 @@ const homeSections = [
   AboutDiuSection,
   Iaup2026Section,
   WelcomeSection,
-  CitySection,
+  AboutDhakaSection,
   RegistrationSection,
   HotelsSection,
   VenueContactSection,
