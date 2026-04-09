@@ -22,7 +22,7 @@ export default function Footer() {
     { href: "#visa-guidelines", label: "Visa Guidelines" },
   ];
 
-  const logoUrl = "/diuLogo.png";
+  const logoUrl = "/navLogo.png";
 
   return (
     <footer className="bg-dark text-slate-300 pt-20 pb-10 border-t-4 border-primary">

@@ -2,14 +2,9 @@ import { CalendarDays, MapPin } from "lucide-react";
 import Image from "next/image";
 
 const schedule = [
+
   {
-    day: "18 Nov (Thursday)",
-    venue: "Hotel / Accommodation",
-    title: "Arrival",
-    events: ["Arrival & Hotel Check-in"],
-  },
-  {
-    day: "Day 1 – 19 Nov (Friday)",
+    day: "Day 1 – 19 Nov (Thursday)",
     venue: "DIU, Dhanmondi",
     title: "Meetings & Welcome",
     events: [
@@ -20,7 +15,7 @@ const schedule = [
     ],
   },
   {
-    day: "Day 2 – 20 Nov (Saturday)",
+    day: "Day 2 – 20 Nov (Friday)",
     venue: "Hotel Venue",
     title: "Main Conference",
     events: [
@@ -36,7 +31,7 @@ const schedule = [
     ],
   },
   {
-    day: "Day 3 – 21 Nov (Sunday)",
+    day: "Day 3 – 21 Nov (Saturday)",
     venue: "Daffodil Smart City",
     title: "Anniversary & Closing",
     events: [
@@ -86,7 +81,7 @@ export default function TentativeProgramSection() {
                   {item.day}
                 </h4>
                 {item.venue && (
-                  <div className="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-full px-4 py-2 text-sm text-muted shadow-sm w-fit mt-auto group-hover:border-primary/30 transition-colors">
+                  <div className="inline-flex items-center gap-2 bg-white 0 rounded-full px-4 py-2 text-sm text-muted w-fit mt-auto group-hover:border-primary/30 transition-colors">
                     <MapPin className="w-4 h-4 text-primary shrink-0" />
                     <span className="font-medium">{item.venue}</span>
                   </div>

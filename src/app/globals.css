@@ -240,21 +240,6 @@ body {
   position: relative;
 }
 
-.pricing-featured::before {
-  content: "MOST POPULAR";
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--primary);
-  color: white;
-  padding: 4px 16px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
 .mobile-menu {
   display: none;
   position: fixed;

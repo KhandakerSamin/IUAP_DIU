@@ -6,19 +6,19 @@ const venues = [
     day: "Day 1",
     name: "Daffodil Tower",
     address: "Dhanmondi, Dhaka",
-    image: "/hotel1.jpg",
+    image: "/venu.jpg",
   },
   {
     day: "Day 2",
     name: "Hotel Sheraton Dhaka",
     address: "44 Kemal Ataturk Avenue, Banani, Dhaka 1213, Bangladesh",
-    image: "/hotel2.jpg",
+    image: "/venue1.png",
   },
   {
     day: "Day 3",
     name: "Daffodil Smart City",
     address: "Birulia, Savar, Dhaka – 1216, Bangladesh",
-    image: "/hotel3.jpg",
+    image: "/venue2.JPG",
   },
 ];
 
