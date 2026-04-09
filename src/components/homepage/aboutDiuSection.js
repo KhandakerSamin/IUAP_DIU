@@ -42,8 +42,8 @@ export default function AboutDiuSection() {
             <div className="relative">
               <div className="relative rounded-3xl h-96 overflow-hidden bg-slate-100 shadow-md">
                 <Image 
-                  src="/campus.jpeg" 
-                  alt="DIU Campus Bird's Eye View" 
+                  src="/aboutDIU.png" 
+                  alt="About DIU Campus" 
                   fill 
                   className="object-cover hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, 50vw"
