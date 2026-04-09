@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 const universityStats = [
-  { value: "20+", label: "Years of Excellence" },
   { value: "25K+", label: "Students" },
-  { value: "100+", label: "Programs" },
+  { value: "30+", label: "Departments" },
+  { value: "20+", label: "International Students" },
+  { value: "600+", label: "International Partner Institution" },
 ];
 
 export default function AboutDiuSection() {
@@ -28,7 +29,7 @@ export default function AboutDiuSection() {
             <p className="text-muted leading-relaxed mb-8 reveal reveal-delay-4">
               DIU has established over 600 active international partnerships worldwide and is a proud member of numerous prestigious global networks and associations. With global partners, DIU is mutually working in the area of student and faculty exchange programs, summer & winter programs, scholarship, international internship, research collaborations, short-term training programs, virtual mobility, etc.
             </p>
-            <div className="grid grid-cols-3 gap-8 reveal reveal-delay-5">
+            <div className="grid grid-cols-4 gap-8 reveal reveal-delay-5">
               {universityStats.map((item) => (
                 <div key={item.label}>
                   <div className="font-display text-4xl font-bold gradient-text">{item.value}</div>

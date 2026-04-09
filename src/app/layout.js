@@ -13,9 +13,12 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "DIU Semi-Annual Meeting 2026 | Daffodil International University",    
+  title: "IAUP Semi-Annual Meeting 2026",    
   description:
-    "Join global academic leaders in Dhaka for DIU Semi-Annual Meeting 2026.",  
+    "Join global academic leaders in Dhaka for DIU Semi-Annual Meeting 2026.",
+  icons: {
+    icon: "/favicon.jpg",
+  },
 };
 
 export default function RootLayout({ children }) {
