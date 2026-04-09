@@ -33,7 +33,7 @@ export default function Iaup2026Section() {
               The program will include meetings of the Executive Committee and Board of Directors of the International Association of University Presidents (IAUP), along with keynote addresses, plenary discussions, and parallel sessions focused on leadership, innovation, sustainability, and international cooperation.
             </p>
             <p className="text-muted leading-relaxed reveal reveal-delay-4">
-              In addition to the formal academic agenda, participants will take part in cultural programs, institutional visits, and networking activities that encourage collaboration and knowledge exchange. The meeting is expected to welcome 100 to 150 from local and international delegates and will coincide with the celebration of 25 years of Daffodil International University, highlighting the institution's commitment to global engagement and academic leadership.
+              In addition to the formal academic agenda, participants will take part in cultural programs, institutional visits, and networking activities that encourage collaboration and knowledge exchange. The meeting is expected to welcome 100 to 150 from local and international delegates and will coincide with the celebration of 25 years of Daffodil International University, highlighting the institution&apos;s commitment to global engagement and academic leadership.
             </p>
           </div>
 

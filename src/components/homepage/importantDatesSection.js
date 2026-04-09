@@ -10,8 +10,8 @@ export default function ImportantDatesSection() {
 
   return (
     <section id="important-dates" className="py-24 lg:py-32 bg-dark relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-secondary/20 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
       
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 reveal">

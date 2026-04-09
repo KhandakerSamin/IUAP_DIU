@@ -10,6 +10,8 @@ import ImportantDatesSection from "@/components/homepage/importantDatesSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
 import VenuesSection from "@/components/homepage/venuesSection";
 import VisaGuidelineSection from "@/components/homepage/visaGuidelineSection";
+import PartnerSection from "@/components/homepage/partnerSection";
+import ContactSection from "@/components/homepage/contactSection";
 import CtaSection from "@/components/homepage/ctaSection";
 
 const homeSections = [
@@ -25,6 +27,8 @@ const homeSections = [
   RegistrationSection,
   VenuesSection,
   VisaGuidelineSection,
+  PartnerSection,
+  ContactSection,
   CtaSection,
 ];
 

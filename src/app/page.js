@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <>
       <Nev />
-      <main className="pt-20">
+      <main>
         {homeSections.map((Section) => (
           <Section key={Section.name} />
         ))}

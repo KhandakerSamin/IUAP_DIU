@@ -6,21 +6,21 @@ const leaders = [
     role1: "Chairman,",
     role2: "Sias University (China)",
     position: "IAUP President",
-    image: "/leader.jpg"
+    image: "/leader1.png"
   },
   {
     name: "Prof. Tatsuro Tanioka",
     role1: "Vice Chancellor",
     role2: "Tanioka Gakuen Education Foundation (Japan)",
     position: "IAUP Secretary-General",
-    image: "/leader.jpg"
+    image: "/leader2.png"
   },
   {
     name: "Dr. Md. Sabur Khan",
     role1: "Founder and Chairman",
     role2: "Daffodil International University",
     position: "Treasurer Elect 2024-2027",
-    image: "/leader.jpg"
+    image: "/leader3.png"
   }
 ];
 

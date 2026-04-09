@@ -62,7 +62,7 @@ export default function TentativeProgramSection() {
             Tentative <span className="gradient-text">Program</span>
           </h2>
           <p className="text-lg text-muted leading-relaxed">
-            Join us for an exciting 3-day event packed with high-level dialogs, governance meetings, cultural immersions, and the grand celebration of DIU's 25th anniversary.
+            Join us for an exciting 3-day event packed with high-level dialogs, governance meetings, cultural immersions, and the grand celebration of DIU&apos;s 25th anniversary.
           </p>
         </div>
 
@@ -133,7 +133,7 @@ export default function TentativeProgramSection() {
                   className="object-cover hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
                   <h4 className="font-display text-3xl font-bold text-white mb-2">Tea Gardens in Jaflong</h4>
                   <p className="text-slate-200">Travel by helicopter or flight.</p>
@@ -152,7 +152,7 @@ export default function TentativeProgramSection() {
                   className="object-cover hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
                   <h4 className="font-display text-3xl font-bold text-white mb-2">The Sundarbans</h4>
                   <p className="text-slate-200">Visiting by helicopter.</p>
