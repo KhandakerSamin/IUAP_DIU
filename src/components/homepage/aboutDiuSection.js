@@ -3,7 +3,7 @@ import Image from "next/image";
 const universityStats = [
   { value: "25K+", label: "Students" },
   { value: "30+", label: "Departments" },
-  { value: "20+", label: "International Students" },
+  { value: "200+", label: "International Students" },
   { value: "600+", label: "International Partner Institution" },
 ];
 
@@ -20,13 +20,13 @@ export default function AboutDiuSection() {
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6 reveal reveal-delay-1">
               About <span className="gradient-text">DIU</span>
             </h2>
-            <p className="text-lg text-muted leading-relaxed mb-6 reveal reveal-delay-2">
+            <p className="text-lg text-muted leading-relaxed text-justify mb-6 reveal reveal-delay-2">
               Founded in 2002, Daffodil International University (DIU) is one of the top universities in Bangladesh according to many national and international rankings, including THE, QS and Greenmetric for its green outlook. Daffodil International University (DIU) is a leading private university in Bangladesh, recognized in world university rankings such as QS and Times Higher Education (THE). DIU is ranked 221st in Asia (QS Asia 2026) and 1st in Bangladesh (THE WUR 2026), 1st in Bangladesh in both THE Impact Rankings 2025 and QS Sustainability Rankings 2026 with strong performance in research and interdisciplinary innovation.
             </p>
-            <p className="text-muted leading-relaxed mb-6 reveal reveal-delay-3">
+            <p className="text-muted leading-relaxed text-justify mb-6 reveal reveal-delay-3">
               Currently, DIU serves a diverse academic community of 25,000+ students across 6 faculties and 32 departments, including 200+ international students from various regions of the world. Our campus promotes a globally inclusive learning environment supported by modern infrastructure and strong industry linkages.
             </p>
-            <p className="text-muted leading-relaxed mb-8 reveal reveal-delay-4">
+            <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
               DIU has established over 600 active international partnerships worldwide and is a proud member of numerous prestigious global networks and associations. With global partners, DIU is mutually working in the area of student and faculty exchange programs, summer & winter programs, scholarship, international internship, research collaborations, short-term training programs, virtual mobility, etc.
             </p>
             <div className="grid grid-cols-4 gap-8 reveal reveal-delay-5">

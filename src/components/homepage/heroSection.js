@@ -42,15 +42,9 @@ export default function HeroSection() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center h-full">
         
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 mt-15 rounded-full bg-white/10 border border-white/20 shadow-sm backdrop-blur-md mb-6 reveal">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
-          </span>
-          <span className="text-xs sm:text-sm font-semibold text-white tracking-wide uppercase">Registration Now Open</span>
-        </div>
+        
 
-        <h1 className="font-display text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-5xl mx-auto">
+        <h1 className="font-display mt-25 text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-5xl mx-auto">
           IAUP Semi-Annual{" "}
           <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-sm">
             Meeting 2026

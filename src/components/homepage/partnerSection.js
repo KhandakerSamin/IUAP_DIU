@@ -2,7 +2,7 @@ import { Users } from "lucide-react";
 
 export default function PartnerSection() {
   return (
-    <section id="partner" className="py-24 bg-slate-50 relative overflow-hidden">
+    <section id="partner" className="pb-34 bg-slate-50 relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-6">
           <Users className="w-8 h-8" />

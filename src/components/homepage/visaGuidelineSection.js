@@ -59,45 +59,7 @@ export default function VisaGuidelineSection() {
           ))}
         </div>
 
-        {/* Contact Info */}
-        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-border shadow-sm max-w-4xl mx-auto reveal reveal-delay-2">
-          <div className="text-center mb-10">
-            <h3 className="font-display text-3xl font-bold text-dark mb-4">Contact Secretariat</h3>
-            <p className="text-muted font-medium text-lg">DIU Secretariat for IAUP Semi-Annual Meeting 2026 event</p>
-          </div>
-          
-          <div className="grid sm:grid-cols-2 gap-8">
-            <div className="flex items-center gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
-                <Mail className="w-6 h-6 text-primary" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-dark font-semibold mb-1">Email Us:</span>
-                <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd" className="text-muted hover:text-primary transition-colors text-sm font-medium">
-                  iaup-bd2026@daffodilvarsity.edu.bd
-                </a>
-                <a href="mailto:int@daffodilvarsity.edu.bd" className="text-muted hover:text-primary transition-colors text-sm font-medium mt-1">
-                  int@daffodilvarsity.edu.bd
-                </a>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
-                <Phone className="w-6 h-6 text-primary" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-dark font-semibold mb-1">Cell / WhatsApp:</span>
-                <a href="tel:+8801811458865" className="text-muted hover:text-primary transition-colors text-sm font-medium">
-                  +880 1811-458865
-                </a>
-                <a href="tel:+8801847334763" className="text-muted hover:text-primary transition-colors text-sm font-medium mt-1">
-                  +880 1847-334763
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        
 
       </div>
     </section>

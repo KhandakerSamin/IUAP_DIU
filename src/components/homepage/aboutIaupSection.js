@@ -16,7 +16,7 @@ export default function AboutIaupSection() {
               <div className="absolute inset-0  transition-opacity group-hover:opacity-100 duration-500" />
               <div className="relative w-full h-full">
                 <Image
-                  src="/iauplogo.jpg"
+                  src="/iaup.jpg"
                   alt="IAUP Logo"
                   fill
                   className="object-contain transition-transform duration-700 group-hover:scale-105"

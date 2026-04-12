@@ -30,7 +30,7 @@ export default function ImportantDatesSection() {
               <span className="text-slate-300 font-medium text-sm tracking-wide uppercase mb-6 flex-1">
                 {item.label}
               </span>
-              <span className="font-display text-2xl xl:text-3xl font-bold text-white">
+              <span className="font-display text-lg sm:text-xl xl:text-2xl whitespace-nowrap font-bold text-white">
                 {item.date}
               </span>
             </div>
