@@ -5,7 +5,7 @@ const schedule = [
 
   {
     day: "Day 1 – 19 Nov (Thursday)",
-    venue: "DIU, Dhanmondi",
+    venue: "Daffodil Tower, Dhanmondi",
     title: "Meetings & Welcome",
     events: [
       "Registration & Welcome Coffee",
@@ -16,7 +16,7 @@ const schedule = [
   },
   {
     day: "Day 2 – 20 Nov (Friday)",
-    venue: "Hotel Venue",
+    venue: "Hotel Sheraton, Banani",
     title: "Main Conference",
     events: [
       "Registration & Networking Coffee",
@@ -32,7 +32,7 @@ const schedule = [
   },
   {
     day: "Day 3 – 21 Nov (Saturday)",
-    venue: "Daffodil Smart City",
+    venue: "Daffodil Smart City, Birulia",
     title: "Anniversary & Closing",
     events: [
       "Reception",
