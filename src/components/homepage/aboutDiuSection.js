@@ -29,19 +29,19 @@ export default function AboutDiuSection() {
             <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
               DIU has established over 600 active international partnerships worldwide and is a proud member of numerous prestigious global networks and associations. With global partners, DIU is mutually working in the area of student and faculty exchange programs, summer & winter programs, scholarship, international internship, research collaborations, short-term training programs, virtual mobility, etc.
             </p>
-            <div className="grid grid-cols-4 gap-8 reveal reveal-delay-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 reveal reveal-delay-5">
               {universityStats.map((item) => (
                 <div key={item.label}>
-                  <div className="font-display text-4xl font-bold gradient-text">{item.value}</div>
-                  <div className="text-sm text-muted mt-1">{item.label}</div>
+                  <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">{item.value}</div>
+                  <div className="text-xs sm:text-sm text-muted mt-1">{item.label}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="reveal">
+          <div className="reveal mt-8 lg:mt-0">
             <div className="relative">
-              <div className="relative rounded-3xl h-96 overflow-hidden bg-slate-100 shadow-md">
+              <div className="relative rounded-3xl w-full aspect-video overflow-hidden bg-slate-100 shadow-md">
                 <Image 
                   src="/aboutDIU.png" 
                   alt="About DIU Campus" 
@@ -50,8 +50,8 @@ export default function AboutDiuSection() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-xl border border-border">
-                <div className="font-display font-bold text-dark">Top Ranked in Bangladesh</div>
+              <div className="absolute -bottom-6 -left-2 sm:-left-6 bg-white rounded-2xl p-4 sm:p-5 shadow-xl border border-border">
+                <div className="font-display font-bold text-dark text-sm sm:text-base">Top Ranked in Bangladesh</div>
               </div>
             </div>
           </div>
