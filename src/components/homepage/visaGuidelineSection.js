@@ -1,4 +1,4 @@
-import { CheckCircle2, Mail, Phone, ExternalLink } from "lucide-react";
+import { CheckCircle2, ExternalLink } from "lucide-react";
 
 export default function VisaGuidelineSection() {
   const visaLinks = [

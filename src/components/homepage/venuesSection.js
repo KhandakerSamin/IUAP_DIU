@@ -11,7 +11,7 @@ const venues = [
   {
     day: "Day 2",
     name: "Hotel Sheraton Dhaka",
-    address: "44 Kemal Ataturk Avenue, Banani, Dhaka 1213, Bangladesh",
+    address: "44 Kemal Ataturk Avenue, Banani, Dhaka",
     image: "/venue1.png",
   },
   {
