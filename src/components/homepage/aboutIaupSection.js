@@ -38,10 +38,10 @@ export default function AboutIaupSection() {
             </div>
             
             <div className="space-y-5 text-lg text-slate-600 leading-relaxed mb-10">
-              <p className="reveal reveal-delay-1">
+              <p className="reveal text-justify reveal-delay-1">
                 The International Association of University Presidents (IAUP) is a prestigious global network of university leaders dedicated to promoting international understanding, academic collaboration, and responsible leadership in higher education. Founded in 1964, IAUP brings together presidents, rectors, and vice chancellors worldwide to address global challenges through education.
               </p>
-              <p className="reveal reveal-delay-2">
+              <p className="reveal text-justify reveal-delay-2">
                 IAUP serves as a trusted platform for dialogue, policy exchange, and partnership-building, working closely with international organizations and academic networks to advance peace, sustainability, ethical governance, innovation, and social responsibility. Through conferences and leadership initiatives, IAUP encourages universities to contribute to a more inclusive and sustainable global future.
               </p>
             </div>

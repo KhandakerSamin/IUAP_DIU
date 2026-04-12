@@ -26,13 +26,13 @@ export default function Iaup2026Section() {
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-8 reveal reveal-delay-1">
               IAUP Semi-Annual <span className="gradient-text">Meeting 2026</span>
             </h2>
-            <p className="text-lg text-muted leading-relaxed mb-6 reveal reveal-delay-2">
+            <p className="text-lg text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-2">
               The IAUP Semi-Annual Meeting 2026 will be hosted by Daffodil International University in Dhaka, Bangladesh, from 19 to 21 November 2026. The meeting will bring together presidents, rectors, vice chancellors, and senior university leaders from around the world for high-level dialogue, governance meetings, and strategic engagement on key issues in global higher education leadership.
             </p>
-            <p className="text-muted leading-relaxed mb-6 reveal reveal-delay-3">
+            <p className="text-muted text-justify  leading-relaxed mb-6 reveal reveal-delay-3">
               The program will include meetings of the Executive Committee and Board of Directors of the International Association of University Presidents (IAUP), along with keynote addresses, plenary discussions, and parallel sessions focused on leadership, innovation, sustainability, and international cooperation.
             </p>
-            <p className="text-muted leading-relaxed reveal reveal-delay-4">
+            <p className="text-muted text-justify  leading-relaxed reveal reveal-delay-4">
               In addition to the formal academic agenda, participants will take part in cultural programs, institutional visits, and networking activities that encourage collaboration and knowledge exchange. The meeting is expected to welcome 100 to 150 from local and international delegates and will coincide with the celebration of 25 years of Daffodil International University, highlighting the institution&apos;s commitment to global engagement and academic leadership.
             </p>
           </div>
