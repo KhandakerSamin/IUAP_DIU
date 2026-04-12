@@ -14,7 +14,7 @@ const pricingPlans = [
       "Gala dinner and cultural night",
     ],
     featured: true,
-    buttonClass: "btn-primary w-full text-center mt-8",
+    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
   },
   {
     name: "Non-Members",
@@ -44,7 +44,7 @@ const pricingPlans = [
       "Cultural program",
       "Dhaka city tour",
     ],
-    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-secondary text-secondary font-semibold hover:bg-secondary hover:text-white transition-colors mt-8",
+    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
   },
 ];
 
