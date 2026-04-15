@@ -8,8 +8,8 @@ export default function CtaSection() {
         <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl">
           {/* Background Gradients */}
           <div className="absolute inset-0 bg-dark" />
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/30 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4" />
+          <div className="absolute top-0 right-0 w-150 h-150 bg-primary/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-150 h-150 bg-secondary/30 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4" />
           
           <div className="relative z-10 p-10 sm:p-16 lg:p-20 text-center reveal">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-semibold tracking-wide uppercase mb-8">
@@ -17,7 +17,7 @@ export default function CtaSection() {
               19-21 November 2026
             </span>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Ready to Join Us in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Dhaka?</span>
+              Ready to Join Us in <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">Dhaka?</span>
             </h2>
             <p className="text-lg sm:text-xl text-slate-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed reveal reveal-delay-1">
               Secure your place at the IAUP Semi-Annual Meeting 2026 hosted by Daffodil International University. Early bird registration ends <span className="font-semibold text-white">June 30, 2026</span>.

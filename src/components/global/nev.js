@@ -22,10 +22,10 @@ export default function Nev() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navIsScrolled = pathname !== "/" || scrolled;
 
   useEffect(() => {
     if (pathname !== "/") {
-      setScrolled(true);
       return;
     }
 
@@ -41,14 +41,14 @@ export default function Nev() {
     <nav
       id="navbar"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200/0 shadow-sm" : "bg-transparent border-transparent"
+        navIsScrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200/0 shadow-sm" : "bg-transparent border-transparent"
       }`}
     >
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 transition-colors duration-300">
           <div className="w-48 shrink-0 flex items-center">
             <Link href={pathname === "/" ? "#hero" : "/"} className="flex items-center gap-3" aria-label="Daffodil International University Home">
-              <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className={`h-8 sm:h-10 md:h-12 w-auto object-contain transition-all duration-300 ${!scrolled ? "brightness-0 invert" : ""}`} />
+              <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className={`h-8 sm:h-10 md:h-12 w-auto object-contain transition-all duration-300 ${!navIsScrolled ? "brightness-0 invert" : ""}`} />
             </Link>
           </div>
 
@@ -57,7 +57,7 @@ export default function Nev() {
               <a
                 key={link.href}
                 href={pathname === "/" ? link.href : `/${link.href}`}
-                className={`${scrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm uppercase tracking-wide`}
+                className={`${navIsScrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm uppercase tracking-wide`}
               >
                 {link.label}
               </a>

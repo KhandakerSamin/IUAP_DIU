@@ -254,27 +254,27 @@ export default function RegistrationForm({ initialAttendeeId = "" }) {
   };
 
   return (
-    <section className="relative overflow-hidden py-10 sm:py-14">
-      <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-white to-slate-100" />
+    <section className="relative overflow-hidden py-10 sm:py-14 ">
+      <div className="absolute inset-0" />
       <div className="absolute -top-40 -right-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -bottom-40 -left-20 h-96 w-96 rounded-full bg-secondary/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-340 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-start sm:justify-between sm:p-6">
+        <div className="mb-8 flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-5  sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-primary">IAUP 2026</p>
-            <h1 className="font-display mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">Registration & Payment Setup</h1>
+            <h1 className="font-display mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">Registration & Payment </h1>
             <p className="mt-3 max-w-3xl text-sm text-slate-600 sm:text-base">
               Complete your profile on the left, choose your attendee type on the right, and proceed to payment when ready.
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-3 self-end sm:self-start">
+          <div className="flex shrink-0 items-center gap-10 self-center">
             <Image
               src="/navLogo.png"
               alt="DIU Navigation Logo"
               width={160}
               height={44}
-              className="h-10 w-auto object-contain"
+              className="h-15 w-auto object-contain"
               priority
             />
             <Image
@@ -292,7 +292,7 @@ export default function RegistrationForm({ initialAttendeeId = "" }) {
             <form
               noValidate
               onSubmit={handleSubmit}
-              className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+              className="rounded-3xl border border-slate-200 bg-white p-6  sm:p-8"
             >
               <div className="mb-6 flex items-center justify-between gap-3">
                 <p className="text-sm font-semibold text-slate-700">Attendee Information Form</p>
@@ -533,7 +533,7 @@ export default function RegistrationForm({ initialAttendeeId = "" }) {
 
           <aside className="lg:col-span-1">
             <div className="space-y-5 lg:sticky lg:top-24">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="rounded-3xl border border-slate-200 bg-white p-5 ">
                 <div className="flex items-center justify-between gap-3">
                   <h2 className="font-display text-lg font-bold text-slate-900">Selected Type</h2>
                 </div>
@@ -557,7 +557,7 @@ export default function RegistrationForm({ initialAttendeeId = "" }) {
                 <p className="mt-3 text-xs text-slate-500">You can change the attendee type anytime from cards or the form dropdown.</p>
               </div>
 
-              <div className="space-y-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="space-y-3 rounded-3xl border border-slate-200 bg-white p-4 ">
                 <p className="px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Registration Plans</p>
                 {REGISTRATION_PLANS.map((plan) => {
                   const isSelected = formValues.attendeeType === plan.name;
@@ -568,7 +568,7 @@ export default function RegistrationForm({ initialAttendeeId = "" }) {
                       onClick={() => handleAttendeePick(plan.name)}
                       className={`w-full rounded-2xl border p-4 text-left transition-all ${
                         isSelected
-                          ? "border-primary bg-primary/5 shadow-sm"
+                          ? "border-primary bg-primary/5"
                           : "border-slate-200 bg-white hover:border-primary/40 hover:bg-slate-50"
                       }`}
                     >
