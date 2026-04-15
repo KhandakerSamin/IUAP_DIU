@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -18,14 +19,21 @@ const links = [
 const logoUrl = "/navLogo.png";
 
 export default function Nev() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    if (pathname !== "/") {
+      setScrolled(true);
+      return;
+    }
+
     const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   const closeMenu = () => setIsOpen(false);
 
@@ -39,14 +47,18 @@ export default function Nev() {
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 transition-colors duration-300">
           <div className="w-48 shrink-0 flex items-center">
-            <a href="#hero" className="flex items-center gap-3" aria-label="Daffodil International University Home">
+            <Link href={pathname === "/" ? "#hero" : "/"} className="flex items-center gap-3" aria-label="Daffodil International University Home">
               <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className={`h-8 sm:h-10 md:h-12 w-auto object-contain transition-all duration-300 ${!scrolled ? "brightness-0 invert" : ""}`} />
-            </a>
+            </Link>
           </div>
 
           <div className="hidden xl:flex items-center justify-center flex-1 gap-4 2xl:gap-8">
             {links.map((link) => (
-              <a key={link.href} href={link.href} className={`${scrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm uppercase tracking-wide`}>
+              <a
+                key={link.href}
+                href={pathname === "/" ? link.href : `/${link.href}`}
+                className={`${scrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm uppercase tracking-wide`}
+              >
                 {link.label}
               </a>
             ))}
@@ -76,7 +88,7 @@ export default function Nev() {
           {links.map((link) => (
             <a
               key={link.href}
-              href={link.href}
+              href={pathname === "/" ? link.href : `/${link.href}`}
               onClick={closeMenu}
               className="py-2 text-slate-800 font-medium hover:text-secondary transition-colors"
             >

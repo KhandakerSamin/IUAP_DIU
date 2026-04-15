@@ -9,17 +9,17 @@ const Youtube = ({ className }) => <svg className={className} fill="none" stroke
 
 export default function Footer() {
   const quickLinks = [
-    { href: "#about", label: "About IAUP" },
-    { href: "#about-diu", label: "About DIU" },
-    { href: "#program", label: "Event Schedule" },
-    { href: "#speakers", label: "Speakers" },
+    { href: "/#about", label: "About IAUP" },
+    { href: "/#about-diu", label: "About DIU" },
+    { href: "/#program", label: "Event Schedule" },
+    { href: "/#speakers", label: "Speakers" },
   ];
 
   const resources = [
-    { href: "#registration", label: "Registration" },
-    { href: "#venues", label: "Venues" },
-    { href: "#important-dates", label: "Important Dates" },
-    { href: "#visa-guidelines", label: "Visa Guidelines" },
+    { href: "/registration", label: "Registration" },
+    { href: "/#venues", label: "Venues" },
+    { href: "/#important-dates", label: "Important Dates" },
+    { href: "/#visa-guidelines", label: "Visa Guidelines" },
   ];
 
   const logoUrl = "/navLogo.png";

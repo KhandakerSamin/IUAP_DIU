@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const pricingPlans = [
   {
+    attendeeId: "member",
     name: "IAUP & AUAP Members",
     subtitle: "Special rate for association members",
     pricing: [
@@ -19,6 +20,7 @@ const pricingPlans = [
     buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
   },
   {
+    attendeeId: "non-member",
     name: "Non-Members",
     subtitle: "Standard registration rate",
     pricing: [
@@ -35,6 +37,7 @@ const pricingPlans = [
     buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
   },
   {
+    attendeeId: "family",
     name: "Participants' Family",
     subtitle: "Accompanying persons",
     pricing: [
@@ -104,7 +107,7 @@ export default function RegistrationSection() {
                 ))}
               </ul>
 
-              <Link href="/registration" className={`${plan.buttonClass} inline-flex items-center justify-center`}>
+              <Link href={`/registration?attendee=${plan.attendeeId}`} className={`${plan.buttonClass} inline-flex items-center justify-center`}>
                 Register Now
               </Link>
             </article>
