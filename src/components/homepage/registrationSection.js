@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const pricingPlans = [
   {
     name: "IAUP & AUAP Members",
@@ -102,9 +104,9 @@ export default function RegistrationSection() {
                 ))}
               </ul>
 
-              <button type="button" className={plan.buttonClass}>
+              <Link href="/registration" className={`${plan.buttonClass} inline-flex items-center justify-center`}>
                 Register Now
-              </button>
+              </Link>
             </article>
           ))}
         </div>

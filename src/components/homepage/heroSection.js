@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function HeroSection() {
@@ -67,10 +68,10 @@ export default function HeroSection() {
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 reveal reveal-delay-3 mb-10">
-          <a href="#registration" className="group relative inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 text-base sm:text-lg font-bold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-lg hover:bg-primary-dark hover:shadow-primary/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
+          <Link href="/registration" className="group relative inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 text-base sm:text-lg font-bold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-lg hover:bg-primary-dark hover:shadow-primary/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
             <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-linear-to-b from-transparent via-transparent to-black"></span>
             <span className="relative">Register Now</span>
-          </a>
+          </Link>
         </div>
 
         {/* Modern Countdown Timer */}
