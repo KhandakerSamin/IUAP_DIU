@@ -233,7 +233,7 @@ function validateForm(values) {
   }
 
   if (!values.agreeToPolicy) {
-    errors.agreeToPolicy = "You must agree before submitting the form.";
+    errors.agreeToPolicy = "You must agree before continuing to payment.";
   }
 
   return errors;
@@ -275,6 +275,7 @@ export default function RegistrationForm() {
   const [status, setStatus] = useState(null);
 
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
+  const isOnlinePayment = formValues.paymentMethod === "online-payment";
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -368,7 +369,7 @@ export default function RegistrationForm() {
     if (Object.keys(nextErrors).length > 0) {
       setStatus({
         type: "error",
-        message: "Please fix the highlighted fields before submitting.",
+        message: "Please fix the highlighted fields before proceeding to payment.",
       });
       return;
     }
@@ -417,10 +418,10 @@ export default function RegistrationForm() {
               alt="DIU Navigation Logo"
               width={160}
               height={44}
-              className="h-14 w-auto object-contain"
+              className="h-10 md:h-14 w-auto object-contain"
               priority
             />
-            <Image src="/diuLogo.png" alt="DIU Logo" width={90} height={64} className="h-12 w-auto object-contain" />
+            <Image src="/diuLogo.png" alt="DIU Logo" width={90} height={64} className="h-9 md:h-12 w-auto object-contain" />
           </div>
         </div>
 
@@ -954,7 +955,7 @@ export default function RegistrationForm() {
               disabled={isSubmitting}
               className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting ? "Processing..." : isOnlinePayment ? "Proceed to Payment" : "Submit Registration"}
             </button>
           </div>
 
