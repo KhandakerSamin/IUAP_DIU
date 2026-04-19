@@ -41,11 +41,11 @@ export default function HeroSection() {
       {/* Dark Overlay to ensure text readability */}
       <div className="absolute inset-0 bg-slate-900/70 z-0"></div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center h-full">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center h-full">
         
         
 
-        <h1 className="font-display mt-25 text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-5xl mx-auto">
+        <h1 className="font-display mt-25 text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-7xl mx-auto">
           IAUP Semi-Annual{" "}
           <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-sm">
             Meeting 2026
@@ -56,7 +56,7 @@ export default function HeroSection() {
           19–21 November
         </p>
 
-        <p className="text-xl sm:text-2xl text-slate-200 font-display font-semibold mb-4 reveal reveal-delay-2 max-w-4xl leading-snug drop-shadow-sm">
+        <p className="text-xl sm:text-2xl text-slate-200 font-display font-semibold mb-4 reveal reveal-delay-2 max-w-6xl leading-snug drop-shadow-sm">
           Transforming Higher Education for a Sustainable, Innovative, and AI-Enabled Future
         </p>
 

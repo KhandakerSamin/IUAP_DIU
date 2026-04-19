@@ -74,7 +74,7 @@ export default function TentativeProgramSection() {
                 <div className="flex items-center gap-3 mb-3 text-primary">
                   <CalendarDays className="w-5 h-5" />
                   <span className="font-semibold tracking-wider uppercase text-sm">
-                    {idx === 0 ? "Pre-Event" : `Conference Day ${idx}`}
+                    {`Conference Day ${idx + 1}`}
                   </span>
                 </div>
                 <h4 className="font-display font-bold text-2xl text-dark mb-4 leading-snug">
