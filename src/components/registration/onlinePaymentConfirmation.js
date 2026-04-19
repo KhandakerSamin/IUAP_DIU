@@ -1,10 +1,119 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function OnlinePaymentConfirmation({ participantName = "Participant", participantEmail = "" }) {
-  const [paymentCompleted, setPaymentCompleted] = useState(false);
+const STORAGE_KEY = "iaup_registration";
+
+function readStoredRegistration() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export default function OnlinePaymentConfirmation() {
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [registration, setRegistration] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setRegistration(readStoredRegistration());
+    setHasLoaded(true);
+  }, []);
+
+  const participantName =
+    registration?.fullName ||
+    `${registration?.givenName || ""} ${registration?.surname || ""}`.trim() ||
+    "Participant";
+  const participantEmail = registration?.email || "";
+  const participantPhone = registration?.phone || "";
+
+  const handlePay = async () => {
+    if (!registration) return;
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/payment/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: participantName,
+          email: participantEmail,
+          phone: participantPhone,
+          address: registration.address,
+          city: registration.city,
+          state: registration.city,
+          country: registration.country,
+          postcode: registration.zipCode,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data?.url) {
+        setError(data?.error || "Could not start payment. Please try again.");
+        setIsProcessing(false);
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+      setIsProcessing(false);
+    }
+  };
+
+  if (!hasLoaded) {
+    return (
+      <section className="py-10 sm:py-14">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 text-sm text-slate-500">
+            Loading payment details…
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!registration || !participantEmail) {
+    return (
+      <section className="py-10 sm:py-14">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6 sm:p-8 text-amber-900">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">No Registration Found</h1>
+            <p className="mt-3 text-sm sm:text-base">
+              We couldn’t find your registration details on this device. Please complete the registration form first.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/registration"
+                className="rounded-xl border border-amber-300 bg-white px-4 py-2 text-sm font-medium text-amber-900 transition hover:bg-amber-100"
+              >
+                Go to Registration Form
+              </Link>
+              <Link
+                href="/"
+                className="rounded-xl border border-amber-300 bg-white px-4 py-2 text-sm font-medium text-amber-900 transition hover:bg-amber-100"
+              >
+                Back to Home
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const canPay = !isProcessing;
 
   return (
     <section className="relative overflow-hidden py-10 sm:py-14">
@@ -24,40 +133,26 @@ export default function OnlinePaymentConfirmation({ participantName = "Participa
               Participant: <strong>{participantName}</strong>
             </p>
             {participantEmail && <p className="mt-1">Primary Email: {participantEmail}</p>}
+            {participantPhone && <p className="mt-1">Phone: {participantPhone}</p>}
           </div>
 
-          {!paymentCompleted && (
-            <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
-              <p>
-                You selected <strong>Online Payment</strong>. After the payment is completed, the following message
-                will be sent by email with your payment receipt attached.
-              </p>
-              <button
-                type="button"
-                onClick={() => setPaymentCompleted(true)}
-                className="mt-4 inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
-              >
-                Mark Payment as Completed
-              </button>
-            </div>
-          )}
+          <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+            <p>
+              You will be redirected to the secure 1Card payment gateway. After payment, you will return to a
+              confirmation page and a receipt will be emailed to <strong>{participantEmail}</strong>.
+            </p>
+            <button
+              type="button"
+              onClick={handlePay}
+              disabled={!canPay}
+              className="mt-4 inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isProcessing ? "Redirecting to gateway..." : "Pay Now"}
+            </button>
+          </div>
 
-          {paymentCompleted && (
-            <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
-              <p>A Payment receipt will be sent as an attachment with this email:</p>
-              <p className="mt-4">Dear {participantName},</p>
-              <p className="mt-3">
-                You have successfully submitted the registration form and completed the registration payment. You can
-                find the attached payment receipt along with this email. Thank you for your interest in joining the IAUP
-                Semi Annual Meeting 2026 to be held at Dhaka, Bangladesh!
-              </p>
-              <p className="mt-3">
-                Should you have any queries, feel free to contact us at iaup-bd2026@daffodilvarsity.edu.bd
-              </p>
-              <p className="mt-6">Best regards,</p>
-              <p className="mt-1">DIU Secretariat, IAUP Semi-Annual Meeting 2026</p>
-              <p>Daffodil International University, Bangladesh</p>
-            </div>
+          {error && (
+            <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
           )}
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -65,7 +160,7 @@ export default function OnlinePaymentConfirmation({ participantName = "Participa
               href="/registration"
               className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
             >
-              Back to Registration
+              Edit Registration
             </Link>
             <Link
               href="/"

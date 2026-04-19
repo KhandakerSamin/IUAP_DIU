@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const STORAGE_KEY = "iaup_registration";
 
 const TITLE_OPTIONS = ["Mr.", "Ms.", "Dr.", "Prof.", "Others"];
 const GENDER_OPTIONS = ["Male", "Female"];
@@ -274,6 +276,24 @@ export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
 
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (!saved || typeof saved !== "object") return;
+      setFormValues((prev) => {
+        const next = { ...prev };
+        for (const key of Object.keys(prev)) {
+          if (typeof saved[key] !== "undefined") next[key] = saved[key];
+        }
+        return next;
+      });
+    } catch {
+      // ignore corrupt sessionStorage
+    }
+  }, []);
+
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
   const isOnlinePayment = formValues.paymentMethod === "online-payment";
 
@@ -388,12 +408,19 @@ export default function RegistrationForm() {
         return;
       }
 
-      const params = new URLSearchParams({
-        name: `${normalized.givenName} ${normalized.surname}`.trim(),
-        email: normalized.email,
-      });
+      try {
+        sessionStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            ...normalized,
+            fullName: `${normalized.givenName} ${normalized.surname}`.trim(),
+          })
+        );
+      } catch {
+        // sessionStorage may be unavailable (private mode, quota); payment page will show a helpful error
+      }
 
-      router.push(`/registration/online-payment?${params.toString()}`);
+      router.push("/registration/online-payment");
     } finally {
       setIsSubmitting(false);
     }

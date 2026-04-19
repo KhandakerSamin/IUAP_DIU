@@ -7,22 +7,12 @@ export const metadata = {
   description: "Complete online payment for IAUP Semi-Annual Meeting 2026 registration.",
 };
 
-export default async function OnlinePaymentPage({ searchParams }) {
-  const resolvedSearchParams = await searchParams;
-  const rawName = resolvedSearchParams?.name;
-  const rawEmail = resolvedSearchParams?.email;
-
-  const participantName = Array.isArray(rawName) ? rawName[0] : rawName;
-  const participantEmail = Array.isArray(rawEmail) ? rawEmail[0] : rawEmail;
-
+export default function OnlinePaymentPage() {
   return (
     <>
       <Nev />
       <main className="min-h-screen pt-20 sm:pt-24">
-        <OnlinePaymentConfirmation
-          participantName={typeof participantName === "string" && participantName.trim() ? participantName : "Participant"}
-          participantEmail={typeof participantEmail === "string" ? participantEmail : ""}
-        />
+        <OnlinePaymentConfirmation />
       </main>
       <Footer />
     </>
