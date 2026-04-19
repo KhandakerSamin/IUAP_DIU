@@ -51,7 +51,7 @@ export default function AboutDiuSection() {
                 />
               </div>
               <div className="absolute -bottom-6 -left-2 sm:-left-6 bg-white rounded-2xl p-4 sm:p-5 shadow-xl border border-border">
-                <div className="font-display font-bold text-dark text-sm sm:text-base">Top Ranked in Bangladesh</div>
+                <div className="font-display font-bold text-dark text-sm sm:text-base">Top Ranked University in Bangladesh</div>
               </div>
             </div>
           </div>
