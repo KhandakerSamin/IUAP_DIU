@@ -38,7 +38,25 @@ const FIELD_LIMITS = {
   otherFood: 160,
   familyMembersOther: 2,
   website: 120,
+  familyFullName: 120,
+  familyRelationship: 40,
 };
+
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const ALLOWED_UPLOAD_TYPES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp", "application/pdf"]);
+const UPLOAD_ACCEPT_ATTR = "image/jpeg,image/png,image/webp,application/pdf";
+const MAX_FAMILY_MEMBERS = 10;
+
+function validateUpload(file) {
+  if (!file) return "Please upload a file.";
+  if (!ALLOWED_UPLOAD_TYPES.has(file.type)) return "Only JPG, PNG, WEBP, or PDF is allowed.";
+  if (file.size > MAX_UPLOAD_BYTES) return "File must be 5 MB or smaller.";
+  return null;
+}
+
+function emptyFamilyMember() {
+  return { fullName: "", relationship: "", profilePhoto: null, passportScan: null };
+}
 
 const INITIAL_FORM = {
   title: "",
@@ -271,6 +289,8 @@ function OptionGroup({ legend, name, options, value, onChange, error }) {
 export default function RegistrationForm() {
   const router = useRouter();
   const [formValues, setFormValues] = useState(INITIAL_FORM);
+  const [fileValues, setFileValues] = useState({ profilePhoto: null, passportScan: null });
+  const [familyMembers, setFamilyMembers] = useState([]);
   const [errors, setErrors] = useState({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -293,6 +313,32 @@ export default function RegistrationForm() {
       // ignore corrupt sessionStorage
     }
   }, []);
+
+  useEffect(() => {
+    let target = 0;
+    if (formValues.hasFamilyMembers === "Yes") {
+      if (formValues.familyMembersCount === "Others") {
+        const parsed = parseInt(formValues.familyMembersOther, 10);
+        if (Number.isInteger(parsed) && parsed > 0) {
+          target = Math.min(parsed, MAX_FAMILY_MEMBERS);
+        }
+      } else {
+        const parsed = parseInt(formValues.familyMembersCount, 10);
+        if (Number.isInteger(parsed) && parsed > 0) {
+          target = Math.min(parsed, MAX_FAMILY_MEMBERS);
+        }
+      }
+    }
+
+    setFamilyMembers((prev) => {
+      if (prev.length === target) return prev;
+      if (target === 0) return [];
+      if (target < prev.length) return prev.slice(0, target);
+      const next = prev.slice();
+      while (next.length < target) next.push(emptyFamilyMember());
+      return next;
+    });
+  }, [formValues.hasFamilyMembers, formValues.familyMembersCount, formValues.familyMembersOther]);
 
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
   const isOnlinePayment = formValues.paymentMethod === "online-payment";
@@ -351,6 +397,69 @@ export default function RegistrationForm() {
     });
   };
 
+  const handleFileChange = (event) => {
+    const { name, files } = event.target;
+    const file = files?.[0] || null;
+
+    if (file) {
+      const err = validateUpload(file);
+      if (err) {
+        setErrors((prev) => ({ ...prev, [name]: err }));
+        setFileValues((prev) => ({ ...prev, [name]: null }));
+        event.target.value = "";
+        return;
+      }
+    }
+
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+    setFileValues((prev) => ({ ...prev, [name]: file }));
+  };
+
+  const handleFamilyTextChange = (index, field) => (event) => {
+    const raw = event.target.value;
+    const limit = field === "fullName" ? FIELD_LIMITS.familyFullName : FIELD_LIMITS.familyRelationship;
+    const value = sanitizeBasicText(raw).slice(0, limit);
+    setFamilyMembers((prev) => {
+      const next = prev.slice();
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
+
+  const handleFamilyFileChange = (index, field) => (event) => {
+    const file = event.target.files?.[0] || null;
+    const errorKey = `familyMembers[${index}][${field}]`;
+
+    if (file) {
+      const err = validateUpload(file);
+      if (err) {
+        setErrors((prev) => ({ ...prev, [errorKey]: err }));
+        setFamilyMembers((prev) => {
+          const next = prev.slice();
+          next[index] = { ...next[index], [field]: null };
+          return next;
+        });
+        event.target.value = "";
+        return;
+      }
+    }
+
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[errorKey];
+      return next;
+    });
+    setFamilyMembers((prev) => {
+      const next = prev.slice();
+      next[index] = { ...next[index], [field]: file };
+      return next;
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setHasSubmitted(true);
@@ -384,6 +493,26 @@ export default function RegistrationForm() {
     };
 
     const nextErrors = validateForm(normalized);
+
+    if (!fileValues.profilePhoto) {
+      nextErrors.profilePhoto = "Profile picture is required.";
+    }
+    if (!fileValues.passportScan) {
+      nextErrors.passportScan = "Passport front page scan is required.";
+    }
+
+    familyMembers.forEach((fm, i) => {
+      if (!fm.fullName.trim()) {
+        nextErrors[`familyMembers[${i}][fullName]`] = "Full name is required.";
+      }
+      if (!fm.profilePhoto) {
+        nextErrors[`familyMembers[${i}][profilePhoto]`] = "Profile picture is required.";
+      }
+      if (!fm.passportScan) {
+        nextErrors[`familyMembers[${i}][passportScan]`] = "Passport scan is required.";
+      }
+    });
+
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
@@ -398,12 +527,46 @@ export default function RegistrationForm() {
     setIsSubmitting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
       if (normalized.paymentMethod === "wire-transfer") {
+        // Wire-transfer: skip backend registration for now; organizer handles manually.
         setStatus({
           type: "wire",
           name: `${normalized.givenName} ${normalized.surname}`.trim(),
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(normalized)) {
+        if (typeof value === "string") {
+          formData.append(key, value);
+        } else if (typeof value === "boolean") {
+          formData.append(key, value ? "true" : "false");
+        }
+      }
+      formData.append("profilePhoto", fileValues.profilePhoto);
+      formData.append("passportScan", fileValues.passportScan);
+      familyMembers.forEach((fm, i) => {
+        formData.append(`familyMembers[${i}][fullName]`, fm.fullName);
+        formData.append(`familyMembers[${i}][relationship]`, fm.relationship);
+        formData.append(`familyMembers[${i}][profilePhoto]`, fm.profilePhoto);
+        formData.append(`familyMembers[${i}][passportScan]`, fm.passportScan);
+      });
+
+      let response;
+      try {
+        response = await fetch("/api/registration", { method: "POST", body: formData });
+      } catch {
+        setStatus({ type: "error", message: "Network error. Please try again." });
+        return;
+      }
+
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload?.reg_id) {
+        setStatus({
+          type: "error",
+          message: payload?.error || "Could not save your registration. Please try again.",
         });
         return;
       }
@@ -414,13 +577,14 @@ export default function RegistrationForm() {
           JSON.stringify({
             ...normalized,
             fullName: `${normalized.givenName} ${normalized.surname}`.trim(),
+            regId: payload.reg_id,
           })
         );
       } catch {
-        // sessionStorage may be unavailable (private mode, quota); payment page will show a helpful error
+        // sessionStorage may be unavailable; payment page can still work via URL param
       }
 
-      router.push("/registration/online-payment");
+      router.push(`/registration/online-payment?reg_id=${encodeURIComponent(payload.reg_id)}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -794,6 +958,53 @@ export default function RegistrationForm() {
               {errors.alternativeEmail && <p className="mt-2 text-sm text-red-600">{errors.alternativeEmail}</p>}
             </div>
 
+            <div className="sm:col-span-2">
+              <p className="mb-1 text-sm font-semibold text-slate-700">Documents</p>
+              <p className="mb-3 text-xs text-slate-500">
+                Upload a recent profile picture and a clear scan of your passport front page. JPG, PNG, WEBP, or PDF · max 5 MB each.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="profilePhoto" className="mb-2 block text-sm font-medium text-slate-700">
+                    Profile Picture
+                  </label>
+                  <input
+                    id="profilePhoto"
+                    name="profilePhoto"
+                    type="file"
+                    accept={UPLOAD_ACCEPT_ATTR}
+                    onChange={handleFileChange}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark"
+                  />
+                  {fileValues.profilePhoto && (
+                    <p className="mt-1 text-xs text-slate-600">
+                      Selected: {fileValues.profilePhoto.name}
+                    </p>
+                  )}
+                  {errors.profilePhoto && <p className="mt-2 text-sm text-red-600">{errors.profilePhoto}</p>}
+                </div>
+                <div>
+                  <label htmlFor="passportScan" className="mb-2 block text-sm font-medium text-slate-700">
+                    Passport Front Page (scan copy)
+                  </label>
+                  <input
+                    id="passportScan"
+                    name="passportScan"
+                    type="file"
+                    accept={UPLOAD_ACCEPT_ATTR}
+                    onChange={handleFileChange}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark"
+                  />
+                  {fileValues.passportScan && (
+                    <p className="mt-1 text-xs text-slate-600">
+                      Selected: {fileValues.passportScan.name}
+                    </p>
+                  )}
+                  {errors.passportScan && <p className="mt-2 text-sm text-red-600">{errors.passportScan}</p>}
+                </div>
+              </div>
+            </div>
+
             <OptionGroup
               legend="T-Shirt Size"
               name="tShirtSize"
@@ -891,6 +1102,105 @@ export default function RegistrationForm() {
                       placeholder="Number"
                     />
                     {errors.familyMembersOther && <p className="mt-2 text-sm text-red-600">{errors.familyMembersOther}</p>}
+                  </div>
+                )}
+
+                {familyMembers.length > 0 && (
+                  <div className="mt-6 space-y-5">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Details for each family member
+                    </p>
+                    {familyMembers.map((fm, index) => {
+                      const profileErrKey = `familyMembers[${index}][profilePhoto]`;
+                      const passportErrKey = `familyMembers[${index}][passportScan]`;
+                      const nameErrKey = `familyMembers[${index}][fullName]`;
+                      return (
+                        <div key={`fm-${index}`} className="rounded-xl border border-slate-200 bg-white p-4">
+                          <p className="mb-4 text-sm font-semibold text-slate-700">Family Member #{index + 1}</p>
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-fullName`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                Full Name
+                              </label>
+                              <input
+                                id={`fm-${index}-fullName`}
+                                type="text"
+                                value={fm.fullName}
+                                onChange={handleFamilyTextChange(index, "fullName")}
+                                maxLength={FIELD_LIMITS.familyFullName}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="Full name"
+                              />
+                              {errors[nameErrKey] && (
+                                <p className="mt-2 text-sm text-red-600">{errors[nameErrKey]}</p>
+                              )}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-relationship`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                Relationship <span className="text-slate-400">(optional)</span>
+                              </label>
+                              <input
+                                id={`fm-${index}-relationship`}
+                                type="text"
+                                value={fm.relationship}
+                                onChange={handleFamilyTextChange(index, "relationship")}
+                                maxLength={FIELD_LIMITS.familyRelationship}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="e.g. Spouse, Child"
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-profilePhoto`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                Profile Picture
+                              </label>
+                              <input
+                                id={`fm-${index}-profilePhoto`}
+                                type="file"
+                                accept={UPLOAD_ACCEPT_ATTR}
+                                onChange={handleFamilyFileChange(index, "profilePhoto")}
+                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark"
+                              />
+                              {fm.profilePhoto && (
+                                <p className="mt-1 text-xs text-slate-600">Selected: {fm.profilePhoto.name}</p>
+                              )}
+                              {errors[profileErrKey] && (
+                                <p className="mt-2 text-sm text-red-600">{errors[profileErrKey]}</p>
+                              )}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-passportScan`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                Passport Front Page (scan copy)
+                              </label>
+                              <input
+                                id={`fm-${index}-passportScan`}
+                                type="file"
+                                accept={UPLOAD_ACCEPT_ATTR}
+                                onChange={handleFamilyFileChange(index, "passportScan")}
+                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark"
+                              />
+                              {fm.passportScan && (
+                                <p className="mt-1 text-xs text-slate-600">Selected: {fm.passportScan.name}</p>
+                              )}
+                              {errors[passportErrKey] && (
+                                <p className="mt-2 text-sm text-red-600">{errors[passportErrKey]}</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </fieldset>

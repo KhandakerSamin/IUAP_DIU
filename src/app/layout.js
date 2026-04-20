@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${roboto.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full" suppressHydrationWarning>{children}</body>
     </html>
   );
 }

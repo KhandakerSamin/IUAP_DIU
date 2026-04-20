@@ -1,4 +1,6 @@
+import { markPaymentStatus } from "@/lib/db";
 import { verifyPayment } from "@/lib/payment";
+import { finalizePaidPayment } from "@/lib/paymentFinalize";
 
 export const dynamic = "force-dynamic";
 
@@ -39,10 +41,20 @@ export async function POST(request) {
   const result = await verifyPayment(reffId);
   console.log("[payment/ipn]", reffId, "->", result.state);
 
-  // TODO: persist payment record + email receipt to result.details?.cus_email
-  // Available on result.details: tran_id, val_id, amount, currency, card_brand, card_no, etc.
+  try {
+    if (result.state === "success") {
+      markPaymentStatus(reffId, "paid", { tran_id: result.details?.tran_id });
+    } else if (result.state === "failed") {
+      markPaymentStatus(reffId, "failed");
+    }
+  } catch (err) {
+    console.error("[payment/ipn] DB update failed", reffId, err);
+  }
 
   if (result.state === "success") {
+    finalizePaidPayment(reffId).catch((err) =>
+      console.error("[payment/ipn] finalize error", reffId, err)
+    );
     return Response.json({ message: "success" });
   }
 

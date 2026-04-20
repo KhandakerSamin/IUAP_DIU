@@ -1,7 +1,9 @@
 import Footer from "@/components/global/footer";
 import Nev from "@/components/global/nev";
 import Link from "next/link";
+import { getRegistrationByReffId, markPaymentStatus } from "@/lib/db";
 import { verifyPayment } from "@/lib/payment";
+import { finalizePaidPayment } from "@/lib/paymentFinalize";
 
 export const metadata = {
   title: "Payment Status | IAUP Semi-Annual Meeting 2026",
@@ -39,6 +41,31 @@ export default async function PaymentResultPage({ searchParams }) {
   const reffId = Array.isArray(raw) ? raw[0] : raw;
 
   const result = await verifyPayment(reffId);
+
+  if (reffId) {
+    try {
+      if (result.state === "success") {
+        markPaymentStatus(reffId, "paid", { tran_id: result.details?.tran_id });
+      } else if (result.state === "failed") {
+        markPaymentStatus(reffId, "failed");
+      }
+    } catch (err) {
+      console.error("[payment-result] DB update failed", reffId, err);
+    }
+
+    if (result.state === "success") {
+      await finalizePaidPayment(reffId).catch((err) =>
+        console.error("[payment-result] finalize error", reffId, err)
+      );
+    }
+  }
+
+  let invoiceAvailable = false;
+  if (reffId && result.state === "success") {
+    const row = getRegistrationByReffId(reffId);
+    invoiceAvailable = Boolean(row?.invoice_path);
+  }
+
   const styles = STATE_STYLES[result.state] || STATE_STYLES.error;
   const details = result.state === "success" ? result.details : null;
 
@@ -101,6 +128,14 @@ export default async function PaymentResultPage({ searchParams }) {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
+                {result.state === "success" && invoiceAvailable && reffId && (
+                  <a
+                    href={`/api/invoice/${encodeURIComponent(reffId)}`}
+                    className={`rounded-xl border bg-white px-4 py-2 text-sm font-semibold transition ${styles.actionBorder}`}
+                  >
+                    Download Invoice (PDF)
+                  </a>
+                )}
                 {result.state === "failed" && (
                   <>
                     <Link

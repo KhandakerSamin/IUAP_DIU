@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "iaup_registration";
@@ -19,15 +20,22 @@ function readStoredRegistration() {
 }
 
 export default function OnlinePaymentConfirmation() {
+  const searchParams = useSearchParams();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [registration, setRegistration] = useState(null);
+  const [regId, setRegId] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setRegistration(readStoredRegistration());
+    const stored = readStoredRegistration();
+    setRegistration(stored);
+
+    const fromUrl = searchParams.get("reg_id");
+    const fromStore = stored?.regId;
+    setRegId(fromUrl || fromStore || "");
     setHasLoaded(true);
-  }, []);
+  }, [searchParams]);
 
   const participantName =
     registration?.fullName ||
@@ -37,7 +45,10 @@ export default function OnlinePaymentConfirmation() {
   const participantPhone = registration?.phone || "";
 
   const handlePay = async () => {
-    if (!registration) return;
+    if (!regId) {
+      setError("Registration reference is missing. Please submit the form again.");
+      return;
+    }
     setIsProcessing(true);
     setError(null);
 
@@ -45,16 +56,7 @@ export default function OnlinePaymentConfirmation() {
       const res = await fetch("/api/payment/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: participantName,
-          email: participantEmail,
-          phone: participantPhone,
-          address: registration.address,
-          city: registration.city,
-          state: registration.city,
-          country: registration.country,
-          postcode: registration.zipCode,
-        }),
+        body: JSON.stringify({ reg_id: regId }),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -84,14 +86,14 @@ export default function OnlinePaymentConfirmation() {
     );
   }
 
-  if (!registration || !participantEmail) {
+  if (!regId) {
     return (
       <section className="py-10 sm:py-14">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6 sm:p-8 text-amber-900">
             <h1 className="font-display text-2xl font-bold sm:text-3xl">No Registration Found</h1>
             <p className="mt-3 text-sm sm:text-base">
-              We couldn’t find your registration details on this device. Please complete the registration form first.
+              We couldn’t find your registration reference. Please complete the registration form first.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
@@ -134,12 +136,13 @@ export default function OnlinePaymentConfirmation() {
             </p>
             {participantEmail && <p className="mt-1">Primary Email: {participantEmail}</p>}
             {participantPhone && <p className="mt-1">Phone: {participantPhone}</p>}
+            <p className="mt-1 text-xs text-slate-500 font-mono">Ref: {regId}</p>
           </div>
 
           <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
             <p>
               You will be redirected to the secure 1Card payment gateway. After payment, you will return to a
-              confirmation page and a receipt will be emailed to <strong>{participantEmail}</strong>.
+              confirmation page and a receipt will be emailed to {participantEmail ? <strong>{participantEmail}</strong> : "your email"}.
             </p>
             <button
               type="button"

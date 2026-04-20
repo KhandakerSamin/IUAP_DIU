@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  serverExternalPackages: ["better-sqlite3", "@react-pdf/renderer", "nodemailer"],
 };
 
 export default nextConfig;
