@@ -4,7 +4,7 @@ import { MapPin, CalendarDays } from "lucide-react";
 const venues = [
   {
     day: "Day 1",
-    name: "Daffodil Tower",
+    name: "Daffodil Plaza",
     address: "Dhanmondi, Dhaka",
     image: "/venu.jpg",
   },

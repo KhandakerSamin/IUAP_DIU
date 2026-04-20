@@ -3,16 +3,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "iaup_registration";
 
-const TITLE_OPTIONS = ["Mr.", "Ms.", "Dr.", "Prof.", "Others"];
+const TITLE_OPTIONS = ["Mr.", "Ms.", "Dr.", "Prof.", "Prof. Dr.", "Others"];
 const GENDER_OPTIONS = ["Male", "Female"];
 const TSHIRT_OPTIONS = ["S", "M", "L", "XL", "XXL"];
-const FOOD_OPTIONS = ["None", "Vegan", "Vegetarian", "Halal", "Other"];
+const FOOD_OPTIONS = ["Vegan", "Vegetarian", "Halal", "Other", "None"];
 const YES_NO_OPTIONS = ["Yes", "No"];
 const FAMILY_MEMBER_OPTIONS = ["1", "2", "3", "4", "Others"];
+const COUNTRY_CODE_OPTIONS = [
+  { value: "+880", label: "Bangladesh (+880)" },
+  { value: "+1", label: "USA/Canada (+1)" },
+  { value: "+44", label: "UK (+44)" },
+  { value: "+91", label: "India (+91)" },
+  { value: "+61", label: "Australia (+61)" },
+  { value: "+65", label: "Singapore (+65)" },
+  { value: "+60", label: "Malaysia (+60)" },
+  { value: "+81", label: "Japan (+81)" },
+  { value: "+86", label: "China (+86)" },
+  { value: "+966", label: "Saudi Arabia (+966)" },
+  { value: "+971", label: "UAE (+971)" },
+  { value: "+49", label: "Germany (+49)" },
+  { value: "+33", label: "France (+33)" },
+];
+
 const PAYMENT_OPTIONS = [
   { value: "wire-transfer", label: "Wire Transfer" },
   { value: "online-payment", label: "Online Payment" },
@@ -38,7 +54,38 @@ const FIELD_LIMITS = {
   otherFood: 160,
   familyMembersOther: 2,
   website: 120,
+  familyName: 80,
+  familyPassportNo: 20,
+  familyPhone: 24,
+  familyEmail: 120,
 };
+
+const MEMBER_FEES_USD = {
+  early: 400,
+  general: 500,
+  late: 600,
+};
+
+const NON_MEMBER_FEES_USD = {
+  early: 500,
+  general: 600,
+  late: 700,
+};
+
+const FAMILY_MEMBER_FEE_USD = 400;
+
+function buildEmptyFamilyMember() {
+  return {
+    name: "",
+    passportNo: "",
+    email: "",
+    phoneCountryCode: "+880",
+    phone: "",
+    tShirtSize: "",
+    passportScanName: "",
+    profilePictureName: "",
+  };
+}
 
 const INITIAL_FORM = {
   title: "",
@@ -48,7 +95,6 @@ const INITIAL_FORM = {
   gender: "",
   passportNo: "",
   nationality: "",
-  dateOfBirth: "",
   organization: "",
   position: "",
   department: "",
@@ -56,7 +102,9 @@ const INITIAL_FORM = {
   zipCode: "",
   city: "",
   country: "",
+  phoneCountryCode: "+880",
   phone: "",
+  whatsappCountryCode: "+880",
   whatsapp: "",
   email: "",
   alternativeEmail: "",
@@ -67,6 +115,9 @@ const INITIAL_FORM = {
   hasFamilyMembers: "",
   familyMembersCount: "",
   familyMembersOther: "",
+  familyMemberDetails: [],
+  participantPassportScanName: "",
+  participantProfilePictureName: "",
   needsInvitationLetter: "",
   paymentMethod: "",
   agreeToPolicy: false,
@@ -85,8 +136,98 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function isValidPhone(value) {
-  return /^\+?[0-9()\-\s]{7,24}$/.test(value);
+function isValidPhoneNumber(value) {
+  return /^[0-9()\-\s]{6,24}$/.test(value);
+}
+
+function resolveFamilyMemberCount(values) {
+  if (values.hasFamilyMembers !== "Yes") return 0;
+
+  if (values.familyMembersCount === "Others") {
+    const count = Number(values.familyMembersOther);
+    return Number.isInteger(count) && count > 0 ? count : 0;
+  }
+
+  const parsed = Number(values.familyMembersCount);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 0;
+}
+
+function syncFamilyMembers(existingMembers, count) {
+  return Array.from({ length: count }, (_, index) => {
+    const prev = existingMembers[index];
+    if (!prev) return buildEmptyFamilyMember();
+    return {
+      ...buildEmptyFamilyMember(),
+      ...prev,
+    };
+  });
+}
+
+function getRegistrationPeriod(now = new Date()) {
+  const earlyEnd = new Date("2026-09-30T23:59:59");
+  const generalEnd = new Date("2026-10-30T23:59:59");
+  const lateEnd = new Date("2026-11-10T23:59:59");
+
+  if (now <= earlyEnd) {
+    return {
+      key: "early",
+      label: "Early Bird",
+      range: "Up to September 30, 2026",
+      isClosed: false,
+    };
+  }
+
+  if (now <= generalEnd) {
+    return {
+      key: "general",
+      label: "General",
+      range: "October 1 - October 30, 2026",
+      isClosed: false,
+    };
+  }
+
+  if (now <= lateEnd) {
+    return {
+      key: "late",
+      label: "Late Registration",
+      range: "October 31 - November 10, 2026",
+      isClosed: false,
+    };
+  }
+
+  return {
+    key: "late",
+    label: "Late Registration",
+    range: "October 31 - November 10, 2026",
+    isClosed: true,
+  };
+}
+
+function formatUsd(amount) {
+  return `USD ${amount.toLocaleString()}`;
+}
+
+function calculatePricing(values) {
+  const period = getRegistrationPeriod();
+  const familyCount = resolveFamilyMemberCount(values);
+  const isMemberSelected = values.isMemberUniversity === "Yes" || values.isMemberUniversity === "No";
+  const isMember = values.isMemberUniversity === "Yes";
+  const baseFeeUsd = isMemberSelected
+    ? (isMember ? MEMBER_FEES_USD[period.key] : NON_MEMBER_FEES_USD[period.key])
+    : 0;
+
+  const familyFeeUsd = familyCount * FAMILY_MEMBER_FEE_USD;
+  const totalFeeUsd = baseFeeUsd + familyFeeUsd;
+
+  return {
+    period,
+    isMemberSelected,
+    isMember,
+    familyCount,
+    baseFeeUsd,
+    familyFeeUsd,
+    totalFeeUsd,
+  };
 }
 
 function validateForm(values) {
@@ -120,21 +261,8 @@ function validateForm(values) {
     errors.nationality = "Nationality is required.";
   }
 
-  if (!values.dateOfBirth) {
-    errors.dateOfBirth = "Date of birth is required.";
-  } else {
-    const selected = new Date(values.dateOfBirth);
-    const now = new Date();
-    selected.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-
-    if (selected >= now) {
-      errors.dateOfBirth = "Date of birth must be in the past.";
-    }
-  }
-
   if (!values.organization.trim()) {
-    errors.organization = "Organization/Institution is required.";
+    errors.organization = "Name of the Organization/Institution is required.";
   }
 
   if (!values.position.trim()) {
@@ -161,16 +289,24 @@ function validateForm(values) {
     errors.country = "Country is required.";
   }
 
+  if (!values.phoneCountryCode || !COUNTRY_CODE_OPTIONS.some((code) => code.value === values.phoneCountryCode)) {
+    errors.phoneCountryCode = "Please select a country code.";
+  }
+
   if (!values.phone.trim()) {
     errors.phone = "Phone number is required.";
-  } else if (!isValidPhone(values.phone.trim())) {
+  } else if (!isValidPhoneNumber(values.phone.trim())) {
     errors.phone = "Please provide a valid phone number.";
   }
 
-  if (!values.whatsapp.trim()) {
-    errors.whatsapp = "WhatsApp number is required.";
-  } else if (!isValidPhone(values.whatsapp.trim())) {
-    errors.whatsapp = "Please provide a valid WhatsApp number.";
+  if (values.whatsapp.trim()) {
+    if (!values.whatsappCountryCode || !COUNTRY_CODE_OPTIONS.some((code) => code.value === values.whatsappCountryCode)) {
+      errors.whatsappCountryCode = "Please select a country code.";
+    }
+
+    if (!isValidPhoneNumber(values.whatsapp.trim())) {
+      errors.whatsapp = "Please provide a valid WhatsApp number.";
+    }
   }
 
   if (!values.email.trim()) {
@@ -203,6 +339,14 @@ function validateForm(values) {
     errors.otherFood = "Please describe your food preferences.";
   }
 
+  if (!values.participantPassportScanName) {
+    errors.participantPassportScanName = "Please upload your passport front page scan copy.";
+  }
+
+  if (!values.participantProfilePictureName) {
+    errors.participantProfilePictureName = "Please upload your profile picture.";
+  }
+
   if (!values.isMemberUniversity || !YES_NO_OPTIONS.includes(values.isMemberUniversity)) {
     errors.isMemberUniversity = "Please select Yes or No.";
   }
@@ -211,6 +355,7 @@ function validateForm(values) {
     errors.hasFamilyMembers = "Please select Yes or No.";
   }
 
+  const familyMemberCount = resolveFamilyMemberCount(values);
   if (values.hasFamilyMembers === "Yes") {
     if (!values.familyMembersCount || !FAMILY_MEMBER_OPTIONS.includes(values.familyMembersCount)) {
       errors.familyMembersCount = "Please select the number of accompanying family members.";
@@ -222,6 +367,59 @@ function validateForm(values) {
         errors.familyMembersOther = "Please specify the number of family members.";
       } else if (!Number.isInteger(count) || count < 1) {
         errors.familyMembersOther = "Please enter a valid number.";
+      }
+    }
+
+    if (familyMemberCount > 0) {
+      const familyErrors = {};
+
+      for (let i = 0; i < familyMemberCount; i += 1) {
+        const member = values.familyMemberDetails[i] || buildEmptyFamilyMember();
+        const itemErrors = {};
+
+        if (!member.name.trim()) {
+          itemErrors.name = "Name is required.";
+        }
+
+        if (!member.passportNo.trim()) {
+          itemErrors.passportNo = "Passport number is required.";
+        }
+
+        if (!member.email.trim()) {
+          itemErrors.email = "Email is required.";
+        } else if (!isValidEmail(member.email.trim())) {
+          itemErrors.email = "Please provide a valid email address.";
+        }
+
+        if (!member.phoneCountryCode || !COUNTRY_CODE_OPTIONS.some((code) => code.value === member.phoneCountryCode)) {
+          itemErrors.phoneCountryCode = "Please select a country code.";
+        }
+
+        if (!member.phone.trim()) {
+          itemErrors.phone = "Phone number is required.";
+        } else if (!isValidPhoneNumber(member.phone.trim())) {
+          itemErrors.phone = "Please provide a valid phone number.";
+        }
+
+        if (!member.tShirtSize || !TSHIRT_OPTIONS.includes(member.tShirtSize)) {
+          itemErrors.tShirtSize = "Please select a T-shirt size.";
+        }
+
+        if (!member.passportScanName) {
+          itemErrors.passportScanName = "Please upload passport front page scan copy.";
+        }
+
+        if (!member.profilePictureName) {
+          itemErrors.profilePictureName = "Please upload profile picture.";
+        }
+
+        if (Object.keys(itemErrors).length > 0) {
+          familyErrors[i] = itemErrors;
+        }
+      }
+
+      if (Object.keys(familyErrors).length > 0) {
+        errors.familyMembers = familyErrors;
       }
     }
   }
@@ -268,7 +466,28 @@ function OptionGroup({ legend, name, options, value, onChange, error }) {
   );
 }
 
-export default function RegistrationForm() {
+function FileUploadField({ id, name, label, helperText, onChange, error, selectedFileName }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 block text-sm font-semibold text-slate-700">
+        {label}
+      </label>
+      <input
+        id={id}
+        name={name}
+        type="file"
+        accept="image/*,.pdf"
+        onChange={onChange}
+        className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-primary"
+      />
+      {helperText && <p className="mt-1 text-xs text-slate-500">{helperText}</p>}
+      {selectedFileName && <p className="mt-1 text-xs font-medium text-slate-700">Selected: {selectedFileName}</p>}
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+    </div>
+  );
+}
+
+export default function RegistrationForm({ initialAttendeeId = "" }) {
   const router = useRouter();
   const [formValues, setFormValues] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState({});
@@ -282,11 +501,22 @@ export default function RegistrationForm() {
       if (!raw) return;
       const saved = JSON.parse(raw);
       if (!saved || typeof saved !== "object") return;
+
       setFormValues((prev) => {
-        const next = { ...prev };
-        for (const key of Object.keys(prev)) {
-          if (typeof saved[key] !== "undefined") next[key] = saved[key];
-        }
+        const next = {
+          ...prev,
+          ...saved,
+          familyMemberDetails: Array.isArray(saved.familyMemberDetails)
+            ? saved.familyMemberDetails.map((member) => ({
+                ...buildEmptyFamilyMember(),
+                ...member,
+              }))
+            : prev.familyMemberDetails,
+        };
+
+        const familyMemberCount = resolveFamilyMemberCount(next);
+        next.familyMemberDetails = syncFamilyMembers(next.familyMemberDetails, familyMemberCount);
+
         return next;
       });
     } catch {
@@ -294,8 +524,36 @@ export default function RegistrationForm() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!initialAttendeeId) return;
+
+    setFormValues((prev) => {
+      if (initialAttendeeId === "member" && !prev.isMemberUniversity) {
+        return { ...prev, isMemberUniversity: "Yes" };
+      }
+
+      if (initialAttendeeId === "non-member" && !prev.isMemberUniversity) {
+        return { ...prev, isMemberUniversity: "No" };
+      }
+
+      if (initialAttendeeId === "family" && prev.hasFamilyMembers !== "Yes") {
+        const next = {
+          ...prev,
+          hasFamilyMembers: "Yes",
+          familyMembersCount: prev.familyMembersCount || "1",
+        };
+        const count = resolveFamilyMemberCount(next);
+        next.familyMemberDetails = syncFamilyMembers(next.familyMemberDetails, count);
+        return next;
+      }
+
+      return prev;
+    });
+  }, [initialAttendeeId]);
+
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
   const isOnlinePayment = formValues.paymentMethod === "online-payment";
+  const pricing = useMemo(() => calculatePricing(formValues), [formValues]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -308,7 +566,7 @@ export default function RegistrationForm() {
         if (name === "email" || name === "alternativeEmail") {
           nextValue = value.trim().toLowerCase();
         } else if (name === "phone" || name === "whatsapp") {
-          nextValue = value.replace(/[^0-9()+\-\s]/g, "");
+          nextValue = value.replace(/[^0-9()\-\s]/g, "");
         } else if (name === "passportNo") {
           nextValue = value.replace(/[^A-Za-z0-9\-]/g, "").toUpperCase();
         } else if (name === "zipCode") {
@@ -337,11 +595,104 @@ export default function RegistrationForm() {
       if (name === "hasFamilyMembers" && nextValue !== "Yes") {
         updated.familyMembersCount = "";
         updated.familyMembersOther = "";
+        updated.familyMemberDetails = [];
       }
 
       if (name === "familyMembersCount" && nextValue !== "Others") {
         updated.familyMembersOther = "";
       }
+
+      const familyMemberCount = resolveFamilyMemberCount(updated);
+      updated.familyMemberDetails = syncFamilyMembers(updated.familyMemberDetails, familyMemberCount);
+
+      if (hasSubmitted) {
+        setErrors(validateForm(updated));
+      }
+
+      return updated;
+    });
+  };
+
+  const handleParticipantFileChange = (event) => {
+    const { name, files } = event.target;
+    const fileName = files && files[0] ? files[0].name : "";
+
+    setFormValues((prev) => {
+      const updated = {
+        ...prev,
+        [name]: fileName,
+      };
+
+      if (hasSubmitted) {
+        setErrors(validateForm(updated));
+      }
+
+      return updated;
+    });
+  };
+
+  const handleFamilyMemberChange = (index, field, rawValue) => {
+    setFormValues((prev) => {
+      const nextFamilyMembers = [...prev.familyMemberDetails];
+      const current = {
+        ...buildEmptyFamilyMember(),
+        ...nextFamilyMembers[index],
+      };
+
+      let nextValue = rawValue;
+      if (field === "email") {
+        nextValue = rawValue.trim().toLowerCase();
+      } else if (field === "passportNo") {
+        nextValue = rawValue.replace(/[^A-Za-z0-9\-]/g, "").toUpperCase();
+      } else if (field === "phone") {
+        nextValue = rawValue.replace(/[^0-9()\-\s]/g, "");
+      } else {
+        nextValue = sanitizeBasicText(rawValue);
+      }
+
+      const limitMap = {
+        name: FIELD_LIMITS.familyName,
+        passportNo: FIELD_LIMITS.familyPassportNo,
+        email: FIELD_LIMITS.familyEmail,
+        phone: FIELD_LIMITS.familyPhone,
+      };
+      const limit = limitMap[field];
+      if (limit) {
+        nextValue = nextValue.slice(0, limit);
+      }
+
+      current[field] = nextValue;
+      nextFamilyMembers[index] = current;
+
+      const updated = {
+        ...prev,
+        familyMemberDetails: nextFamilyMembers,
+      };
+
+      if (hasSubmitted) {
+        setErrors(validateForm(updated));
+      }
+
+      return updated;
+    });
+  };
+
+  const handleFamilyMemberFileChange = (index, field, files) => {
+    const fileName = files && files[0] ? files[0].name : "";
+
+    setFormValues((prev) => {
+      const nextFamilyMembers = [...prev.familyMemberDetails];
+      const current = {
+        ...buildEmptyFamilyMember(),
+        ...nextFamilyMembers[index],
+      };
+      current[field] = fileName;
+      nextFamilyMembers[index] = current;
+
+      const updated = {
+        ...prev,
+        familyMemberDetails: nextFamilyMembers,
+      };
 
       if (hasSubmitted) {
         setErrors(validateForm(updated));
@@ -360,6 +711,18 @@ export default function RegistrationForm() {
       setStatus({ type: "error", message: "Unable to process this request." });
       return;
     }
+
+    const familyMemberCount = resolveFamilyMemberCount(formValues);
+    const normalizedFamilyMembers = syncFamilyMembers(formValues.familyMemberDetails, familyMemberCount).map((member) => ({
+      ...member,
+      name: normalizeSpaces(member.name || ""),
+      passportNo: (member.passportNo || "").trim().toUpperCase(),
+      email: (member.email || "").trim().toLowerCase(),
+      phone: (member.phone || "").trim(),
+      phoneCountryCode: member.phoneCountryCode || "+880",
+      passportScanName: member.passportScanName || "",
+      profilePictureName: member.profilePictureName || "",
+    }));
 
     const normalized = {
       ...formValues,
@@ -381,6 +744,22 @@ export default function RegistrationForm() {
       email: formValues.email.trim().toLowerCase(),
       alternativeEmail: formValues.alternativeEmail.trim().toLowerCase(),
       familyMembersOther: formValues.familyMembersOther.trim(),
+      familyMemberDetails: normalizedFamilyMembers,
+    };
+
+    const computedPricing = calculatePricing(normalized);
+    normalized.pricing = {
+      registrationPeriodKey: computedPricing.period.key,
+      registrationPeriodLabel: computedPricing.period.label,
+      registrationPeriodRange: computedPricing.period.range,
+      memberCategory: normalized.isMemberUniversity === "Yes" ? "Member / Partner Institution" : "Non-Member",
+      baseFeeUsd: computedPricing.baseFeeUsd,
+      familyMembersCount: computedPricing.familyCount,
+      familyFeeUsd: computedPricing.familyFeeUsd,
+      totalFeeUsd: computedPricing.totalFeeUsd,
+      currency: "USD",
+      isAfterDeadline: computedPricing.period.isClosed,
+      calculatedAt: new Date().toISOString(),
     };
 
     const nextErrors = validateForm(normalized);
@@ -404,6 +783,7 @@ export default function RegistrationForm() {
         setStatus({
           type: "wire",
           name: `${normalized.givenName} ${normalized.surname}`.trim(),
+          totalFeeUsd: normalized.pricing.totalFeeUsd,
         });
         return;
       }
@@ -414,6 +794,8 @@ export default function RegistrationForm() {
           JSON.stringify({
             ...normalized,
             fullName: `${normalized.givenName} ${normalized.surname}`.trim(),
+            phoneFull: `${normalized.phoneCountryCode} ${normalized.phone}`.trim(),
+            whatsappFull: normalized.whatsapp ? `${normalized.whatsappCountryCode} ${normalized.whatsapp}`.trim() : "",
           })
         );
       } catch {
@@ -425,6 +807,11 @@ export default function RegistrationForm() {
       setIsSubmitting(false);
     }
   };
+
+  const familyMembersToRender = useMemo(() => {
+    const count = resolveFamilyMemberCount(formValues);
+    return syncFamilyMembers(formValues.familyMemberDetails, count);
+  }, [formValues]);
 
   return (
     <section className="relative overflow-hidden py-10 sm:py-14">
@@ -576,24 +963,8 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-              <label htmlFor="dateOfBirth" className="mb-2 block text-sm font-semibold text-slate-700">
-                Date of Birth
-              </label>
-              <input
-                id="dateOfBirth"
-                name="dateOfBirth"
-                type="date"
-                value={formValues.dateOfBirth}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                required
-              />
-              {errors.dateOfBirth && <p className="mt-2 text-sm text-red-600">{errors.dateOfBirth}</p>}
-            </div>
-
-            <div>
               <label htmlFor="organization" className="mb-2 block text-sm font-semibold text-slate-700">
-                Organization/Institution
+                Name of the Organization/Institution
               </label>
               <input
                 id="organization"
@@ -604,7 +975,7 @@ export default function RegistrationForm() {
                 maxLength={FIELD_LIMITS.organization}
                 autoComplete="organization"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                placeholder="Organization/Institution"
+                placeholder="Name of the Organization/Institution"
                 required
               />
               {errors.organization && <p className="mt-2 text-sm text-red-600">{errors.organization}</p>}
@@ -721,40 +1092,73 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-slate-700">
-                Phone
+                Phone Number (with country code)
               </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={formValues.phone}
-                onChange={handleChange}
-                maxLength={FIELD_LIMITS.phone}
-                autoComplete="tel"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                placeholder="Phone number"
-                required
-              />
-              {errors.phone && <p className="mt-2 text-sm text-red-600">{errors.phone}</p>}
+              <div className="flex gap-2">
+                <select
+                  id="phoneCountryCode"
+                  name="phoneCountryCode"
+                  value={formValues.phoneCountryCode}
+                  onChange={handleChange}
+                  className="w-48 rounded-xl border border-slate-300 px-3 py-3 text-slate-900 outline-none transition focus:border-primary"
+                >
+                  {COUNTRY_CODE_OPTIONS.map((option) => (
+                    <option key={`phone-${option.value}`} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={formValues.phone}
+                  onChange={handleChange}
+                  maxLength={FIELD_LIMITS.phone}
+                  autoComplete="tel"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                  placeholder="Phone number"
+                  required
+                />
+              </div>
+              {(errors.phoneCountryCode || errors.phone) && (
+                <p className="mt-2 text-sm text-red-600">{errors.phoneCountryCode || errors.phone}</p>
+              )}
             </div>
 
             <div>
               <label htmlFor="whatsapp" className="mb-2 block text-sm font-semibold text-slate-700">
-                WhatsApp No
+                WhatsApp Number (optional)
               </label>
-              <input
-                id="whatsapp"
-                name="whatsapp"
-                type="tel"
-                value={formValues.whatsapp}
-                onChange={handleChange}
-                maxLength={FIELD_LIMITS.whatsapp}
-                autoComplete="tel"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                placeholder="WhatsApp number"
-                required
-              />
-              {errors.whatsapp && <p className="mt-2 text-sm text-red-600">{errors.whatsapp}</p>}
+              <div className="flex gap-2">
+                <select
+                  id="whatsappCountryCode"
+                  name="whatsappCountryCode"
+                  value={formValues.whatsappCountryCode}
+                  onChange={handleChange}
+                  className="w-48 rounded-xl border border-slate-300 px-3 py-3 text-slate-900 outline-none transition focus:border-primary"
+                >
+                  {COUNTRY_CODE_OPTIONS.map((option) => (
+                    <option key={`whatsapp-${option.value}`} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  id="whatsapp"
+                  name="whatsapp"
+                  type="tel"
+                  value={formValues.whatsapp}
+                  onChange={handleChange}
+                  maxLength={FIELD_LIMITS.whatsapp}
+                  autoComplete="tel"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                  placeholder="WhatsApp number"
+                />
+              </div>
+              {(errors.whatsappCountryCode || errors.whatsapp) && (
+                <p className="mt-2 text-sm text-red-600">{errors.whatsappCountryCode || errors.whatsapp}</p>
+              )}
             </div>
 
             <div>
@@ -831,6 +1235,33 @@ export default function RegistrationForm() {
               </div>
             )}
 
+            <fieldset className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <legend className="px-1 text-sm font-semibold text-slate-700">Participant Uploads</legend>
+              <p className="mb-4 mt-2 text-sm text-slate-600">
+                Upload both passport front page (scan copy) and profile picture.
+              </p>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <FileUploadField
+                  id="participantPassportScanName"
+                  name="participantPassportScanName"
+                  label="Passport front page (scan copy)"
+                  helperText="Accepted: image or PDF"
+                  onChange={handleParticipantFileChange}
+                  error={errors.participantPassportScanName}
+                  selectedFileName={formValues.participantPassportScanName}
+                />
+                <FileUploadField
+                  id="participantProfilePictureName"
+                  name="participantProfilePictureName"
+                  label="Profile picture"
+                  helperText="Accepted: image"
+                  onChange={handleParticipantFileChange}
+                  error={errors.participantProfilePictureName}
+                  selectedFileName={formValues.participantProfilePictureName}
+                />
+              </div>
+            </fieldset>
+
             <OptionGroup
               legend="Are you/your university a member of IAUP/ AUAP/ DIU's Partner University?"
               name="isMemberUniversity"
@@ -893,6 +1324,123 @@ export default function RegistrationForm() {
                     {errors.familyMembersOther && <p className="mt-2 text-sm text-red-600">{errors.familyMembersOther}</p>}
                   </div>
                 )}
+
+                {familyMembersToRender.length > 0 && (
+                  <div className="mt-6 space-y-6">
+                    {familyMembersToRender.map((member, index) => {
+                      const memberErrors = errors.familyMembers?.[index] || {};
+                      return (
+                        <div key={`family-member-${index}`} className="rounded-xl border border-slate-200 bg-white p-4">
+                          <h3 className="mb-4 text-sm font-semibold text-slate-800">Family Member {index + 1}</h3>
+
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div>
+                              <label className="mb-2 block text-sm font-semibold text-slate-700">Name</label>
+                              <input
+                                type="text"
+                                value={member.name}
+                                onChange={(event) => handleFamilyMemberChange(index, "name", event.target.value)}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="Full name"
+                              />
+                              {memberErrors.name && <p className="mt-2 text-sm text-red-600">{memberErrors.name}</p>}
+                            </div>
+
+                            <div>
+                              <label className="mb-2 block text-sm font-semibold text-slate-700">Passport No</label>
+                              <input
+                                type="text"
+                                value={member.passportNo}
+                                onChange={(event) => handleFamilyMemberChange(index, "passportNo", event.target.value)}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="Passport number"
+                              />
+                              {memberErrors.passportNo && <p className="mt-2 text-sm text-red-600">{memberErrors.passportNo}</p>}
+                            </div>
+
+                            <div>
+                              <label className="mb-2 block text-sm font-semibold text-slate-700">Email</label>
+                              <input
+                                type="email"
+                                value={member.email}
+                                onChange={(event) => handleFamilyMemberChange(index, "email", event.target.value)}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="email@example.com"
+                              />
+                              {memberErrors.email && <p className="mt-2 text-sm text-red-600">{memberErrors.email}</p>}
+                            </div>
+
+                            <div>
+                              <label className="mb-2 block text-sm font-semibold text-slate-700">Phone No</label>
+                              <div className="flex gap-2">
+                                <select
+                                  value={member.phoneCountryCode}
+                                  onChange={(event) =>
+                                    handleFamilyMemberChange(index, "phoneCountryCode", event.target.value)
+                                  }
+                                  className="w-40 rounded-xl border border-slate-300 px-3 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                >
+                                  {COUNTRY_CODE_OPTIONS.map((option) => (
+                                    <option key={`family-code-${index}-${option.value}`} value={option.value}>
+                                      {option.label}
+                                    </option>
+                                  ))}
+                                </select>
+                                <input
+                                  type="tel"
+                                  value={member.phone}
+                                  onChange={(event) => handleFamilyMemberChange(index, "phone", event.target.value)}
+                                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                  placeholder="Phone number"
+                                />
+                              </div>
+                              {(memberErrors.phoneCountryCode || memberErrors.phone) && (
+                                <p className="mt-2 text-sm text-red-600">{memberErrors.phoneCountryCode || memberErrors.phone}</p>
+                              )}
+                            </div>
+
+                            <div>
+                              <label className="mb-2 block text-sm font-semibold text-slate-700">T-shirt Size</label>
+                              <select
+                                value={member.tShirtSize}
+                                onChange={(event) => handleFamilyMemberChange(index, "tShirtSize", event.target.value)}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                              >
+                                <option value="">Select size</option>
+                                {TSHIRT_OPTIONS.map((size) => (
+                                  <option key={`family-size-${index}-${size}`} value={size}>
+                                    {size}
+                                  </option>
+                                ))}
+                              </select>
+                              {memberErrors.tShirtSize && <p className="mt-2 text-sm text-red-600">{memberErrors.tShirtSize}</p>}
+                            </div>
+
+                            <FileUploadField
+                              id={`family-${index}-passport-scan`}
+                              name={`family-${index}-passport-scan`}
+                              label="Passport front page (scan copy)"
+                              helperText="Accepted: image or PDF"
+                              onChange={(event) => handleFamilyMemberFileChange(index, "passportScanName", event.target.files)}
+                              error={memberErrors.passportScanName}
+                              selectedFileName={member.passportScanName}
+                            />
+
+                            <FileUploadField
+                              id={`family-${index}-profile-picture`}
+                              name={`family-${index}-profile-picture`}
+                              label="Profile picture"
+                              helperText="Accepted: image"
+                              onChange={(event) => handleFamilyMemberFileChange(index, "profilePictureName", event.target.files)}
+                              error={memberErrors.profilePictureName}
+                              selectedFileName={member.profilePictureName}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </fieldset>
             )}
 
@@ -929,6 +1477,46 @@ export default function RegistrationForm() {
               </div>
               {errors.paymentMethod && <p className="mt-2 text-sm text-red-600">{errors.paymentMethod}</p>}
             </fieldset>
+
+            <div className="sm:col-span-2 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+              <h2 className="mb-3 font-semibold text-blue-950">Automatic Registration Cost Summary</h2>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <p>
+                  Registration Period (auto): <strong>{pricing.period.label}</strong>
+                </p>
+                <p>
+                  Date Range: <strong>{pricing.period.range}</strong>
+                </p>
+                <p>
+                  Participant Category:{" "}
+                  <strong>
+                    {formValues.isMemberUniversity === "Yes"
+                      ? "IAUP/AUAP Member or DIU Partner Institution"
+                      : formValues.isMemberUniversity === "No"
+                        ? "Non-Member"
+                        : "Select membership above"}
+                  </strong>
+                </p>
+                <p>
+                  Base Registration Fee: <strong>{formatUsd(pricing.baseFeeUsd)}</strong>
+                </p>
+                <p>
+                  Family Members: <strong>{pricing.familyCount}</strong>
+                </p>
+                <p>
+                  Family Cost ({formatUsd(FAMILY_MEMBER_FEE_USD)} x {pricing.familyCount}):{" "}
+                  <strong>{formatUsd(pricing.familyFeeUsd)}</strong>
+                </p>
+              </div>
+              <p className="mt-3 text-base">
+                Total Payable: <strong>{formatUsd(pricing.totalFeeUsd)}</strong>
+              </p>
+              {pricing.period.isClosed && (
+                <p className="mt-2 text-xs font-medium text-amber-700">
+                  The official late registration deadline was November 10, 2026. Please contact the secretariat before proceeding.
+                </p>
+              )}
+            </div>
 
             <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
               <h2 className="mb-3 font-semibold text-slate-900">Data Protection Statement & Personality/Image Rights</h2>
@@ -976,7 +1564,9 @@ export default function RegistrationForm() {
           </div>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-slate-500">Participant: {participantName || "Please complete your name fields"}</p>
+            <p className="text-sm text-slate-500">
+              Participant: {participantName || "Please complete your name fields"} | Total: {formatUsd(pricing.totalFeeUsd)}
+            </p>
             <button
               type="submit"
               disabled={isSubmitting}
@@ -996,6 +1586,9 @@ export default function RegistrationForm() {
               <p className="mt-3">
                 You have successfully submitted the registration form and your data has been recorded for further wire
                 transfer guidelines from us. Thank you for your interest in joining the IAUP Semi Annual Meeting 2026.
+              </p>
+              <p className="mt-3">
+                Total registration amount: <strong>{formatUsd(status.totalFeeUsd || 0)}</strong>
               </p>
               <p className="mt-3">
                 Should you have any queries, feel free to contact us at iaup-bd2026@daffodilvarsity.edu.bd

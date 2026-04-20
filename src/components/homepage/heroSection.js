@@ -56,8 +56,10 @@ export default function HeroSection() {
           19–21 November
         </p>
 
-        <p className="text-xl sm:text-2xl text-slate-200 font-display font-semibold mb-4 reveal reveal-delay-2 max-w-6xl leading-snug drop-shadow-sm">
-          Transforming Higher Education for a Sustainable, Innovative, and AI-Enabled Future
+        <p className="text-xl sm:text-2xl lg:text-3xl font-display font-extrabold mb-4 reveal reveal-delay-2 max-w-6xl leading-snug tracking-wide drop-shadow-sm">
+          <span className="bg-linear-to-r from-amber-200 via-white to-secondary bg-clip-text text-transparent">
+            Transforming Higher Education for a Sustainable, Innovative, and AI-Enabled Future
+          </span>
         </p>
 
        

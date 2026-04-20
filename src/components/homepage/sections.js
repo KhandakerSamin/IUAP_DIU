@@ -9,6 +9,7 @@ import SpeakersSection from "@/components/homepage/speakersSection";
 import ImportantDatesSection from "@/components/homepage/importantDatesSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
 import VenuesSection from "@/components/homepage/venuesSection";
+import AccommodationSection from "@/components/homepage/accommodationSection";
 import VisaGuidelineSection from "@/components/homepage/visaGuidelineSection";
 import PartnerSection from "@/components/homepage/partnerSection";
 import ContactSection from "@/components/homepage/contactSection";
@@ -26,6 +27,7 @@ const homeSections = [
   ImportantDatesSection,
   RegistrationSection,
   VenuesSection,
+  AccommodationSection,
   VisaGuidelineSection,
   PartnerSection,
   ContactSection,

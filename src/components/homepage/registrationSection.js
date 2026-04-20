@@ -3,8 +3,8 @@ import Link from "next/link";
 const pricingPlans = [
   {
     attendeeId: "member",
-    name: "IAUP & AUAP Members",
-    subtitle: "Special rate for association members",
+    name: "IAUP & AUAP Members and Daffodil Partner Institutions",
+    subtitle: "Special rate for association members and partner universities",
     pricing: [
       { label: "Early Bird", price: "USD 400" },
       { label: "General", price: "USD 500" },
@@ -65,7 +65,7 @@ export default function RegistrationSection() {
           </span>
           <div className="section-divider mx-auto mb-8 reveal reveal-delay-1" />
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6 reveal reveal-delay-1">
-            Registration <span className="gradient-text">Options</span>
+            Registration Options
           </h2>
           <p className="text-lg text-muted reveal reveal-delay-2">
             Registration to the meeting is now open. DIU 2026 will take place as an in-person event only.

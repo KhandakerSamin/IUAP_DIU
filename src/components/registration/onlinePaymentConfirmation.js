@@ -25,6 +25,7 @@ export default function OnlinePaymentConfirmation() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRegistration(readStoredRegistration());
     setHasLoaded(true);
   }, []);
@@ -34,7 +35,11 @@ export default function OnlinePaymentConfirmation() {
     `${registration?.givenName || ""} ${registration?.surname || ""}`.trim() ||
     "Participant";
   const participantEmail = registration?.email || "";
-  const participantPhone = registration?.phone || "";
+  const participantPhone = registration?.phoneFull || registration?.phone || "";
+  const pricing = registration?.pricing || null;
+  const totalFeeUsd = Number(pricing?.totalFeeUsd || 0);
+  const paymentCurrency = pricing?.currency || "USD";
+  const amountToPay = Number.isFinite(totalFeeUsd) && totalFeeUsd > 0 ? totalFeeUsd : null;
 
   const handlePay = async () => {
     if (!registration) return;
@@ -49,6 +54,8 @@ export default function OnlinePaymentConfirmation() {
           name: participantName,
           email: participantEmail,
           phone: participantPhone,
+          amount: amountToPay,
+          currency: paymentCurrency,
           address: registration.address,
           city: registration.city,
           state: registration.city,
@@ -134,6 +141,17 @@ export default function OnlinePaymentConfirmation() {
             </p>
             {participantEmail && <p className="mt-1">Primary Email: {participantEmail}</p>}
             {participantPhone && <p className="mt-1">Phone: {participantPhone}</p>}
+            {pricing?.registrationPeriodLabel && (
+              <p className="mt-1">
+                Registration Period: <strong>{pricing.registrationPeriodLabel}</strong>
+              </p>
+            )}
+            {typeof pricing?.familyMembersCount === "number" && (
+              <p className="mt-1">Family Members: {pricing.familyMembersCount}</p>
+            )}
+            <p className="mt-1">
+              Total Amount: <strong>{amountToPay ? `${paymentCurrency} ${amountToPay}` : "Not available"}</strong>
+            </p>
           </div>
 
           <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">

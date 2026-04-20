@@ -5,7 +5,7 @@ const schedule = [
 
   {
     day: "Day 1 – 19 Nov (Thursday)",
-    venue: "Daffodil Tower, Dhanmondi",
+    venue: "Daffodil Plaza, Dhanmondi",
     title: "Meetings & Welcome",
     events: [
       "Registration & Welcome Coffee",
