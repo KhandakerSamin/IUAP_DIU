@@ -75,7 +75,15 @@ export default function SpeakersSection() {
                   </div>
                   <div className="flex items-center gap-3 text-dark font-medium">
                     <Mail className="w-5 h-5 text-primary" />
-                    <span>Email: <span className="text-primary cursor-pointer hover:underline">TBA</span></span>
+                    <span>
+                      Email:{" "}
+                      <a
+                        href="mailto:iaup-bd2026@daffodilvarsity.edu.bd"
+                        className="text-primary cursor-pointer hover:underline"
+                      >
+                        iaup-bd2026@daffodilvarsity.edu.bd
+                      </a>
+                    </span>
                   </div>
                 </div>
                 <p className="text-sm text-muted italic border-l-2 border-primary pl-4">

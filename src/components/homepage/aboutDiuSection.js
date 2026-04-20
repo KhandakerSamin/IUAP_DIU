@@ -4,7 +4,7 @@ const universityStats = [
   { value: "25K+", label: "Students" },
   { value: "30+", label: "Departments" },
   { value: "200+", label: "International Students" },
-  { value: "600+", label: "International Partner Institution" },
+  { value: "600+", label: "International Partner Institutions" },
 ];
 
 export default function AboutDiuSection() {
@@ -29,17 +29,17 @@ export default function AboutDiuSection() {
             <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
               DIU has established over 600 active international partnerships worldwide and is a proud member of numerous prestigious global networks and associations. With global partners, DIU is mutually working in the area of student and faculty exchange programs, summer & winter programs, scholarship, international internship, research collaborations, short-term training programs, virtual mobility, etc.
             </p>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 reveal reveal-delay-5">
+          </div>
+
+          <div className="reveal mt-8 lg:mt-0">
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-8 reveal reveal-delay-2">
               {universityStats.map((item) => (
-                <div key={item.label}>
-                  <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">{item.value}</div>
+                <div key={item.label} className="p-1 sm:p-2">
+                  <div className="font-display text-2xl sm:text-3xl font-bold gradient-text">{item.value}</div>
                   <div className="text-xs sm:text-sm text-muted mt-1">{item.label}</div>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="reveal mt-8 lg:mt-0">
             <div className="relative">
               <div className="relative rounded-3xl w-full aspect-video overflow-hidden bg-slate-100 shadow-md">
                 <Image 

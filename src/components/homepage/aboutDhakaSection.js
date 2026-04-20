@@ -23,7 +23,8 @@ export default function AboutDhakaSection() {
             </span>
             <div className="section-divider mb-8 reveal reveal-delay-1" />
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6 reveal reveal-delay-1">
-              About <span className="gradient-text">Dhaka, Bangladesh</span>
+              <span className="block">About</span>
+              <span className="block gradient-text">Dhaka, Bangladesh</span>
             </h2>
             <p className="text-lg text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-2">
               Dhaka is the capital city of a South Asian country, Bangladesh. It is the hub of economic, political and administrative enterprises located in central Bangladesh at 23°42′N 90°22′E, on the eastern banks of the Buriganga River. It lies on the lower reaches of the Ganges Delta and covers a total area of 306.38 square kilometers (around 118.29 square miles).
