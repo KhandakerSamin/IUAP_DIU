@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { calculatePricing, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
 
@@ -342,6 +343,15 @@ export default function RegistrationForm() {
 
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
   const isOnlinePayment = formValues.paymentMethod === "online-payment";
+
+  const pricing = useMemo(
+    () =>
+      calculatePricing({
+        isMember: formValues.isMemberUniversity === "Yes",
+        familyMembersCount: familyMembers.length,
+      }),
+    [formValues.isMemberUniversity, familyMembers.length]
+  );
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -1239,6 +1249,49 @@ export default function RegistrationForm() {
               </div>
               {errors.paymentMethod && <p className="mt-2 text-sm text-red-600">{errors.paymentMethod}</p>}
             </fieldset>
+
+            <div className="sm:col-span-2 rounded-xl border border-primary/30 bg-primary/5 p-5 text-sm text-slate-700">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-primary">Registration fee</p>
+              <dl className="grid gap-2 sm:grid-cols-2">
+                <div>
+                  <dt className="text-slate-500">Period</dt>
+                  <dd className="font-semibold text-slate-900">
+                    {pricing.period.label} <span className="font-normal text-slate-500">({pricing.period.range})</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Category</dt>
+                  <dd className="font-semibold text-slate-900">
+                    {formValues.isMemberUniversity === "Yes"
+                      ? "IAUP / AUAP / DIU partner"
+                      : formValues.isMemberUniversity === "No"
+                      ? "Non-partner"
+                      : "Select partner-university option above to see category"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Base fee</dt>
+                  <dd className="font-semibold text-slate-900">{formatUsd(pricing.baseFeeUsd)}</dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Family members</dt>
+                  <dd className="font-semibold text-slate-900">
+                    {pricing.familyCount === 0
+                      ? "None"
+                      : `${pricing.familyCount} × ${formatUsd(FAMILY_MEMBER_FEE_USD)} = ${formatUsd(pricing.familyFeeUsd)}`}
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
+                <span className="text-sm font-semibold text-slate-900">Total payable</span>
+                <span className="font-display text-xl font-bold text-primary">{formatUsd(pricing.totalFeeUsd)}</span>
+              </div>
+              {pricing.period.isClosed && (
+                <p className="mt-2 text-xs text-amber-700">
+                  Registration window has closed. Please contact the organizer.
+                </p>
+              )}
+            </div>
 
             <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
               <h2 className="mb-3 font-semibold text-slate-900">Data Protection Statement & Personality/Image Rights</h2>

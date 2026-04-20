@@ -66,6 +66,7 @@ CREATE INDEX IF NOT EXISTS idx_family_members_reg ON family_members(registration
 
 const MIGRATIONS = [
   `ALTER TABLE registrations ADD COLUMN invoice_sent_at TEXT`,
+  `ALTER TABLE registrations ADD COLUMN registration_period TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -162,15 +163,19 @@ export function getFamilyMembersForRegistration(registrationId) {
   return db.prepare("SELECT * FROM family_members WHERE registration_id = ? ORDER BY id").all(registrationId);
 }
 
-export function attachReffIdToRegistration(regId, reffId, amount, currency) {
+export function attachReffIdToRegistration(regId, reffId, amount, currency, period) {
   const db = getDatabase();
   return db
     .prepare(
       `UPDATE registrations
-         SET payment_reff_id = ?, payment_amount = ?, payment_currency = ?, updated_at = datetime('now')
+         SET payment_reff_id = ?,
+             payment_amount = ?,
+             payment_currency = ?,
+             registration_period = COALESCE(?, registration_period),
+             updated_at = datetime('now')
        WHERE reg_id = ?`
     )
-    .run(reffId, amount, currency, regId);
+    .run(reffId, amount, currency, period || null, regId);
 }
 
 export function markPaymentStatus(reffId, status, extras = {}) {

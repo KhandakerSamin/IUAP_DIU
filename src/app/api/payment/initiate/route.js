@@ -1,4 +1,9 @@
-import { attachReffIdToRegistration, getRegistrationByRegId } from "@/lib/db";
+import {
+  attachReffIdToRegistration,
+  getFamilyMembersForRegistration,
+  getRegistrationByRegId,
+} from "@/lib/db";
+import { calculatePricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +15,15 @@ function buildReffId() {
 
 function trimBaseUrl(url) {
   return (url || "").replace(/\/+$/, "");
+}
+
+function resolveAmount(pricing) {
+  const forced = process.env.IAUP_DEV_FORCE_AMOUNT;
+  if (process.env.NODE_ENV !== "production" && forced) {
+    const currency = (process.env.IAUP_DEV_FORCE_CURRENCY || "BDT").toUpperCase();
+    return { amount: String(forced), currency, source: "dev-override" };
+  }
+  return { amount: String(pricing.totalFeeUsd), currency: pricing.currency, source: "pricing" };
 }
 
 export async function POST(request) {
@@ -46,10 +60,14 @@ export async function POST(request) {
     return Response.json({ error: "This registration is already paid." }, { status: 409 });
   }
 
-  const amount = String(process.env.IAUP_REGISTRATION_AMOUNT || "500");
-  const currency = String(process.env.IAUP_CURRENCY || "BDT").toUpperCase();
-  const reffId = buildReffId();
+  const familyMembers = getFamilyMembersForRegistration(registration.id);
+  const pricing = calculatePricing({
+    isMember: registration.is_member_university === "Yes",
+    familyMembersCount: familyMembers.length,
+  });
 
+  const { amount, currency } = resolveAmount(pricing);
+  const reffId = buildReffId();
   const name = `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant";
 
   const payload = {
@@ -111,7 +129,7 @@ export async function POST(request) {
   }
 
   try {
-    attachReffIdToRegistration(regId, reffId, amount, currency);
+    attachReffIdToRegistration(regId, reffId, amount, currency, pricing.period.key);
   } catch (err) {
     console.error("[payment/initiate] DB update failed", err);
   }

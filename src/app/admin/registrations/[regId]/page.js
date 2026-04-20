@@ -107,6 +107,7 @@ export default async function RegistrationDetailPage({ params }) {
         <h2 className="mb-4 text-sm font-semibold text-slate-900">Payment</h2>
         <dl className="grid gap-4 sm:grid-cols-3">
           <Field label="Amount" value={row.payment_amount ? `${row.payment_amount} ${row.payment_currency || ""}` : null} />
+          <Field label="Period" value={row.registration_period ? row.registration_period.replace(/^\w/, (c) => c.toUpperCase()) : null} />
           <Field label="Reff ID" value={row.payment_reff_id} />
           <Field label="Transaction ID" value={row.payment_tran_id} />
           <Field label="Method" value={row.payment_method} />

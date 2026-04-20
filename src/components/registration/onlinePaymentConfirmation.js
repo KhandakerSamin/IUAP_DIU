@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { calculatePricing, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
 
@@ -17,6 +18,16 @@ function readStoredRegistration() {
   } catch {
     return null;
   }
+}
+
+function parseFamilyCount(registration) {
+  if (!registration || registration.hasFamilyMembers !== "Yes") return 0;
+  if (registration.familyMembersCount === "Others") {
+    const n = parseInt(registration.familyMembersOther, 10);
+    return Number.isInteger(n) && n > 0 ? n : 0;
+  }
+  const n = parseInt(registration.familyMembersCount, 10);
+  return Number.isInteger(n) && n > 0 ? n : 0;
 }
 
 export default function OnlinePaymentConfirmation() {
@@ -43,6 +54,15 @@ export default function OnlinePaymentConfirmation() {
     "Participant";
   const participantEmail = registration?.email || "";
   const participantPhone = registration?.phone || "";
+
+  const pricing = useMemo(
+    () =>
+      calculatePricing({
+        isMember: registration?.isMemberUniversity === "Yes",
+        familyMembersCount: parseFamilyCount(registration),
+      }),
+    [registration]
+  );
 
   const handlePay = async () => {
     if (!regId) {
@@ -137,6 +157,40 @@ export default function OnlinePaymentConfirmation() {
             {participantEmail && <p className="mt-1">Primary Email: {participantEmail}</p>}
             {participantPhone && <p className="mt-1">Phone: {participantPhone}</p>}
             <p className="mt-1 text-xs text-slate-500 font-mono">Ref: {regId}</p>
+          </div>
+
+          <div className="mt-6 rounded-xl border border-primary/30 bg-primary/5 p-5 text-sm text-slate-700">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-primary">Amount to pay</p>
+            <dl className="grid gap-2 sm:grid-cols-2">
+              <div>
+                <dt className="text-slate-500">Period</dt>
+                <dd className="font-semibold text-slate-900">
+                  {pricing.period.label} <span className="font-normal text-slate-500">({pricing.period.range})</span>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500">Category</dt>
+                <dd className="font-semibold text-slate-900">
+                  {pricing.isMember ? "IAUP / AUAP / DIU partner" : "Non-partner"}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-slate-500">Base fee</dt>
+                <dd className="font-semibold text-slate-900">{formatUsd(pricing.baseFeeUsd)}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-500">Family members</dt>
+                <dd className="font-semibold text-slate-900">
+                  {pricing.familyCount === 0
+                    ? "None"
+                    : `${pricing.familyCount} × ${formatUsd(FAMILY_MEMBER_FEE_USD)} = ${formatUsd(pricing.familyFeeUsd)}`}
+                </dd>
+              </div>
+            </dl>
+            <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
+              <span className="text-sm font-semibold text-slate-900">Total</span>
+              <span className="font-display text-xl font-bold text-primary">{formatUsd(pricing.totalFeeUsd)}</span>
+            </div>
           </div>
 
           <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">

@@ -3,6 +3,7 @@ import path from "node:path";
 import React from "react";
 import { Document, Page, Text, View, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { dataDir } from "@/lib/db";
+import { calculatePricing, FAMILY_MEMBER_FEE_USD, REGISTRATION_PERIODS } from "@/lib/pricing";
 
 const PRIMARY = "#0b3d91";
 const MUTED = "#64748b";
@@ -134,14 +135,24 @@ function formatDate(value) {
 function InvoiceDoc({ registration, familyMembers }) {
   const fullName = `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant";
   const amount = registration.payment_amount || "0";
-  const currency = (registration.payment_currency || "BDT").toUpperCase();
+  const currency = (registration.payment_currency || "USD").toUpperCase();
   const tranId = registration.payment_tran_id || "—";
   const reffId = registration.payment_reff_id || "—";
   const familyCount = familyMembers.length;
+  const isMember = registration.is_member_university === "Yes";
 
-  const lineItem = familyCount
-    ? `IAUP Semi-Annual Meeting 2026 — Registration (1 participant + ${familyCount} family member${familyCount > 1 ? "s" : ""})`
-    : "IAUP Semi-Annual Meeting 2026 — Registration";
+  const storedPeriodKey = registration.registration_period;
+  const periodMeta = REGISTRATION_PERIODS.find((p) => p.key === storedPeriodKey);
+  const pricing = calculatePricing({
+    isMember,
+    familyMembersCount: familyCount,
+  });
+  const periodLabel = periodMeta?.label || pricing.period.label;
+  const periodRange = periodMeta?.range || pricing.period.range;
+  const baseFee = pricing.baseFeeUsd;
+  const familyFee = pricing.familyFeeUsd;
+
+  const baseLabel = `IAUP Semi-Annual Meeting 2026 — Registration (${isMember ? "Member" : "Non-member"} · ${periodLabel})`;
 
   return (
     <Document title={`IAUP Invoice ${reffId}`} author="IAUP Secretariat">
@@ -182,31 +193,39 @@ function InvoiceDoc({ registration, familyMembers }) {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Summary</Text>
+          <Text style={styles.muted}>Registration period: {periodLabel} ({periodRange})</Text>
           <View style={styles.table}>
             <View style={styles.tableHeader}>
               <Text style={[styles.tableHeaderCell, styles.cellDesc]}>Description</Text>
               <Text style={[styles.tableHeaderCell, styles.cellQty]}>Qty</Text>
               <Text style={[styles.tableHeaderCell, styles.cellAmount]}>Amount</Text>
             </View>
-            <View style={styles.tableRowLast}>
+            <View style={familyCount > 0 ? styles.tableRow : styles.tableRowLast}>
               <View style={styles.cellDesc}>
-                <Text>{lineItem}</Text>
-                {familyCount > 0 ? (
-                  <Text style={styles.muted}>
-                    Accompanying: {familyMembers.map((f) => f.full_name).filter(Boolean).join(", ")}
-                  </Text>
-                ) : null}
+                <Text>{baseLabel}</Text>
               </View>
               <Text style={styles.cellQty}>1</Text>
-              <Text style={styles.cellAmount}>{formatAmount(amount, currency)}</Text>
+              <Text style={styles.cellAmount}>{formatAmount(baseFee, "USD")}</Text>
             </View>
+            {familyCount > 0 ? (
+              <View style={styles.tableRowLast}>
+                <View style={styles.cellDesc}>
+                  <Text>Accompanying family members</Text>
+                  <Text style={styles.muted}>
+                    {familyMembers.map((f) => f.full_name).filter(Boolean).join(", ")}
+                  </Text>
+                </View>
+                <Text style={styles.cellQty}>{familyCount}</Text>
+                <Text style={styles.cellAmount}>{formatAmount(familyFee, "USD")}</Text>
+              </View>
+            ) : null}
           </View>
 
           <View style={styles.totalsWrap}>
             <View style={styles.totalsBox}>
               <View style={styles.totalsRow}>
                 <Text style={styles.totalsLabel}>Subtotal</Text>
-                <Text>{formatAmount(amount, currency)}</Text>
+                <Text>{formatAmount(baseFee + familyFee, "USD")}</Text>
               </View>
               <View style={styles.totalsDivider} />
               <View style={styles.totalsRow}>
