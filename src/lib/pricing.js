@@ -58,10 +58,38 @@ function coerceFamilyCount(value) {
   return Math.floor(n);
 }
 
+// Test-mode flat fee for stakeholder testing in production. Must be prefixed
+// with NEXT_PUBLIC_ so client-rendered price displays match the server charge.
+function getFlatFeeOverrideUsd() {
+  const raw = process.env.NEXT_PUBLIC_IAUP_FLAT_FEE_USD;
+  if (raw === undefined || raw === null || raw === "") return null;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return n;
+}
+
+export function isTestMode() {
+  return getFlatFeeOverrideUsd() !== null;
+}
+
 export function calculatePricing({ isMember, familyMembersCount = 0, now } = {}) {
   const period = getRegistrationPeriod(now);
   const member = coerceIsMember(isMember);
   const familyCount = coerceFamilyCount(familyMembersCount);
+
+  const flatFeeUsd = getFlatFeeOverrideUsd();
+  if (flatFeeUsd !== null) {
+    return {
+      period,
+      isMember: member,
+      familyCount,
+      baseFeeUsd: flatFeeUsd,
+      familyFeeUsd: 0,
+      totalFeeUsd: flatFeeUsd,
+      currency: "USD",
+      isTestMode: true,
+    };
+  }
 
   const feeTable = member ? MEMBER_FEES_USD : NON_MEMBER_FEES_USD;
   const baseFeeUsd = feeTable[period.key];
@@ -76,6 +104,7 @@ export function calculatePricing({ isMember, familyMembersCount = 0, now } = {})
     familyFeeUsd,
     totalFeeUsd,
     currency: "USD",
+    isTestMode: false,
   };
 }
 

@@ -1,5 +1,6 @@
 import { Roboto, Montserrat } from "next/font/google";
 import "./globals.css";
+import TestModeBanner from "@/components/global/testModeBanner";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -27,7 +28,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${roboto.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full" suppressHydrationWarning>{children}</body>
+      <body className="min-h-full" suppressHydrationWarning>
+        <TestModeBanner />
+        {children}
+      </body>
     </html>
   );
 }
