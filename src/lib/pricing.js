@@ -16,20 +16,20 @@ export const REGISTRATION_PERIODS = [
   {
     key: "early",
     label: "Early Bird",
-    range: "on or before 30 Sep 2026",
-    endsISO: "2026-09-30T23:59:59+06:00",
+    range: "on or before 31 Aug 2026",
+    endsISO: "2026-08-31T23:59:59+06:00",
   },
   {
     key: "general",
     label: "General Registration",
-    range: "1 – 30 Oct 2026",
-    endsISO: "2026-10-30T23:59:59+06:00",
+    range: "1 – 30 Sep 2026",
+    endsISO: "2026-09-30T23:59:59+06:00",
   },
   {
     key: "late",
     label: "Late Registration",
-    range: "31 Oct – 10 Nov 2026",
-    endsISO: "2026-11-10T23:59:59+06:00",
+    range: "1 – 31 Oct 2026",
+    endsISO: "2026-10-31T23:59:59+06:00",
   },
 ];
 

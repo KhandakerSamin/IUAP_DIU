@@ -2,9 +2,9 @@ import { CalendarDays } from "lucide-react";
 
 export default function ImportantDatesSection() {
   const importantDates = [
-    { label: "Early Bird Registration Deadline", date: "September 30, 2026" },
-    { label: "General Registration Deadline", date: "October 30, 2026" },
-    { label: "Late Registration Deadline", date: "November 10, 2026" },
+    { label: "Early Bird Registration Deadline", date: "August 31, 2026" },
+    { label: "General Registration Deadline", date: "September 30, 2026" },
+    { label: "Late Registration Deadline", date: "October 31, 2026" },
     { label: "Program Date", date: "19-21 November 2026" },
   ];
 

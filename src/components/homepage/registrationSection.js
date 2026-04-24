@@ -3,7 +3,7 @@ import Link from "next/link";
 const pricingPlans = [
   {
     attendeeId: "member",
-    name: "IAUP & AUAP Members and Daffodil Partner Institutions",
+    name: "IAUP, AUAP Members and Daffodil's Partner Institutions",
     subtitle: "Special rate for association members and partner universities",
     pricing: [
       { label: "Early Bird", price: "USD 400" },
@@ -16,7 +16,6 @@ const pricingPlans = [
       "Lunch and coffee breaks",
       "Gala dinner and cultural night",
     ],
-    featured: true,
     buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
   },
   {
@@ -51,6 +50,19 @@ const pricingPlans = [
     ],
     buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
   },
+  {
+    attendeeId: "local",
+    name: "Local Participants",
+    subtitle: "Bangladesh-based participants",
+    pricing: [{ label: "Flat Rate", price: "BDT 20,000" }],
+    features: [
+      "All conference sessions",
+      "Conference kit and materials",
+      "Lunch and coffee breaks",
+      "Gala dinner and cultural night",
+    ],
+    buttonClass: "w-full py-4 px-6 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-colors mt-8",
+  },
 ];
 
 export default function RegistrationSection() {
@@ -72,16 +84,14 @@ export default function RegistrationSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-6 items-stretch">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8 lg:gap-6 items-stretch">
           {pricingPlans.map((plan) => (
             <article
               key={plan.name}
-              className={`card-hover bg-white rounded-3xl p-8 border border-border reveal flex flex-col h-full ${
-                plan.featured ? "pricing-featured reveal-delay-1" : ""
-              }`}
+              className="card-hover bg-white rounded-3xl p-8 reveal flex flex-col h-full"
             >
-              <div className={`text-center mb-8 ${plan.featured ? "pt-4" : ""}`}>
-                <h3 className="font-display text-2xl font-bold text-dark mb-2">{plan.name}</h3>
+              <div className="text-center mb-8">
+                <h3 className="font-display text-[20px] font-bold text-dark mb-2">{plan.name}</h3>
                 <p className="text-muted text-sm">{plan.subtitle}</p>
               </div>
 
@@ -90,7 +100,7 @@ export default function RegistrationSection() {
                   {plan.pricing.map((tier, idx) => (
                     <div key={idx} className="flex justify-between items-center pb-3 last:pb-0 border-b border-slate-200 last:border-0 border-dashed">
                       <span className="text-sm font-medium text-slate-600">{tier.label}</span>
-                      <span className={`font-display font-bold text-lg ${plan.featured && idx === 0 ? "text-primary" : "text-dark"}`}>
+                      <span className="font-display font-bold text-lg text-dark">
                         {tier.price}
                       </span>
                     </div>

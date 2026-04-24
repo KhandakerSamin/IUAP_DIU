@@ -4,7 +4,7 @@ import Image from "next/image";
 const schedule = [
 
   {
-    day: "Day 1 – 19 Nov (Thursday)",
+    day: "19 Nov (Thursday)",
     venue: "Daffodil Plaza, Dhanmondi",
     title: "Meetings & Welcome",
     events: [
@@ -15,7 +15,7 @@ const schedule = [
     ],
   },
   {
-    day: "Day 2 – 20 Nov (Friday)",
+    day: "20 Nov (Friday)",
     venue: "Hotel Sheraton, Banani",
     title: "Main Conference",
     events: [
@@ -31,7 +31,7 @@ const schedule = [
     ],
   },
   {
-    day: "Day 3 – 21 Nov (Saturday)",
+    day: "21 Nov (Saturday)",
     venue: "Daffodil Smart City, Birulia",
     title: "Anniversary & Closing",
     events: [
@@ -54,7 +54,7 @@ export default function TentativeProgramSection() {
             Event Schedule
           </span>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6">
-            Tentative <span className="gradient-text">Program</span>
+            Tentative <span className="gradient-text">Schedule</span>
           </h2>
           <p className="text-lg text-muted leading-relaxed">
             Join us for an exciting 3-day event packed with high-level dialogs, governance meetings, cultural immersions, and the grand celebration of DIU&apos;s 25th anniversary.
@@ -74,7 +74,7 @@ export default function TentativeProgramSection() {
                 <div className="flex items-center gap-3 mb-3 text-primary">
                   <CalendarDays className="w-5 h-5" />
                   <span className="font-semibold tracking-wider uppercase text-sm">
-                    {`Conference Day ${idx + 1}`}
+                    {`Day ${idx + 1}`}
                   </span>
                 </div>
                 <h4 className="font-display font-bold text-2xl text-dark mb-4 leading-snug">
@@ -110,7 +110,7 @@ export default function TentativeProgramSection() {
         <div className="reveal">
           <div className="text-center mb-12">
             <h3 className="font-display text-3xl sm:text-4xl font-bold text-dark mb-4">
-              Optional <span className="gradient-text">Post-Event</span> (TBC)
+              Optional <span className="gradient-text">Post-Event Tour</span> (TBC)
             </h3>
             <p className="text-muted text-lg">Extend your trip and discover the natural beauty of Bangladesh.</p>
           </div>

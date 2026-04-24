@@ -55,6 +55,10 @@ CREATE TABLE IF NOT EXISTS family_members (
   registration_id INTEGER NOT NULL,
   full_name TEXT,
   relationship TEXT,
+  passport_no TEXT,
+  email TEXT,
+  phone TEXT,
+  tshirt_size TEXT,
   profile_photo_path TEXT,
   passport_scan_path TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -67,6 +71,10 @@ CREATE INDEX IF NOT EXISTS idx_family_members_reg ON family_members(registration
 const MIGRATIONS = [
   `ALTER TABLE registrations ADD COLUMN invoice_sent_at TEXT`,
   `ALTER TABLE registrations ADD COLUMN registration_period TEXT`,
+  `ALTER TABLE family_members ADD COLUMN passport_no TEXT`,
+  `ALTER TABLE family_members ADD COLUMN email TEXT`,
+  `ALTER TABLE family_members ADD COLUMN phone TEXT`,
+  `ALTER TABLE family_members ADD COLUMN tshirt_size TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -142,8 +150,28 @@ export function insertRegistration(row) {
 export function insertFamilyMember(row) {
   const db = getDatabase();
   const stmt = db.prepare(`
-    INSERT INTO family_members (registration_id, full_name, relationship, profile_photo_path, passport_scan_path)
-    VALUES (@registration_id, @full_name, @relationship, @profile_photo_path, @passport_scan_path)
+    INSERT INTO family_members (
+      registration_id,
+      full_name,
+      relationship,
+      passport_no,
+      email,
+      phone,
+      tshirt_size,
+      profile_photo_path,
+      passport_scan_path
+    )
+    VALUES (
+      @registration_id,
+      @full_name,
+      @relationship,
+      @passport_no,
+      @email,
+      @phone,
+      @tshirt_size,
+      @profile_photo_path,
+      @passport_scan_path
+    )
   `);
   return stmt.run(row).lastInsertRowid;
 }
