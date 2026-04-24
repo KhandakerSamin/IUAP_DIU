@@ -1,6 +1,8 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Download } from "lucide-react";
 
 export default function Iaup2026Section() {
+  const brochureUrl = "/IAUP%20Semi-Annual%20Meeting%202026-4.pdf";
+
   const highlights = [
     "IAUP Executive Committee and Board of Directors meetings",
     "Participation of 100 to 150 global university leaders",
@@ -39,7 +41,7 @@ export default function Iaup2026Section() {
 
           {/* Highlights Column */}
           <div className="reveal reveal-delay-2">
-            <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-lg border border-border h-full">
+            <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-border h-full">
               <h3 className="font-display text-2xl font-bold text-dark mb-8 pb-4 border-b border-border">
                 Key Highlights
               </h3>
@@ -53,6 +55,16 @@ export default function Iaup2026Section() {
                   </li>
                 ))}
               </ul>
+              <div className="mt-10 pt-6 border-t border-border">
+                <a
+                  href={brochureUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-all shadow-sm"
+                >
+                  Download Brochure <Download className="ml-3"/>
+                </a>
+              </div>
             </div>
           </div>
         </div>

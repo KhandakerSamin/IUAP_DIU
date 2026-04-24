@@ -13,14 +13,14 @@ const leaders = [
     role1: "President,",
     role2: "CETYS University (Mexico)",
     position: "IAUP Chairman of the Board",
-    image: "/iaup.jpg"
+    image: "/leader2.jpeg"
   },
   {
     name: "Dr. Tomas Morales",
     role1: "President,",
     role2: "California State University, San Bernardino (USA)",
     position: "President Elect 2024-2027",
-    image: "/iauplogo.jpg"
+    image: "/leader3.jpeg"
   },
   {
     name: "Prof. Tatsuro Tanioka",

@@ -4,14 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import PhoneInput from "react-phone-input-2";
 import { calculatePricing, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
 
-const TITLE_OPTIONS = ["Mr.", "Ms.", "Dr.", "Prof.", "Others"];
+const TITLE_OPTIONS = ["Mr.", "Ms.", "Dr.", "Prof.", "Prof. Dr.", "Others"];
 const GENDER_OPTIONS = ["Male", "Female"];
 const TSHIRT_OPTIONS = ["S", "M", "L", "XL", "XXL"];
-const FOOD_OPTIONS = ["None", "Vegan", "Vegetarian", "Halal", "Other"];
+const FOOD_OPTIONS = [ "Vegan", "Vegetarian", "Halal","None", "Other"];
 const YES_NO_OPTIONS = ["Yes", "No"];
 const FAMILY_MEMBER_OPTIONS = ["1", "2", "3", "4", "Others"];
 const PAYMENT_OPTIONS = [
@@ -40,7 +41,9 @@ const FIELD_LIMITS = {
   familyMembersOther: 2,
   website: 120,
   familyFullName: 120,
-  familyRelationship: 40,
+  familyPassportNo: 20,
+  familyEmail: 120,
+  familyPhone: 24,
 };
 
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -56,7 +59,15 @@ function validateUpload(file) {
 }
 
 function emptyFamilyMember() {
-  return { fullName: "", relationship: "", profilePhoto: null, passportScan: null };
+  return {
+    fullName: "",
+    passportNo: "",
+    email: "",
+    phone: "",
+    tShirtSize: "",
+    profilePhoto: null,
+    passportScan: null,
+  };
 }
 
 const INITIAL_FORM = {
@@ -67,7 +78,6 @@ const INITIAL_FORM = {
   gender: "",
   passportNo: "",
   nationality: "",
-  dateOfBirth: "",
   organization: "",
   position: "",
   department: "",
@@ -75,6 +85,8 @@ const INITIAL_FORM = {
   zipCode: "",
   city: "",
   country: "",
+  phoneCountryIso2: "bd",
+  phoneCountryCode: "+880",
   phone: "",
   whatsapp: "",
   email: "",
@@ -108,6 +120,12 @@ function isValidPhone(value) {
   return /^\+?[0-9()\-\s]{7,24}$/.test(value);
 }
 
+function normalizePhoneCountryCode(value) {
+  const raw = String(value || "").trim();
+  const normalized = raw.split(" ")[0];
+  return /^\+\d{1,4}$/.test(normalized) ? normalized : "+880";
+}
+
 function validateForm(values) {
   const errors = {};
 
@@ -139,19 +157,6 @@ function validateForm(values) {
     errors.nationality = "Nationality is required.";
   }
 
-  if (!values.dateOfBirth) {
-    errors.dateOfBirth = "Date of birth is required.";
-  } else {
-    const selected = new Date(values.dateOfBirth);
-    const now = new Date();
-    selected.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-
-    if (selected >= now) {
-      errors.dateOfBirth = "Date of birth must be in the past.";
-    }
-  }
-
   if (!values.organization.trim()) {
     errors.organization = "Organization/Institution is required.";
   }
@@ -178,6 +183,10 @@ function validateForm(values) {
 
   if (!values.country.trim()) {
     errors.country = "Country is required.";
+  }
+
+  if (!values.phoneCountryCode || !/^\+\d{1,4}$/.test(values.phoneCountryCode)) {
+    errors.phoneCountryCode = "Please select a country code.";
   }
 
   if (!values.phone.trim()) {
@@ -260,10 +269,17 @@ function validateForm(values) {
   return errors;
 }
 
-function OptionGroup({ legend, name, options, value, onChange, error }) {
+function RequiredMark() {
+  return <span className="ml-1 text-red-600">*</span>;
+}
+
+function OptionGroup({ legend, name, options, value, onChange, error, required = false }) {
   return (
     <fieldset className="sm:col-span-2">
-      <legend className="mb-2 block text-sm font-semibold text-slate-700">{legend}</legend>
+      <legend className="mb-2 block text-sm font-semibold text-slate-700">
+        {legend}
+        {required && <RequiredMark />}
+      </legend>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => (
           <label
@@ -306,7 +322,15 @@ export default function RegistrationForm() {
       setFormValues((prev) => {
         const next = { ...prev };
         for (const key of Object.keys(prev)) {
-          if (typeof saved[key] !== "undefined") next[key] = saved[key];
+          if (typeof saved[key] !== "undefined") {
+            if (key === "phoneCountryCode") {
+              next[key] = normalizePhoneCountryCode(saved[key]);
+            } else if (key === "phoneCountryIso2") {
+              next[key] = String(saved[key] || "bd").toLowerCase();
+            } else {
+              next[key] = saved[key];
+            }
+          }
         }
         return next;
       });
@@ -343,6 +367,7 @@ export default function RegistrationForm() {
 
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
   const isOnlinePayment = formValues.paymentMethod === "online-payment";
+  const phoneInputValue = formValues.phone;
 
   const pricing = useMemo(
     () =>
@@ -407,6 +432,24 @@ export default function RegistrationForm() {
     });
   };
 
+  const handlePhoneInputChange = (value, countryData) => {
+    const dialCode = normalizePhoneCountryCode(`+${countryData?.dialCode || ""}`);
+    const countryIso2 = String(countryData?.countryCode || "bd").toLowerCase();
+
+    setFormValues((prev) => {
+      const updated = {
+        ...prev,
+        phoneCountryCode: dialCode,
+        phoneCountryIso2: countryIso2,
+        phone: (value || "").replace(/\D/g, "").slice(0, FIELD_LIMITS.phone),
+      };
+      if (hasSubmitted) {
+        setErrors(validateForm(updated));
+      }
+      return updated;
+    });
+  };
+
   const handleFileChange = (event) => {
     const { name, files } = event.target;
     const file = files?.[0] || null;
@@ -431,8 +474,39 @@ export default function RegistrationForm() {
 
   const handleFamilyTextChange = (index, field) => (event) => {
     const raw = event.target.value;
-    const limit = field === "fullName" ? FIELD_LIMITS.familyFullName : FIELD_LIMITS.familyRelationship;
-    const value = sanitizeBasicText(raw).slice(0, limit);
+    let value = raw;
+
+    if (field === "email") {
+      value = raw.trim().toLowerCase();
+    } else if (field === "passportNo") {
+      value = raw.replace(/[^A-Za-z0-9\-]/g, "").toUpperCase();
+    } else if (field === "phone") {
+      value = raw.replace(/[^0-9()+\-\s]/g, "");
+    } else {
+      value = sanitizeBasicText(raw);
+    }
+
+    const limit = FIELD_LIMITS[
+      field === "fullName"
+        ? "familyFullName"
+        : field === "passportNo"
+          ? "familyPassportNo"
+          : field === "email"
+            ? "familyEmail"
+            : field === "phone"
+              ? "familyPhone"
+              : "familyFullName"
+    ];
+    value = value.slice(0, limit);
+    setFamilyMembers((prev) => {
+      const next = prev.slice();
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
+
+  const handleFamilySelectChange = (index, field) => (event) => {
+    const value = event.target.value;
     setFamilyMembers((prev) => {
       const next = prev.slice();
       next[index] = { ...next[index], [field]: value };
@@ -492,6 +566,7 @@ export default function RegistrationForm() {
       address: normalizeSpaces(formValues.address),
       city: normalizeSpaces(formValues.city),
       country: normalizeSpaces(formValues.country),
+      phoneCountryCode: normalizePhoneCountryCode(formValues.phoneCountryCode),
       otherFood: normalizeSpaces(formValues.otherFood),
       passportNo: formValues.passportNo.trim(),
       zipCode: formValues.zipCode.trim(),
@@ -515,6 +590,22 @@ export default function RegistrationForm() {
       if (!fm.fullName.trim()) {
         nextErrors[`familyMembers[${i}][fullName]`] = "Full name is required.";
       }
+      if (!fm.passportNo.trim()) {
+        nextErrors[`familyMembers[${i}][passportNo]`] = "Passport number is required.";
+      }
+      if (!fm.email.trim()) {
+        nextErrors[`familyMembers[${i}][email]`] = "Email is required.";
+      } else if (!isValidEmail(fm.email.trim())) {
+        nextErrors[`familyMembers[${i}][email]`] = "Please provide a valid email address.";
+      }
+      if (!fm.phone.trim()) {
+        nextErrors[`familyMembers[${i}][phone]`] = "Phone number is required.";
+      } else if (!isValidPhone(fm.phone.trim())) {
+        nextErrors[`familyMembers[${i}][phone]`] = "Please provide a valid phone number.";
+      }
+      if (!fm.tShirtSize || !TSHIRT_OPTIONS.includes(fm.tShirtSize)) {
+        nextErrors[`familyMembers[${i}][tShirtSize]`] = "Please select a T-shirt size.";
+      }
       if (!fm.profilePhoto) {
         nextErrors[`familyMembers[${i}][profilePhoto]`] = "Profile picture is required.";
       }
@@ -533,6 +624,12 @@ export default function RegistrationForm() {
       return;
     }
 
+    const phoneDialCode = normalized.phoneCountryCode;
+    const submissionValues = {
+      ...normalized,
+      phone: `${phoneDialCode} ${normalized.phone}`.trim(),
+    };
+
     setFormValues(normalized);
     setIsSubmitting(true);
 
@@ -547,7 +644,7 @@ export default function RegistrationForm() {
       }
 
       const formData = new FormData();
-      for (const [key, value] of Object.entries(normalized)) {
+      for (const [key, value] of Object.entries(submissionValues)) {
         if (typeof value === "string") {
           formData.append(key, value);
         } else if (typeof value === "boolean") {
@@ -558,7 +655,10 @@ export default function RegistrationForm() {
       formData.append("passportScan", fileValues.passportScan);
       familyMembers.forEach((fm, i) => {
         formData.append(`familyMembers[${i}][fullName]`, fm.fullName);
-        formData.append(`familyMembers[${i}][relationship]`, fm.relationship);
+        formData.append(`familyMembers[${i}][passportNo]`, fm.passportNo);
+        formData.append(`familyMembers[${i}][email]`, fm.email);
+        formData.append(`familyMembers[${i}][phone]`, fm.phone);
+        formData.append(`familyMembers[${i}][tShirtSize]`, fm.tShirtSize);
         formData.append(`familyMembers[${i}][profilePhoto]`, fm.profilePhoto);
         formData.append(`familyMembers[${i}][passportScan]`, fm.passportScan);
       });
@@ -645,12 +745,13 @@ export default function RegistrationForm() {
               value={formValues.title}
               onChange={handleChange}
               error={errors.title}
+              required
             />
 
             {formValues.title === "Others" && (
               <div className="sm:col-span-2">
                 <label htmlFor="otherTitle" className="mb-2 block text-sm font-semibold text-slate-700">
-                  Other Title
+                  Other Title<RequiredMark />
                 </label>
                 <input
                   id="otherTitle"
@@ -668,7 +769,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="givenName" className="mb-2 block text-sm font-semibold text-slate-700">
-                Given Name
+                Given Name<RequiredMark />
               </label>
               <input
                 id="givenName"
@@ -687,7 +788,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="surname" className="mb-2 block text-sm font-semibold text-slate-700">
-                Surname
+                Surname<RequiredMark />
               </label>
               <input
                 id="surname"
@@ -711,11 +812,12 @@ export default function RegistrationForm() {
               value={formValues.gender}
               onChange={handleChange}
               error={errors.gender}
+              required
             />
 
             <div>
               <label htmlFor="passportNo" className="mb-2 block text-sm font-semibold text-slate-700">
-                Passport No
+                Passport No<RequiredMark />
               </label>
               <input
                 id="passportNo"
@@ -733,7 +835,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="nationality" className="mb-2 block text-sm font-semibold text-slate-700">
-                Nationality (As per passport)
+                Nationality (As per passport)<RequiredMark />
               </label>
               <input
                 id="nationality"
@@ -750,24 +852,8 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-              <label htmlFor="dateOfBirth" className="mb-2 block text-sm font-semibold text-slate-700">
-                Date of Birth
-              </label>
-              <input
-                id="dateOfBirth"
-                name="dateOfBirth"
-                type="date"
-                value={formValues.dateOfBirth}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                required
-              />
-              {errors.dateOfBirth && <p className="mt-2 text-sm text-red-600">{errors.dateOfBirth}</p>}
-            </div>
-
-            <div>
               <label htmlFor="organization" className="mb-2 block text-sm font-semibold text-slate-700">
-                Organization/Institution
+                Name of the Organization/Institution<RequiredMark />
               </label>
               <input
                 id="organization"
@@ -786,7 +872,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="position" className="mb-2 block text-sm font-semibold text-slate-700">
-                Position
+                Position<RequiredMark />
               </label>
               <input
                 id="position"
@@ -804,7 +890,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="department" className="mb-2 block text-sm font-semibold text-slate-700">
-                Department/Office
+                Department/Office<RequiredMark />
               </label>
               <input
                 id="department"
@@ -822,7 +908,7 @@ export default function RegistrationForm() {
 
             <div className="sm:col-span-2">
               <label htmlFor="address" className="mb-2 block text-sm font-semibold text-slate-700">
-                Address
+                Address<RequiredMark />
               </label>
               <textarea
                 id="address"
@@ -840,7 +926,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="zipCode" className="mb-2 block text-sm font-semibold text-slate-700">
-                Zip code
+                Zip code<RequiredMark />
               </label>
               <input
                 id="zipCode"
@@ -858,7 +944,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="city" className="mb-2 block text-sm font-semibold text-slate-700">
-                City
+                City<RequiredMark />
               </label>
               <input
                 id="city"
@@ -876,7 +962,7 @@ export default function RegistrationForm() {
 
             <div>
               <label htmlFor="country" className="mb-2 block text-sm font-semibold text-slate-700">
-                Country
+                Country<RequiredMark />
               </label>
               <input
                 id="country"
@@ -894,21 +980,34 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-              <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-slate-700">
-                Phone
+              <label htmlFor="phone" className="mb-2 block text-sm text-start font-semibold text-slate-700">
+                Phone Number<RequiredMark />
               </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={formValues.phone}
-                onChange={handleChange}
-                maxLength={FIELD_LIMITS.phone}
-                autoComplete="tel"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                placeholder="Phone number"
-                required
-              />
+              <div className="iaup-phone-shell" style={{ "--iaup-phone-code": formValues.phoneCountryCode.replace("+", "") }}>
+                <PhoneInput
+                  country={formValues.phoneCountryIso2 || "bd"}
+                  value={phoneInputValue}
+                  onChange={handlePhoneInputChange}
+                  enableSearch
+                  disableSearchIcon
+                  disableCountryCode
+                  countryCodeEditable={false}
+                  inputProps={{
+                    id: "phone",
+                    name: "phone",
+                    required: true,
+                    autoComplete: "tel",
+                  }}
+                  containerClass="iaup-phone-input"
+                  buttonClass="iaup-phone-button"
+                  dropdownClass="iaup-phone-dropdown"
+                  searchClass="iaup-phone-search"
+                  inputClass="iaup-phone-number"
+                  specialLabel=""
+                  placeholder="Phone number"
+                />
+              </div>
+              {errors.phoneCountryCode && <p className="mt-2 text-sm text-red-600">{errors.phoneCountryCode}</p>}
               {errors.phone && <p className="mt-2 text-sm text-red-600">{errors.phone}</p>}
             </div>
 
@@ -926,14 +1025,13 @@ export default function RegistrationForm() {
                 autoComplete="tel"
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
                 placeholder="WhatsApp number"
-                required
               />
               {errors.whatsapp && <p className="mt-2 text-sm text-red-600">{errors.whatsapp}</p>}
             </div>
 
             <div>
               <label htmlFor="email" className="mb-2 block text-sm font-semibold text-slate-700">
-                Email
+                Email<RequiredMark />
               </label>
               <input
                 id="email"
@@ -976,7 +1074,7 @@ export default function RegistrationForm() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="profilePhoto" className="mb-2 block text-sm font-medium text-slate-700">
-                    Profile Picture
+                    Profile Picture<RequiredMark />
                   </label>
                   <input
                     id="profilePhoto"
@@ -995,7 +1093,7 @@ export default function RegistrationForm() {
                 </div>
                 <div>
                   <label htmlFor="passportScan" className="mb-2 block text-sm font-medium text-slate-700">
-                    Passport Front Page (scan copy)
+                    Passport Front Page (scan copy)<RequiredMark />
                   </label>
                   <input
                     id="passportScan"
@@ -1016,12 +1114,13 @@ export default function RegistrationForm() {
             </div>
 
             <OptionGroup
-              legend="T-Shirt Size"
+              legend="T-Shirt Size (European Size)"
               name="tShirtSize"
               options={TSHIRT_OPTIONS}
               value={formValues.tShirtSize}
               onChange={handleChange}
               error={errors.tShirtSize}
+              required
             />
 
             <OptionGroup
@@ -1031,12 +1130,13 @@ export default function RegistrationForm() {
               value={formValues.foodRequirement}
               onChange={handleChange}
               error={errors.foodRequirement}
+              required
             />
 
             {formValues.foodRequirement === "Other" && (
               <div className="sm:col-span-2">
                 <label htmlFor="otherFood" className="mb-2 block text-sm font-semibold text-slate-700">
-                  Other Food Requirement
+                  Other Food Requirement<RequiredMark />
                 </label>
                 <input
                   id="otherFood"
@@ -1059,6 +1159,7 @@ export default function RegistrationForm() {
               value={formValues.isMemberUniversity}
               onChange={handleChange}
               error={errors.isMemberUniversity}
+              required
             />
 
             <OptionGroup
@@ -1068,12 +1169,14 @@ export default function RegistrationForm() {
               value={formValues.hasFamilyMembers}
               onChange={handleChange}
               error={errors.hasFamilyMembers}
+              required
             />
 
             {formValues.hasFamilyMembers === "Yes" && (
               <fieldset className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
                 <legend className="px-1 text-sm font-semibold text-slate-700">
                   Please select the number of accompanying family members (USD 400 per person)
+                  <RequiredMark />
                 </legend>
                 <div className="mt-3 flex flex-wrap gap-3">
                   {FAMILY_MEMBER_OPTIONS.map((option) => (
@@ -1098,7 +1201,7 @@ export default function RegistrationForm() {
                 {formValues.familyMembersCount === "Others" && (
                   <div className="mt-4 max-w-xs">
                     <label htmlFor="familyMembersOther" className="mb-2 block text-sm font-semibold text-slate-700">
-                      Specify Number
+                      Specify Number<RequiredMark />
                     </label>
                     <input
                       id="familyMembersOther"
@@ -1124,6 +1227,10 @@ export default function RegistrationForm() {
                       const profileErrKey = `familyMembers[${index}][profilePhoto]`;
                       const passportErrKey = `familyMembers[${index}][passportScan]`;
                       const nameErrKey = `familyMembers[${index}][fullName]`;
+                      const passportErr = `familyMembers[${index}][passportNo]`;
+                      const emailErr = `familyMembers[${index}][email]`;
+                      const phoneErr = `familyMembers[${index}][phone]`;
+                      const tshirtErr = `familyMembers[${index}][tShirtSize]`;
                       return (
                         <div key={`fm-${index}`} className="rounded-xl border border-slate-200 bg-white p-4">
                           <p className="mb-4 text-sm font-semibold text-slate-700">Family Member #{index + 1}</p>
@@ -1133,7 +1240,7 @@ export default function RegistrationForm() {
                                 htmlFor={`fm-${index}-fullName`}
                                 className="mb-2 block text-sm font-medium text-slate-700"
                               >
-                                Full Name
+                                Full Name<RequiredMark />
                               </label>
                               <input
                                 id={`fm-${index}-fullName`}
@@ -1150,27 +1257,88 @@ export default function RegistrationForm() {
                             </div>
                             <div>
                               <label
-                                htmlFor={`fm-${index}-relationship`}
+                                htmlFor={`fm-${index}-passportNo`}
                                 className="mb-2 block text-sm font-medium text-slate-700"
                               >
-                                Relationship <span className="text-slate-400">(optional)</span>
+                                Passport No<RequiredMark />
                               </label>
                               <input
-                                id={`fm-${index}-relationship`}
+                                id={`fm-${index}-passportNo`}
                                 type="text"
-                                value={fm.relationship}
-                                onChange={handleFamilyTextChange(index, "relationship")}
-                                maxLength={FIELD_LIMITS.familyRelationship}
+                                value={fm.passportNo}
+                                onChange={handleFamilyTextChange(index, "passportNo")}
+                                maxLength={FIELD_LIMITS.familyPassportNo}
                                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                                placeholder="e.g. Spouse, Child"
+                                placeholder="Passport number"
                               />
+                              {errors[passportErr] && (
+                                <p className="mt-2 text-sm text-red-600">{errors[passportErr]}</p>
+                              )}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-email`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                Email<RequiredMark />
+                              </label>
+                              <input
+                                id={`fm-${index}-email`}
+                                type="email"
+                                value={fm.email}
+                                onChange={handleFamilyTextChange(index, "email")}
+                                maxLength={FIELD_LIMITS.familyEmail}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="family@example.com"
+                              />
+                              {errors[emailErr] && <p className="mt-2 text-sm text-red-600">{errors[emailErr]}</p>}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-phone`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                Phone No<RequiredMark />
+                              </label>
+                              <input
+                                id={`fm-${index}-phone`}
+                                type="tel"
+                                value={fm.phone}
+                                onChange={handleFamilyTextChange(index, "phone")}
+                                maxLength={FIELD_LIMITS.familyPhone}
+                                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                                placeholder="Phone number"
+                              />
+                              {errors[phoneErr] && <p className="mt-2 text-sm text-red-600">{errors[phoneErr]}</p>}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`fm-${index}-tShirtSize`}
+                                className="mb-2 block text-sm font-medium text-slate-700"
+                              >
+                                T-shirt Size<RequiredMark />
+                              </label>
+                              <select
+                                id={`fm-${index}-tShirtSize`}
+                                value={fm.tShirtSize}
+                                onChange={handleFamilySelectChange(index, "tShirtSize")}
+                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
+                              >
+                                <option value="">Select size</option>
+                                {TSHIRT_OPTIONS.map((size) => (
+                                  <option key={`fm-${index}-size-${size}`} value={size}>
+                                    {size}
+                                  </option>
+                                ))}
+                              </select>
+                              {errors[tshirtErr] && <p className="mt-2 text-sm text-red-600">{errors[tshirtErr]}</p>}
                             </div>
                             <div>
                               <label
                                 htmlFor={`fm-${index}-profilePhoto`}
                                 className="mb-2 block text-sm font-medium text-slate-700"
                               >
-                                Profile Picture
+                                Profile Picture<RequiredMark />
                               </label>
                               <input
                                 id={`fm-${index}-profilePhoto`}
@@ -1191,7 +1359,7 @@ export default function RegistrationForm() {
                                 htmlFor={`fm-${index}-passportScan`}
                                 className="mb-2 block text-sm font-medium text-slate-700"
                               >
-                                Passport Front Page (scan copy)
+                                Passport Front Page (scan copy)<RequiredMark />
                               </label>
                               <input
                                 id={`fm-${index}-passportScan`}
@@ -1223,11 +1391,13 @@ export default function RegistrationForm() {
               value={formValues.needsInvitationLetter}
               onChange={handleChange}
               error={errors.needsInvitationLetter}
+              required
             />
 
             <fieldset className="sm:col-span-2">
               <legend className="mb-2 block text-sm font-semibold text-slate-700">
                 Which payment method do you want to choose for registration payment?
+                <RequiredMark />
               </legend>
               <div className="flex flex-wrap gap-3">
                 {PAYMENT_OPTIONS.map((option) => (
@@ -1319,7 +1489,10 @@ export default function RegistrationForm() {
                   onChange={handleChange}
                   className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
                 />
-                <span>I Agree</span>
+                <span>
+                  I Agree
+                  <RequiredMark />
+                </span>
               </label>
               {errors.agreeToPolicy && <p className="mt-2 text-sm text-red-600">{errors.agreeToPolicy}</p>}
             </div>

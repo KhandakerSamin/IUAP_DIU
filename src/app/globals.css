@@ -320,3 +320,117 @@ button:focus-visible {
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   border-radius: 2px;
 }
+
+/* Registration phone dropdown custom look */
+.iaup-phone-shell {
+  --iaup-phone-code: "+880";
+}
+
+.iaup-phone-input {
+  width: 100%;
+}
+
+.iaup-phone-input .form-control.iaup-phone-number {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding-left: 8.1rem;
+  font-size: 0.95rem;
+  color: #0f172a;
+  box-shadow: none;
+}
+
+.iaup-phone-input .form-control.iaup-phone-number:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(9, 80, 158, 0.12);
+}
+
+.iaup-phone-input .flag-dropdown.iaup-phone-button {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem 0 0 0.75rem;
+  background: #f8fafc;
+}
+
+.iaup-phone-input .selected-flag {
+  border-radius: 0.75rem 0 0 0.75rem;
+  padding: 0 30px 0 12px;
+  width: 118px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.iaup-phone-input .selected-flag:hover,
+.iaup-phone-input .selected-flag:focus {
+  background: #eef2f7;
+}
+
+.iaup-phone-shell .iaup-phone-input .selected-flag::after {
+  content: var(--iaup-phone-code);
+  font-weight: 600;
+  color: #0f172a;
+  margin-left: 2px;
+}
+
+.iaup-phone-input .country-list.iaup-phone-dropdown {
+  margin-top: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 16px 36px -16px rgba(15, 23, 42, 0.35);
+  max-height: 320px;
+  width: 360px;
+}
+
+.iaup-phone-input .country-list .search {
+  padding: 8px;
+}
+
+.iaup-phone-input .country-list .search-box.iaup-phone-search {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  height: 38px;
+  margin: 0;
+  padding: 0 12px;
+}
+
+.iaup-phone-input .country-list .country {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.iaup-phone-input .country-list .country .dial-code {
+  order: 1;
+  min-width: 52px;
+  margin-left: 0;
+}
+
+.iaup-phone-input .country-list .country .flag {
+  order: 2;
+  float: none;
+  position: static;
+  margin: 0;
+}
+
+.iaup-phone-input .country-list .country .country-name {
+  order: 3;
+  flex: 1;
+}
+
+.iaup-phone-input .country-list .country:hover {
+  background: #f1f5f9;
+}
+
+.iaup-phone-input .country-list .country.highlight {
+  background: rgba(9, 80, 158, 0.1);
+}
+
+.iaup-phone-input .country-list .country .dial-code {
+  color: #0f172a;
+  font-weight: 600;
+}
