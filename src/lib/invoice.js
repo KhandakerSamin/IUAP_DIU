@@ -1,9 +1,15 @@
 import fs from "node:fs/promises";
+import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import React from "react";
-import { Document, Page, Text, View, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
+import { Document, Page, Text, View, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { dataDir } from "@/lib/db";
 import { calculatePricing, FAMILY_MEMBER_FEE_USD, REGISTRATION_PERIODS } from "@/lib/pricing";
+
+const LOGO_PATH = path.join(process.cwd(), "public", "iuap_invoice.jpg");
+const LOGO_DATA_URI = existsSync(LOGO_PATH)
+  ? `data:image/jpeg;base64,${readFileSync(LOGO_PATH).toString("base64")}`
+  : null;
 
 const PRIMARY = "#0b3d91";
 const MUTED = "#64748b";
@@ -28,6 +34,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: PRIMARY },
   eventSubtitle: { fontSize: 10, color: MUTED, marginTop: 3 },
+  headerLogo: { height: 48, width: "auto", objectFit: "contain" },
   invoiceTitle: { fontSize: 28, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
@@ -159,8 +166,14 @@ function InvoiceDoc({ registration, familyMembers }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.eventTitle}>IAUP Semi-Annual Meeting 2026</Text>
-            <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
+            {LOGO_DATA_URI ? (
+              <Image src={LOGO_DATA_URI} style={styles.headerLogo} />
+            ) : (
+              <>
+                <Text style={styles.eventTitle}>IAUP Semi-Annual Meeting 2026</Text>
+                <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
+              </>
+            )}
             <Text style={styles.paidPill}>PAID</Text>
           </View>
           <View>
