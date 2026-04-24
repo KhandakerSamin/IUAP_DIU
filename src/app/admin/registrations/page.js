@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AdminShell from "../AdminShell";
+import RegistrationsTable from "./registrationsTable";
 import { requireAdmin } from "@/lib/adminAuth";
 import { countRegistrationsByStatus, listRegistrations } from "@/lib/db";
 
@@ -15,20 +16,6 @@ const STATUS_FILTERS = [
   { key: "pending", label: "Pending" },
   { key: "failed", label: "Failed" },
 ];
-
-const STATUS_BADGE = {
-  paid: "bg-emerald-100 text-emerald-800",
-  pending: "bg-amber-100 text-amber-800",
-  failed: "bg-red-100 text-red-800",
-};
-
-function formatDate(iso) {
-  if (!iso) return "";
-  return new Date(iso + (iso.endsWith("Z") ? "" : "Z")).toLocaleString("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
-}
 
 export default async function AdminRegistrationsPage({ searchParams }) {
   await requireAdmin();
@@ -89,67 +76,7 @@ export default async function AdminRegistrationsPage({ searchParams }) {
         })}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-        <table className="min-w-full divide-y divide-slate-200 text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3">Reg ID</th>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Phone</th>
-              <th className="px-4 py-3">Country</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Submitted</th>
-              <th className="px-4 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {rows.length === 0 && (
-              <tr>
-                <td colSpan={8} className="px-4 py-12 text-center text-sm text-slate-500">
-                  No registrations match your filters.
-                </td>
-              </tr>
-            )}
-            {rows.map((r) => {
-              const fullName = `${r.given_name || ""} ${r.surname || ""}`.trim() || "—";
-              const badge = STATUS_BADGE[r.payment_status] || "bg-slate-100 text-slate-700";
-              const detailHref = `/admin/registrations/${encodeURIComponent(r.reg_id)}`;
-              return (
-                <tr key={r.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-mono text-xs text-slate-600">
-                    <Link href={detailHref} className="hover:underline">
-                      {r.reg_id}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 font-medium text-slate-900">
-                    <Link href={detailHref} className="hover:underline">
-                      {fullName}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 text-slate-700">{r.email}</td>
-                  <td className="px-4 py-3 text-slate-700">{r.phone || "—"}</td>
-                  <td className="px-4 py-3 text-slate-700">{r.country || "—"}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${badge}`}>
-                      {r.payment_status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-slate-500">{formatDate(r.created_at)}</td>
-                  <td className="px-4 py-3 text-right">
-                    <Link
-                      href={detailHref}
-                      className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
-                    >
-                      View details
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <RegistrationsTable rows={rows} />
     </AdminShell>
   );
 }

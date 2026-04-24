@@ -285,3 +285,94 @@ export function runInTransaction(fn) {
   const db = getDatabase();
   return db.transaction(fn)();
 }
+
+const EDITABLE_FIELDS = new Set([
+  "title",
+  "other_title",
+  "given_name",
+  "surname",
+  "gender",
+  "passport_no",
+  "nationality",
+  "date_of_birth",
+  "organization",
+  "position",
+  "department",
+  "address",
+  "zip_code",
+  "city",
+  "country",
+  "phone",
+  "whatsapp",
+  "email",
+  "alternative_email",
+  "tshirt_size",
+  "food_requirement",
+  "other_food",
+  "is_member_university",
+  "has_family_members",
+  "family_members_count",
+  "family_members_other",
+  "needs_invitation_letter",
+  "payment_method",
+  "payment_status",
+]);
+
+export function updateRegistrationByRegId(regId, fields) {
+  const db = getDatabase();
+  const allowed = {};
+  for (const [k, v] of Object.entries(fields || {})) {
+    if (EDITABLE_FIELDS.has(k)) {
+      allowed[k] = v === undefined ? null : v;
+    }
+  }
+  const keys = Object.keys(allowed);
+  if (keys.length === 0) return { changes: 0 };
+  const setSql = keys.map((k) => `${k} = @${k}`).join(", ");
+  const stmt = db.prepare(
+    `UPDATE registrations SET ${setSql}, updated_at = datetime('now') WHERE reg_id = @reg_id`
+  );
+  return stmt.run({ ...allowed, reg_id: regId });
+}
+
+export function collectFilePathsForRegIds(regIds) {
+  if (!Array.isArray(regIds) || regIds.length === 0) return [];
+  const db = getDatabase();
+  const placeholders = regIds.map(() => "?").join(",");
+
+  const regPaths = db
+    .prepare(
+      `SELECT profile_photo_path AS p, passport_scan_path AS s, invoice_path AS i
+         FROM registrations WHERE reg_id IN (${placeholders})`
+    )
+    .all(...regIds);
+
+  const familyPaths = db
+    .prepare(
+      `SELECT fm.profile_photo_path AS p, fm.passport_scan_path AS s
+         FROM family_members fm
+         JOIN registrations r ON fm.registration_id = r.id
+        WHERE r.reg_id IN (${placeholders})`
+    )
+    .all(...regIds);
+
+  const out = [];
+  for (const row of regPaths) {
+    if (row.p) out.push(row.p);
+    if (row.s) out.push(row.s);
+    if (row.i) out.push(row.i);
+  }
+  for (const row of familyPaths) {
+    if (row.p) out.push(row.p);
+    if (row.s) out.push(row.s);
+  }
+  return out;
+}
+
+export function deleteRegistrationsByRegIds(regIds) {
+  if (!Array.isArray(regIds) || regIds.length === 0) return { changes: 0 };
+  const db = getDatabase();
+  const placeholders = regIds.map(() => "?").join(",");
+  const stmt = db.prepare(`DELETE FROM registrations WHERE reg_id IN (${placeholders})`);
+  return stmt.run(...regIds);
+}
