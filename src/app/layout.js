@@ -1,5 +1,6 @@
 import { Roboto, Montserrat } from "next/font/google";
 import "./globals.css";
+import "react-phone-input-2/lib/style.css";
 import TestModeBanner from "@/components/global/testModeBanner";
 
 const roboto = Roboto({

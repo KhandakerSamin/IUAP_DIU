@@ -170,9 +170,13 @@ export default async function RegistrationDetailPage({ params }) {
               <div key={fm.id} className="rounded-xl border border-slate-200 p-4">
                 <p className="mb-3 text-sm font-semibold text-slate-900">
                   #{idx + 1} · {fm.full_name || "—"}
-                  {fm.relationship ? <span className="text-slate-500"> · {fm.relationship}</span> : null}
                 </p>
-                <dl className="grid gap-6 sm:grid-cols-2">
+                <dl className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Passport No" value={fm.passport_no} />
+                  <Field label="Email" value={fm.email} />
+                  <Field label="Phone" value={fm.phone} />
+                  <Field label="T-shirt size" value={fm.tshirt_size} />
+                  {fm.relationship ? <Field label="Relationship" value={fm.relationship} /> : null}
                   <FileBlock label="Profile Picture" relPath={fm.profile_photo_path} />
                   <FileBlock label="Passport Front Page" relPath={fm.passport_scan_path} />
                 </dl>

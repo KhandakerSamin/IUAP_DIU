@@ -2,11 +2,25 @@ import Image from "next/image";
 
 const leaders = [
   {
-    name: "Dr. Shawn Chen",
+    name: "Dr. Shown Chen",
     role1: "Chairman,",
     role2: "Sias University (China)",
     position: "IAUP President",
     image: "/leader1.png"
+  },
+  {
+    name: "Dr. Fernando Leon-Garcia",
+    role1: "President,",
+    role2: "CETYS University (Mexico)",
+    position: "IAUP Chairman of the Board",
+    image: "/leader2.jpeg"
+  },
+  {
+    name: "Dr. Tomas Morales",
+    role1: "President,",
+    role2: "California State University, San Bernardino (USA)",
+    position: "President Elect 2024-2027",
+    image: "/leader3.jpeg"
   },
   {
     name: "Prof. Tatsuro Tanioka",
@@ -14,13 +28,6 @@ const leaders = [
     role2: "Tanioka Gakuen Education Foundation (Japan)",
     position: "IAUP Secretary-General",
     image: "/leader2.png"
-  },
-  {
-    name: "Dr. Md. Sabur Khan",
-    role1: "Founder and Chairman",
-    role2: "Daffodil International University",
-    position: "Treasurer Elect 2024-2027",
-    image: "/leader3.png"
   }
 ];
 
@@ -37,7 +44,7 @@ export default function IaupLeadersSection() {
           </h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10 lg:gap-14">
           {leaders.map((leader, index) => (
             <div 
               key={index} 

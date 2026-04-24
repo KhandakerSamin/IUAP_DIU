@@ -92,12 +92,27 @@ export async function POST(request) {
   const familyUploads = [];
   for (let i = 0; i < familyMemberCount; i++) {
     const fullName = pickText(form, `familyMembers[${i}][fullName]`).trim();
-    const relationship = pickText(form, `familyMembers[${i}][relationship]`).trim();
+    const passportNo = pickText(form, `familyMembers[${i}][passportNo]`).trim();
+    const email = pickText(form, `familyMembers[${i}][email]`).trim();
+    const phone = pickText(form, `familyMembers[${i}][phone]`).trim();
+    const tShirtSize = pickText(form, `familyMembers[${i}][tShirtSize]`).trim();
     const profileFile = pickFile(form, `familyMembers[${i}][profilePhoto]`);
     const passportFile = pickFile(form, `familyMembers[${i}][passportScan]`);
 
     if (!fullName) {
       return Response.json({ error: `Family member #${i + 1}: full name is required.` }, { status: 400 });
+    }
+    if (!passportNo) {
+      return Response.json({ error: `Family member #${i + 1}: passport number is required.` }, { status: 400 });
+    }
+    if (!email) {
+      return Response.json({ error: `Family member #${i + 1}: email is required.` }, { status: 400 });
+    }
+    if (!phone) {
+      return Response.json({ error: `Family member #${i + 1}: phone number is required.` }, { status: 400 });
+    }
+    if (!tShirtSize) {
+      return Response.json({ error: `Family member #${i + 1}: T-shirt size is required.` }, { status: 400 });
     }
     if (!profileFile || (profileFile.size ?? 0) === 0) {
       return Response.json({ error: `Family member #${i + 1}: profile picture is required.` }, { status: 400 });
@@ -117,7 +132,7 @@ export async function POST(request) {
         kind: "family",
         slug: `${regId}-fm${i + 1}-passport`,
       });
-      familyUploads.push({ fullName, relationship, profilePath, passportPath });
+      familyUploads.push({ fullName, passportNo, email, phone, tShirtSize, profilePath, passportPath });
     } catch (err) {
       return Response.json(
         { error: `Family member #${i + 1}: ${err?.message || "could not save uploads."}` },
@@ -167,7 +182,10 @@ export async function POST(request) {
         insertFamilyMember({
           registration_id: registrationId,
           full_name: fm.fullName,
-          relationship: fm.relationship || null,
+          passport_no: fm.passportNo || null,
+          email: fm.email || null,
+          phone: fm.phone || null,
+          tshirt_size: fm.tShirtSize || null,
           profile_photo_path: fm.profilePath,
           passport_scan_path: fm.passportPath,
         });

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { BedDouble } from "lucide-react";
+import { BedDouble, Hotel } from "lucide-react";
 
 const accommodations = [
   {
@@ -8,8 +8,8 @@ const accommodations = [
     alt: "Hotel Sheraton",
   },
   {
-    name: "Hotel Sherina",
-    image: "/heroBG.jpg",
+    name: "Hotel Sarina",
+    image: "/sarina.jpg",
     alt: "Hotel Sherina",
   },
 ];
@@ -39,12 +39,12 @@ export default function AccommodationSection() {
                 index > 0 ? `reveal-delay-${index}` : ""
               }`}
             >
-              <div className="relative h-72 bg-slate-200">
+              <div className="relative h-96 sm:h-112 bg-slate-200">
                 <Image
                   src={hotel.image}
                   alt={hotel.alt}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-slate-900/70 via-slate-900/10 to-transparent" />
@@ -58,6 +58,16 @@ export default function AccommodationSection() {
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center reveal reveal-delay-2">
+          <button
+            type="button"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-10 py-4 text-base font-semibold text-white transition hover:bg-primary-dark"
+          >
+            <Hotel className="h-5 w-5" />
+            Book Hotel
+          </button>
         </div>
       </div>
     </section>

@@ -53,7 +53,11 @@ export default function OnlinePaymentConfirmation() {
     `${registration?.givenName || ""} ${registration?.surname || ""}`.trim() ||
     "Participant";
   const participantEmail = registration?.email || "";
-  const participantPhone = registration?.phone || "";
+  const participantPhone = registration?.phone
+    ? registration.phone
+    : registration?.phoneCountryCode
+    ? `${registration.phoneCountryCode.split(" ")[0]} ${registration?.phone || ""}`.trim()
+    : "";
 
   const pricing = useMemo(
     () =>
