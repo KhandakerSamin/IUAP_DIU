@@ -30,10 +30,10 @@ export default function AboutDhakaSection() {
               Dhaka is the capital city of a South Asian country, Bangladesh. It is the hub of economic, political and administrative enterprises located in central Bangladesh at 23°42′N 90°22′E, on the eastern banks of the Buriganga River. It lies on the lower reaches of the Ganges Delta and covers a total area of 306.38 square kilometers (around 118.29 square miles).
             </p>
             <p className="text-muted text-justify leading-relaxed mb-6 reveal reveal-delay-3">
-              Historically, Dhaka was associated with the periods of Kamarupa kingdom, Sena kingdom, and Sultanate period, and was a part of Mughal Empire, Nawab era, British. The capital has a favorable climate characterized by tropical monsoon from June to October; mild winter from October to March; hot, humid summer from March to June.
+              Historically, Dhaka was associated with the periods of Kamarupa kingdom, Sena kingdom, and Sultanate period, and was a part of Mughal Empire, Nawabi Period, British. The capital has a favorable climate characterized by tropical monsoon from June to October; mild winter from October to March; hot, humid summer from March to June.
             </p>
             <p className="text-muted text-justify leading-relaxed reveal reveal-delay-4">
-              The demographic features of the city are varied in character. Dhaka (North and South) city corporations are the most populated urban areas with the highest density accommodating over 22 million people including Muslims, Hindus, Christians, Buddhists and others.
+              The demographic features of the city are varied in character. Dhaka city corporations are the most populated urban areas with the highest density accommodating over 22 million people including Muslims, Hindus, Christians, Buddhists and others.
             </p>
           </div>
         </div>
