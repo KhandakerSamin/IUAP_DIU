@@ -3,7 +3,7 @@ import Image from "next/image";
 const universityStats = [
   { value: "25K+", label: "Students" },
   { value: "30+", label: "Departments" },
-  { value: "200+", label: "International Students" },
+  { value: "100+", label: "International Students" },
   { value: "600+", label: "International Partner Institutions" },
 ];
 
@@ -21,13 +21,16 @@ export default function AboutDiuSection() {
               About <span className="gradient-text">DIU</span>
             </h2>
             <p className="text-lg text-muted leading-relaxed text-justify mb-6 reveal reveal-delay-2">
-              Founded in 2002, Daffodil International University (DIU) is one of the top universities in Bangladesh according to many national and international rankings, including THE, QS and Greenmetric for its green outlook. Daffodil International University (DIU) is a leading private university in Bangladesh, recognized in world university rankings such as QS and Times Higher Education (THE). DIU is ranked 221st in Asia (QS Asia 2026) and 1st in Bangladesh (THE WUR 2026), 1st in Bangladesh in both THE Impact Rankings 2025 and QS Sustainability Rankings 2026 with strong performance in research and interdisciplinary innovation.
+              Daffodil International University (DIU), a leading private university in Bangladesh, recognized in world university rankings such as QS and Times Higher Education (THE).DIU is ranked 221st in Asia (QS Asia 2026) and 1st in Bangladesh (THE WUR 2026), Ist in Bangladesh in both THE Impact Rankings 2025 and QS Sustainability Rankings 2026 with strong performance in research and interdisciplinary innovation.
             </p>
             <p className="text-muted leading-relaxed text-justify mb-6 reveal reveal-delay-3">
-              Currently, DIU serves a diverse academic community of 25,000+ students across 6 faculties and 32 departments, including 200+ international students from various regions of the world. Our campus promotes a globally inclusive learning environment supported by modern infrastructure and strong industry linkages.
+             DIU is the number one private university in Bangladesh in terms of Scopus and Web of Science indexed research publications. QS World University Rankings also recognizes DIU as a &quot;Very High Research Intensive University&quot;.
             </p>
             <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
-              DIU has established over 600 active international partnerships worldwide and is a proud member of numerous prestigious global networks and associations. With global partners, DIU is mutually working in the area of student and faculty exchange programs, summer & winter programs, scholarship, international internship, research collaborations, short-term training programs, virtual mobility, etc.
+             The university maintains over 600 international partnerships and actively engages in student and faculty exchange, international internships, research collaboration, scholarships, and global mobility programs
+            </p>
+            <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
+             The university has also successfully hosted major international events, including the AUPF 2019 and the AUAP General Conference 2022.
             </p>
           </div>
 
