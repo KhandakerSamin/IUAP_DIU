@@ -110,7 +110,7 @@ export default function TentativeProgramSection() {
         <div className="reveal">
           <div className="text-center mb-12">
             <h3 className="font-display text-3xl sm:text-4xl font-bold text-dark mb-4">
-              Optional <span className="gradient-text">Post-Event Tour</span> (TBC)
+              Optional Post-Event Tour
             </h3>
             <p className="text-muted text-lg">Extend your trip and discover the natural beauty of Bangladesh.</p>
           </div>
@@ -131,7 +131,6 @@ export default function TentativeProgramSection() {
                 <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
                   <h4 className="font-display text-3xl font-bold text-white mb-2">Tea Gardens in Jaflong</h4>
-                  <p className="text-slate-200">Travel by helicopter or flight.</p>
                 </div>
               </div>
             </div>
@@ -141,16 +140,15 @@ export default function TentativeProgramSection() {
               <div className="relative h-80 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
-                  src="/sundorban.jpg"
-                  alt="Visiting the Sundarbans"
+                  src="/jaflong2.jpg"
+                  alt="Jaflong view"
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
-                  <h4 className="font-display text-3xl font-bold text-white mb-2">The Sundarbans</h4>
-                  <p className="text-slate-200">Visiting by helicopter.</p>
+                  <h4 className="font-display text-3xl font-bold text-white mb-2">Visit by Helicopter</h4>
                 </div>
               </div>
             </div>
