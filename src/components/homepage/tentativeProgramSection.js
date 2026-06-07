@@ -118,7 +118,7 @@ export default function TentativeProgramSection() {
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
             {/* Jaflong */}
             <div className="group relative rounded-3xl overflow-hidden bg-slate-100 shadow-md">
-              <div className="relative h-80 w-full">
+              <div className="relative h-96 w-full">
                 {/* Fallback image if actual not present */}
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
@@ -137,7 +137,7 @@ export default function TentativeProgramSection() {
 
             {/* Sundarbans */}
             <div className="group relative rounded-3xl overflow-hidden bg-slate-100 shadow-md">
-              <div className="relative h-80 w-full">
+              <div className="relative h-96 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
                   src="/jaflong2.jpg"
@@ -153,6 +153,92 @@ export default function TentativeProgramSection() {
               </div>
             </div>
           </div>
+
+        {/* Site Visit Highlights */}
+        <div className="reveal mt-16">
+          <div className="text-center mb-8">
+            <h3 className="font-display text-2xl sm:text-3xl font-bold text-dark mb-3">Site Visit Highlights</h3>
+            <p className="text-muted">Two selected site photos with location labels.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
+              <div className="relative h-60 w-full">
+                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+                <Image
+                  src="/img1.jpg"
+                  alt="Site photo 1"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
+                  <h4 className="font-display text-xl font-semibold text-white">Dhaka City Exploration</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
+              <div className="relative h-60 w-full">
+                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+                <Image
+                  src="/img2.jpeg"
+                  alt="Site photo 2"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
+                  <h4 className="font-display text-xl font-semibold text-white">Bangladesh Parliament Visit</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Optional Leisure Activities */}
+        <div className="reveal mt-12 mb-8">
+          <div className="text-center mb-8">
+            <h3 className="font-display text-2xl sm:text-3xl font-bold text-dark mb-3">Optional Leisure Activities</h3>
+            <p className="text-muted">Relax and enjoy curated leisure experiences during your stay.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
+              <div className="relative h-60 w-full">
+                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+                <Image
+                  src="/img3.jpg"
+                  alt="Leisure activity 1"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
+                  <h4 className="font-display text-xl font-semibold text-white">Playing golf at DSC</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
+              <div className="relative h-60 w-full">
+                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+                <Image
+                  src="/img4.jpg"
+                  alt="Leisure activity 2"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
+                  <h4 className="font-display text-xl font-semibold text-white">Kurmitola golf club</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          
         </div>
 
       </div>
