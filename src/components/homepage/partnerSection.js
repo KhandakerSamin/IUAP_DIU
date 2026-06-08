@@ -16,8 +16,7 @@ export default function PartnerSection() {
             Our Partners
           </h2>
           <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto font-light">
-            We are collaborating with leading institutions and organizations
-            worldwide.
+            Association of Private Universities of Bangladesh
           </p>
         </div>
         <div className="flex justify-center items-center mt-8">

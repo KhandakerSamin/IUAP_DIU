@@ -158,7 +158,6 @@ export default function TentativeProgramSection() {
         <div className="reveal mt-16">
           <div className="text-center mb-8">
             <h3 className="font-display text-2xl sm:text-3xl font-bold text-dark mb-3">Site Visit Highlights</h3>
-            <p className="text-muted">Two selected site photos with location labels.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
@@ -200,7 +199,7 @@ export default function TentativeProgramSection() {
         <div className="reveal mt-12 mb-8">
           <div className="text-center mb-8">
             <h3 className="font-display text-2xl sm:text-3xl font-bold text-dark mb-3">Optional Leisure Activities</h3>
-            <p className="text-muted">Relax and enjoy curated leisure experiences during your stay.</p>
+            <p className="text-muted">Playing golf at DSC/Kurmitola Golf Club ( Pre-Confirmation Required)</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
@@ -215,7 +214,7 @@ export default function TentativeProgramSection() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
-                  <h4 className="font-display text-xl font-semibold text-white">Playing golf at DSC</h4>
+                  {/* <h4 className="font-display text-xl font-semibold text-white">Playing golf at DSC</h4> */}
                 </div>
               </div>
             </div>
@@ -231,7 +230,7 @@ export default function TentativeProgramSection() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
-                  <h4 className="font-display text-xl font-semibold text-white">Kurmitola golf club</h4>
+                  {/* <h4 className="font-display text-xl font-semibold text-white">Kurmitola golf club</h4> */}
                 </div>
               </div>
             </div>
