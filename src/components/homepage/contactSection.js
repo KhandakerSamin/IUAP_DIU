@@ -5,7 +5,7 @@ export default function ContactSection() {
     <section id="contact" className="py-24 lg:py-32 relative bg-white border-t border-slate-100">
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 reveal">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-dark mb-6">Contact Secretariat</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-dark mb-6">Contact Event Secretariat</h2>
           <p className="text-lg text-slate-600 font-light">
             Have questions about the IAUP Semi-Annual Meeting 2026? Contact our secretariat for assistance with registration, accommodation, or general inquiries.
           </p>
