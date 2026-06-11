@@ -52,7 +52,7 @@ export default function IaupSemiAnnualSection() {
             <ul className="space-y-4">
               {[
                 "IAUP Executive Committee and Board of Directors meetings",
-                "Participation of 100 to 150 global university leaders",
+                "Participation of 200 to 250 global university leaders",
                 "Keynote and plenary sessions on higher education leadership",
                 "Campus Tour: Daffodil International University at Daffodil Smart City",
                 "Celebration of 25 years of Daffodil International University",
@@ -82,7 +82,7 @@ export default function IaupSemiAnnualSection() {
             {/* Download Brochure Button */}
             <div className="mt-8 pt-6 border-t border-slate-200">
               <a
-                href="/brochure-iaup-semi-annual-meeting-2026.pdf"
+                href="/IAUP Semi-Annual Meeting 2026.pdf"
                 download
                 className="group inline-flex items-center gap-3 px-6 py-3 bg-primary text-white text-sm font-bold rounded-full shadow-md hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
