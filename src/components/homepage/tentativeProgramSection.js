@@ -112,7 +112,7 @@ export default function TentativeProgramSection() {
             <h3 className="font-display text-3xl sm:text-4xl font-bold text-dark mb-4">
               Optional Post-Event Tour
             </h3>
-            <p className="text-muted text-lg">Extend your trip and discover the natural beauty of Bangladesh.</p>
+            <p className="text-muted text-lg">Extend your trip and discover the natural beauty of Bangladesh with exclusive helicopter tours.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
@@ -148,7 +148,7 @@ export default function TentativeProgramSection() {
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
-                  <h4 className="font-display text-3xl font-bold text-white mb-2">Visit by Helicopter</h4>
+                  <h4 className="font-display text-3xl font-bold text-white mb-2">Scenic Beauty of Jaflong</h4>
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function TentativeProgramSection() {
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-60 w-full">
+              <div className="relative h-96 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
                   src="/img1.jpg"
@@ -178,7 +178,7 @@ export default function TentativeProgramSection() {
             </div>
 
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-60 w-full">
+              <div className="relative h-96 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
                   src="/img2.jpeg"
@@ -204,7 +204,7 @@ export default function TentativeProgramSection() {
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-60 w-full">
+              <div className="relative h-96 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
                   src="/img3.jpg"
@@ -220,7 +220,7 @@ export default function TentativeProgramSection() {
             </div>
 
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-60 w-full">
+              <div className="relative h-96 w-full">
                 <div className="absolute inset-0 bg-slate-800 animate-pulse" />
                 <Image
                   src="/img4.jpg"
