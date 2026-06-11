@@ -3,13 +3,13 @@ export default function IaupSemiAnnualSection() {
   return (
     <section
       id="semi-annual-meeting"
-      className="pb-24 lg:pb-32 bg-white relative overflow-hidden"
+      className="py-24 lg:py-32 bg-white relative overflow-hidden"
     >
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-slate-50 to-transparent opacity-50" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto  relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Label */}
         <div className="mb-4 reveal">
@@ -28,15 +28,24 @@ export default function IaupSemiAnnualSection() {
         </h2>
 
         {/* Description Paragraphs */}
-        <div className="space-y-5 text-lg text-slate-600 leading-relaxed mb-12 max-w-7xl">
+        <div className="space-y-5 text-lg text-slate-600 leading-relaxed mb-12 max-w-5xl">
           <p className="reveal text-justify reveal-delay-1">
-            The IAUP Semi-Annual Meeting 2026 will be hosted by Daffodil International University in Dhaka, Bangladesh, from 19 to 21 November 2026. The meeting will bring together presidents, rectors, vice chancellors, and senior university leaders from around the world for high-level dialogue, governance meetings, and strategic engagement on key issues in global higher education leadership.
-          </p>
-          <p className="reveal text-justify reveal-delay-1">
-           The program will include meetings of the Executive Committee and Board of Directors of the International Association of University Presidents (IAUP), along with keynote addresses, plenary discussions, and parallel sessions focused on leadership, innovation, sustainability, and international cooperation.
+            The IAUP Semi-Annual Meeting 2026 will be hosted by Daffodil
+            International University in Dhaka, Bangladesh, from 18 to 21
+            November 2026. The meeting will bring together university presidents
+            and leaders from around the world for high-level dialogue,
+            governance meetings, and strategic engagement on key issues in
+            global higher education.
           </p>
           <p className="reveal text-justify reveal-delay-2">
-            In addition to the formal academic agenda, participants will take part in cultural programs, institutional visits, and networking activities that encourage collaboration and knowledge exchange. The meeting is expected to welcome 200 to 250 from local and international delegates and will coincide with the celebration of 25 years of Daffodil International University, highlighting the institution&apos;s commitment to global engagement and academic leadership.
+            The program will include meetings of the Executive Committee and
+            Board of Directors of the International Association of University
+            Presidents (IAUP), along with keynote addresses, plenary
+            discussions, and parallel sessions focused on leadership, innovation,
+            sustainability, and international cooperation. In addition to the
+            formal academic agenda, participants will take part in cultural
+            programs, institutional visits, and networking activities that
+            encourage collaboration across borders and disciplines.
           </p>
         </div>
 
@@ -78,6 +87,30 @@ export default function IaupSemiAnnualSection() {
                 </li>
               ))}
             </ul>
+
+            {/* Download Brochure Button */}
+            <div className="mt-8 pt-6 border-t border-slate-200">
+              <a
+                href="/brochure-iaup-semi-annual-meeting-2026.pdf"
+                download
+                className="group inline-flex items-center gap-3 px-6 py-3 bg-primary text-white text-sm font-bold rounded-full shadow-md hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              >
+                <svg
+                  className="w-4 h-4 shrink-0 transition-transform group-hover:translate-y-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
+                  />
+                </svg>
+                Download Brochure
+              </a>
+            </div>
           </div>
 
           {/* Box 2: Promo Video */}
