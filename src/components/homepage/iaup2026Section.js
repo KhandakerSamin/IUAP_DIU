@@ -3,13 +3,13 @@ export default function IaupSemiAnnualSection() {
   return (
     <section
       id="semi-annual-meeting"
-      className="py-24 lg:py-32 bg-white relative overflow-hidden"
+      className="pb-24 lg:pb-32 bg-white relative overflow-hidden"
     >
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-slate-50 to-transparent opacity-50" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
 
         {/* Section Label */}
         <div className="mb-4 reveal">
@@ -28,24 +28,15 @@ export default function IaupSemiAnnualSection() {
         </h2>
 
         {/* Description Paragraphs */}
-        <div className="space-y-5 text-lg text-slate-600 leading-relaxed mb-12 max-w-5xl">
+        <div className="space-y-5 text-lg text-slate-600 leading-relaxed mb-12 max-w-7xl">
           <p className="reveal text-justify reveal-delay-1">
-            The IAUP Semi-Annual Meeting 2026 will be hosted by Daffodil
-            International University in Dhaka, Bangladesh, from 18 to 21
-            November 2026. The meeting will bring together university presidents
-            and leaders from around the world for high-level dialogue,
-            governance meetings, and strategic engagement on key issues in
-            global higher education.
+            The IAUP Semi-Annual Meeting 2026 will be hosted by Daffodil International University in Dhaka, Bangladesh, from 19 to 21 November 2026. The meeting will bring together presidents, rectors, vice chancellors, and senior university leaders from around the world for high-level dialogue, governance meetings, and strategic engagement on key issues in global higher education leadership.
+          </p>
+          <p className="reveal text-justify reveal-delay-1">
+            The program will include meetings of the Executive Committee and Board of Directors of the International Association of University Presidents (IAUP), along with keynote addresses, plenary discussions, and parallel sessions focused on leadership, innovation, sustainability, and international cooperation.
           </p>
           <p className="reveal text-justify reveal-delay-2">
-            The program will include meetings of the Executive Committee and
-            Board of Directors of the International Association of University
-            Presidents (IAUP), along with keynote addresses, plenary
-            discussions, and parallel sessions focused on leadership, innovation,
-            sustainability, and international cooperation. In addition to the
-            formal academic agenda, participants will take part in cultural
-            programs, institutional visits, and networking activities that
-            encourage collaboration across borders and disciplines.
+            In addition to the formal academic agenda, participants will take part in cultural programs, institutional visits, and networking activities that encourage collaboration and knowledge exchange. The meeting is expected to welcome 200 to 250 from local and international delegates and will coincide with the celebration of 25 years of Daffodil International University, highlighting the institution&apos;s commitment to global engagement and academic leadership.
           </p>
         </div>
 
