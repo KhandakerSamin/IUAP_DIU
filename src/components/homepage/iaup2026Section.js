@@ -3,7 +3,7 @@ export default function IaupSemiAnnualSection() {
   return (
     <section
       id="semi-annual-meeting"
-      className="pb-24 lg:pb-32 bg-white relative overflow-hidden"
+      className="pb-24 px-5 lg:pb-32 bg-white relative overflow-hidden"
     >
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-slate-50 to-transparent opacity-50" />

@@ -20,7 +20,7 @@ export default function SpeakersSection() {
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6">
               Call for <span className="gradient-text">Panel Speakers</span>
             </h2>
-            <p className="text-lg text-muted leading-relaxed">
+            <p className="text-lg text-muted  leading-relaxed">
               The International Association of University Presidents (IAUP) Semi-Annual Meeting 2026 invites distinguished university leaders, academics, researchers, and experts to serve as panel speakers in its thematic sessions. Hosted by Daffodil International University, this global forum will bring together thought leaders to exchange insights and shape the future of higher education.
             </p>
           </div>
@@ -45,7 +45,7 @@ export default function SpeakersSection() {
             {/* Right Column: How to apply */}
             <div className="flex flex-col gap-8 reveal reveal-delay-2 h-full">
               {/* Who Should Apply */}
-              <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-lg flex-1">
+              <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-sm flex-1">
                 <div className="flex items-center gap-4 mb-5">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                     <UserSquare2 className="text-primary w-6 h-6" />
@@ -58,7 +58,7 @@ export default function SpeakersSection() {
               </div>
 
               {/* How to Express Interest */}
-              <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-lg flex-1">
+              <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-sm flex-1">
                 <div className="flex items-center gap-4 mb-5">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                     <Mail className="text-primary w-6 h-6" />
@@ -111,11 +111,11 @@ export default function SpeakersSection() {
             {/* Generating 3 "Coming Soon" speaker cards */}
             {[1, 2, 3].map((i) => (
               <div key={i} className="reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className="group relative bg-white rounded-3xl overflow-hidden shadow-sm border border-border aspect-4/5 flex items-center justify-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+                <div className="group relative bg-white rounded-3xl overflow-hidden shadow-sm border border-border aspect-4/5 flex items-center justify-center transition-all duration-500 hover:shadow-sm hover:-translate-y-2">
                    <div className="absolute inset-0 transition-opacity duration-500 bg-linear-to-br from-slate-50 to-slate-100 opacity-100 group-hover:opacity-80" />
                    
                    <div className="relative z-10 flex flex-col items-center text-center p-8 w-full h-full justify-center">
-                     <div className="w-32 h-32 rounded-full bg-slate-200 mb-8 flex items-center justify-center border-4 border-white shadow-lg overflow-hidden relative group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                     <div className="w-32 h-32 rounded-full bg-slate-200 mb-8 flex items-center justify-center border-4 border-white shadow-sm overflow-hidden relative group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
                         <UserSquare2 className="text-slate-400 w-12 h-12" />
                         <div className="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm">
                           <span className="text-primary font-bold text-sm tracking-widest uppercase">Soon</span>
