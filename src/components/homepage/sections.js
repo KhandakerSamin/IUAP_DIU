@@ -8,6 +8,7 @@ import AboutDhakaSection from "@/components/homepage/aboutDhakaSection";
 import SpeakersSection from "@/components/homepage/speakersSection";
 import ImportantDatesSection from "@/components/homepage/importantDatesSection";
 import PosterPresentationSection from "@/components/homepage/posterPresentationSection";
+import EventSpeakers from "@/components/homepage/EventSpeakers";
 import PostEventSection from "@/components/homepage/postEventSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
 import VenuesSection from "@/components/homepage/venuesSection";
@@ -25,8 +26,9 @@ const homeSections = [
   Iaup2026Section,
   AboutDhakaSection,
   SpeakersSection,
-  TentativeProgramSection,
   PosterPresentationSection,
+  EventSpeakers,
+  TentativeProgramSection,
   PostEventSection,
   ImportantDatesSection,
   RegistrationSection,
