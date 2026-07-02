@@ -24,7 +24,7 @@ export default function PosterPresentationSection() {
   return (
     <section
       id="poster-presentation"
-      className="py-15 max-w-7xl mx-auto bg-white relative overflow-hidden"
+      className="py-15 md:py-25 max-w-7xl mx-auto bg-white relative overflow-hidden"
     >
       {/* <div className="absolute inset-x-0 top-0 h-1 gradient-bg" /> */}
       {/* <div className="absolute top-10 left-6 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
