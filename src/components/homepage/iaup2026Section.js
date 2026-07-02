@@ -52,7 +52,7 @@ export default function IaupSemiAnnualSection() {
             <ul className="space-y-4">
               {[
                 "IAUP Executive Committee and Board of Directors meetings",
-                "Participation of 200 to 250 global university leaders",
+                " Participation of 200-250 global and local university leaders.",
                 "Keynote and plenary sessions on higher education leadership",
                 "Campus Tour: Daffodil International University at Daffodil Smart City",
                 "Celebration of 25 years of Daffodil International University",

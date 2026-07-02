@@ -7,6 +7,8 @@ import TentativeProgramSection from "@/components/homepage/tentativeProgramSecti
 import AboutDhakaSection from "@/components/homepage/aboutDhakaSection";
 import SpeakersSection from "@/components/homepage/speakersSection";
 import ImportantDatesSection from "@/components/homepage/importantDatesSection";
+import PosterPresentationSection from "@/components/homepage/posterPresentationSection";
+import PostEventSection from "@/components/homepage/postEventSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
 import VenuesSection from "@/components/homepage/venuesSection";
 import AccommodationSection from "@/components/homepage/accommodationSection";
@@ -24,6 +26,8 @@ const homeSections = [
   AboutDhakaSection,
   SpeakersSection,
   TentativeProgramSection,
+  PosterPresentationSection,
+  PostEventSection,
   ImportantDatesSection,
   RegistrationSection,
   VenuesSection,
