@@ -24,7 +24,7 @@ export default function AboutDhakaSection() {
             <div className="section-divider mb-8 reveal reveal-delay-1" />
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6 reveal reveal-delay-1">
               <span className="block">Welcome</span>
-              <span className="block gradient-text">Dhaka Bangladesh</span>
+              <span className="block gradient-text">Dhaka, Bangladesh</span>
             </h2>
             <p className="text-lg text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-2">
               Dhaka, the capital of Bangladesh, is one of South Asia’s largest and most dynamic cities. Home to more than 20 million people, it is the country&apos;s centre of government, commerce, culture, and higher education, where tradition and progress exist side by side.
