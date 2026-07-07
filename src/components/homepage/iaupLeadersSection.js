@@ -2,21 +2,21 @@ import Image from "next/image";
 
 const leaders = [
   {
-    name: "Dr. Shown Chen",
+    name: "Dr. Shawn Chen",
     role1: "Chairman",
     role2: "Sias University (China)",
     position: "IAUP President",
     image: "/leader1.png"
   },
   {
-    name: "Dr. Fernando Leon-Garcia",
+    name: "Dr. Fernando León-García",
     role1: "President",
     role2: "CETYS University (Mexico)",
     position: "IAUP Chairman of the Board",
     image: "/leader3.jpeg"
   },
   {
-    name: "Dr. Tomas Morales",
+    name: "Dr. Tomás Morales",
     role1: "President",
     role2: "California State University, San Bernardino (USA)",
     position: "President Elect 2024-2027",

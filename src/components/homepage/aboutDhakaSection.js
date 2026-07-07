@@ -23,17 +23,20 @@ export default function AboutDhakaSection() {
             </span>
             <div className="section-divider mb-8 reveal reveal-delay-1" />
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6 reveal reveal-delay-1">
-              <span className="block">About</span>
-              <span className="block gradient-text">Dhaka, Bangladesh</span>
+              <span className="block">Welcome</span>
+              <span className="block gradient-text">Dhaka Bangladesh</span>
             </h2>
             <p className="text-lg text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-2">
-              Dhaka is the capital city of a South Asian country, Bangladesh. It is the hub of economic, political and administrative enterprises located in central Bangladesh at 23°42′N 90°22′E, on the eastern banks of the Buriganga River. It lies on the lower reaches of the Ganges Delta and covers a total area of 306.38 square kilometers (around 118.29 square miles).
+              Dhaka, the capital of Bangladesh, is one of South Asia’s largest and most dynamic cities. Home to more than 20 million people, it is the country&apos;s centre of government, commerce, culture, and higher education, where tradition and progress exist side by side.
             </p>
             <p className="text-muted text-justify leading-relaxed mb-6 reveal reveal-delay-3">
-              Historically, Dhaka was associated with the periods of Kamarupa kingdom, Sena kingdom, and Sultanate period, and was a part of Mughal Empire, Nawabi Period, British. The capital has a favorable climate characterized by tropical monsoon from June to October; mild winter from October to March; hot, humid summer from March to June.
+              With a history spanning more than four centuries, Dhaka offers a rich cultural landscape shaped by Mughal heritage, vibrant artistic traditions, and the warmth of Bangladeshi hospitality. Visitors can explore historic landmarks, experience renowned Bengali cuisine, discover thriving artisan crafts, and enjoy the energy of a city that never stands still.
+            </p>
+            <p className="text-muted text-justify leading-relaxed mb-6 reveal reveal-delay-4">
+              As Bangladesh continues its remarkable economic and social transformation, Dhaka has become a meeting place for ideas, entrepreneurship, and academic collaboration. The city is home to many of the nation&apos;s leading universities, research institutions, and industries, making it a fitting venue for global conversations on the future of higher education.
             </p>
             <p className="text-muted text-justify leading-relaxed reveal reveal-delay-4">
-              The demographic features of the city are varied in character. Dhaka city corporations are the most populated urban areas with the highest density accommodating over 22 million people including Muslims, Hindus, Christians, Buddhists and others.
+              We look forward to welcoming you to Dhaka and hope your visit offers not only professional engagement but also an opportunity to experience the history, culture, and hospitality that make Bangladesh unique.
             </p>
           </div>
         </div>
