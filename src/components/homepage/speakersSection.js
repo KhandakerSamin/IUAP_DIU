@@ -40,6 +40,25 @@ export default function SpeakersSection() {
                   </li>
                 ))}
               </ul>
+
+              <div className="bg-slate-50 text-lg rounded-2xl p-5 my-6 border border-slate-200">
+                  <div className="flex items-center gap-3 text-dark font-medium">
+                    <CalendarDays className="w-5 h-5 text-primary" />
+                    <span>Deadline: 30th September 2026</span>
+                  </div>
+                  {/* <div className="flex items-center gap-3 text-dark font-medium">
+                    <Mail className="w-5 h-5 text-primary" />
+                    <span>
+                      Email:{" "}
+                      <a
+                        href="mailto:iaup-bd2026@daffodilvarsity.edu.bd"
+                        className="text-primary cursor-pointer hover:underline"
+                      >
+                        iaup-bd2026@daffodilvarsity.edu.bd
+                      </a>
+                    </span>
+                  </div> */}
+                </div>
             </div>
 
             {/* Right Column: How to apply */}
@@ -58,7 +77,7 @@ export default function SpeakersSection() {
               </div>
 
               {/* How to Express Interest */}
-              <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-sm flex-1">
+              {/* <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-sm flex-1">
                 <div className="flex items-center gap-4 mb-5">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                     <Mail className="text-primary w-6 h-6" />
@@ -68,28 +87,11 @@ export default function SpeakersSection() {
                 <p className="text-muted leading-relaxed mb-6">
                   Interested speakers are requested to submit a brief profile, photo (150–200 words) along with their proposed contribution to the session theme.
                 </p>
-                <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100">
-                  <div className="flex items-center gap-3 text-dark font-medium mb-3">
-                    <CalendarDays className="w-5 h-5 text-primary" />
-                    <span>Deadline: 30th September 2026</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-dark font-medium">
-                    <Mail className="w-5 h-5 text-primary" />
-                    <span>
-                      Email:{" "}
-                      <a
-                        href="mailto:iaup-bd2026@daffodilvarsity.edu.bd"
-                        className="text-primary cursor-pointer hover:underline"
-                      >
-                        iaup-bd2026@daffodilvarsity.edu.bd
-                      </a>
-                    </span>
-                  </div>
-                </div>
+                
                 <p className="text-sm text-muted italic border-l-2 border-primary pl-4">
                   Selected panelists will have the opportunity to engage with global peers, contribute to high-level discussions, and expand international collaboration networks.
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

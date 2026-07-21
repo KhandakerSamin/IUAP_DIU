@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const quickTrustStats = [
   { value: "250+", label: "Global Higher Education Leaders" },
   { value: "100+", label: "Universities" },
