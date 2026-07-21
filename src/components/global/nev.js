@@ -8,11 +8,13 @@ import { Menu, X } from "lucide-react";
 
 const links = [
   { href: "#about", label: "About IAUP" },
+  { href: "#diu", label: "Why DIU" },
   { href: "#call-for-speakers", label: "Call for Panel Speakers" },
   { href: "#speakers", label: "Speakers" },
   { href: "#program", label: "Program" },
   { href: "#important-dates", label: "Important Dates" },
-  { href: "#venues", label: "Venues" },
+  // { href: "#venues", label: "Venues" },
+  { href: "#support", label: "Delegate Support" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -52,12 +54,13 @@ export default function Nev() {
             </Link>
           </div>
 
-          <div className="hidden xl:flex items-center justify-center flex-1 gap-4 2xl:gap-8">
+          <div className="hidden xl:flex  items-center justify-center flex-1 gap-4 2xl:gap-8">
+          
             {links.map((link) => (
               <a
                 key={link.href}
                 href={pathname === "/" ? link.href : `/${link.href}`}
-                className={`${navIsScrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm uppercase tracking-wide`}
+                className={`${navIsScrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm `}
               >
                 {link.label}
               </a>
