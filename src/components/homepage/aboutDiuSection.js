@@ -20,16 +20,16 @@ export default function AboutDiuSection() {
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6 reveal reveal-delay-1">
               About <span className="gradient-text">DIU</span>
             </h2>
-            <p className="text-lg text-muted leading-relaxed text-justify mb-6 reveal reveal-delay-2">
+            <p className="text-lg text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-2">
               Daffodil International University (DIU), a leading private university in Bangladesh, recognized in world university rankings such as QS and Times Higher Education (THE).DIU is ranked 221st in Asia (QS Asia 2026) and 1st in Bangladesh (THE WUR 2026), Ist in Bangladesh in both THE Impact Rankings 2025 and QS Sustainability Rankings 2026 with strong performance in research and interdisciplinary innovation.
             </p>
-            <p className="text-muted leading-relaxed text-justify mb-6 reveal reveal-delay-3">
+            <p className="text-lg  text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-2">
              DIU is the number one private university in Bangladesh in terms of Scopus and Web of Science indexed research publications. QS World University Rankings also recognizes DIU as a &quot;Very High Research Intensive University&quot;.
             </p>
-            <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
+            <p className="text-lg text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-4">
              The university maintains over 600 international partnerships and actively engages in student and faculty exchange, international internships, research collaboration, scholarships, and global mobility programs
             </p>
-            <p className="text-muted leading-relaxed text-justify mb-8 reveal reveal-delay-4">
+            <p className="text-lg  text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-4">
              The university has also successfully hosted major international events, including the AUPF 2019 and the AUAP General Conference 2022.
             </p>
           </div>

@@ -10,7 +10,7 @@ export default function PostEventSection() {
               Optional Post-Event Tour
             </h3>
             <p className="text-muted text-lg">
-              Extend your trip and discover the natural beauty of Bangladesh with exclusive helicopter tours.
+              Extend your trip and discover the natural beauty of Bangladesh
             </p>
           </div>
 
