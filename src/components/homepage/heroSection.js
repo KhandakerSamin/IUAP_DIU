@@ -2,6 +2,13 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+const quickTrustStats = [
+  { value: "250+", label: "Global Higher Education Leaders" },
+  { value: "100+", label: "Universities" },
+  { value: "40+", label: "Countries" },
+  { value: "30+", label: "Speakers" },
+];
+
 export default function HeroSection() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [mounted, setMounted] = useState(false);
@@ -94,8 +101,22 @@ export default function HeroSection() {
             </div>
           ))}
         </div>
-        
       </div>
+
+      {/* <div className="absolute bottom-14 left-1/2 z-10 w-full max-w-6xl -translate-x-1/2 px-4 sm:px-6 lg:px-8">
+        <div className="rounded-4xl border border-white/15 bg-white/1 backdrop-blur-sm ">
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-b-3xl bg-white/10 sm:grid-cols-4">
+            {quickTrustStats.map((item) => (
+              <div key={item.label} className="bg-slate-950/35 px-4 py-4 text-center sm:px-6 sm:py-5">
+                <div className="font-display text-xl sm:text-2xl font-bold text-white tabular-nums">{item.value}</div>
+                <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-200 sm:text-xs">
+                  {item.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div> */}
 
       {/* Smooth transition to the light section below (hidden or darkened as we are on dark bg now) */}
       <div className="absolute bottom-0 inset-x-0 h-32 bg-linear-to-b from-transparent to-slate-900 pointer-events-none" />
