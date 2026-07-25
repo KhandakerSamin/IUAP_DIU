@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 const links = [
+  { href: "/", label: "Home" },
   { href: "/#about", label: "About IAUP" },
   { href: "/why-diu", label: "Why DIU" },
   { href: "/call-for-contributions", label: "Call for Contributions" },

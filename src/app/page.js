@@ -8,8 +8,8 @@ export default function Page() {
     <>
       <Nev />
       <main>
-        {homeSections.map((Section) => (
-          <Section key={Section.name} />
+        {homeSections.map(({ id, Component }, index) => (
+          <Component key={id || `section-${index}`} />
         ))}
       </main>
       <Footer />
