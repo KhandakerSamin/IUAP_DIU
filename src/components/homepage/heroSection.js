@@ -52,9 +52,9 @@ export default function HeroSection() {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="absolute top-1/2 left-1/2 z-0 w-auto h-auto min-w-full min-h-full max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
       >
-        <source src="/hero.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/xmcj37va/video/upload/v1785006264/hero_1_nuhtco.mp4" type="video/mp4" />
       </video>
 
       {/* Dark Overlay to ensure text readability */}
