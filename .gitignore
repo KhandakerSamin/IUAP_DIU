@@ -44,3 +44,4 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+public/hero.mp4

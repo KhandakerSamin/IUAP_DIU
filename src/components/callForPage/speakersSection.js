@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useState } from "react";
 import {
   CheckCircle2,
@@ -8,6 +9,8 @@ import {
   Send,
   CheckCircle,
   UserRoundPen,
+  UploadCloud,
+  FileCheck2,
 } from "lucide-react";
 
 const PANELS = [
@@ -27,7 +30,6 @@ const EMPTY_FORM = {
   panel: "",
   abstract: "",
   bio: "",
-  cvLink: "",
 };
 
 function wordCount(text) {
@@ -37,6 +39,9 @@ function wordCount(text) {
 
 function SpeakerFormModal({ open, onClose }) {
   const [form, setForm] = useState(EMPTY_FORM);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   if (!open) return null;
@@ -44,16 +49,27 @@ function SpeakerFormModal({ open, onClose }) {
   const update = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
+  const handleFile = (e) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Here you can process 'form' and 'file' (e.g. upload to API using FormData)
     setSubmitted(true);
   };
 
   const handleClose = () => {
     onClose();
-    // Reset after the close animation has a moment to run
+    // Reset state after close animation completes
     setTimeout(() => {
       setForm(EMPTY_FORM);
+      setFile(null);
+      setFileName("");
       setSubmitted(false);
     }, 200);
   };
@@ -110,8 +126,8 @@ function SpeakerFormModal({ open, onClose }) {
             </h4>
             <p className="text-muted leading-relaxed max-w-sm">
               Thank you for your interest in speaking at IAUP Semi-Annual
-              Meeting 2026. Our team will review your proposal and get back
-              to you before the panel selections are finalized.
+              Meeting 2026. Our team will review your proposal and get back to
+              you before the panel selections are finalized.
             </p>
             <button
               type="button"
@@ -235,18 +251,32 @@ function SpeakerFormModal({ open, onClose }) {
                 />
               </Field>
 
-              <Field
-                label="Share Your CV"
-                hint="Drive link"
-                className="sm:col-span-2"
-              >
-                <input
-                  type="url"
-                  value={form.cvLink}
-                  onChange={update("cvLink")}
-                  placeholder="https://drive.google.com/..."
-                  className={inputClass}
-                />
+              <Field label="Share Your CV" required className="sm:col-span-2">
+                <label
+                  htmlFor="cv-upload"
+                  className="flex items-center gap-3 rounded-xl border border-dashed border-border bg-slate-50 px-4 py-4 cursor-pointer hover:bg-slate-100 transition-colors"
+                >
+                  {fileName ? (
+                    <FileCheck2 className="w-5 h-5 text-primary shrink-0" />
+                  ) : (
+                    <UploadCloud className="w-5 h-5 text-muted shrink-0" />
+                  )}
+                  <span
+                    className={`text-sm truncate ${
+                      fileName ? "text-dark font-medium" : "text-muted"
+                    }`}
+                  >
+                    {fileName || "Click to upload PDF or Word document"}
+                  </span>
+                  <input
+                    id="cv-upload"
+                    type="file"
+                    required
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFile}
+                    className="sr-only"
+                  />
+                </label>
               </Field>
             </div>
 
@@ -321,7 +351,7 @@ export default function SpeakersSection() {
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6">
               Call for <span className="gradient-text">Panel Speakers</span>
             </h2>
-            <p className="text-lg text-muted  leading-relaxed">
+            <p className="text-lg text-muted leading-relaxed">
               The International Association of University Presidents (IAUP)
               Semi-Annual Meeting 2026 invites distinguished university
               leaders, academics, researchers, and experts to serve as panel
@@ -392,7 +422,10 @@ export default function SpeakersSection() {
                     </h3>
                   </div>
                   <p className="text-muted leading-relaxed mb-6">
-                    Presidents, Vice-Chancellors, Rectors, senior academics, policymakers, researchers and industry leaders with relevant experience and a strong track record in the respective themes.
+                    Presidents, Vice-Chancellors, Rectors, senior academics,
+                    policymakers, researchers and industry leaders with
+                    relevant experience and a strong track record in the
+                    respective themes.
                   </p>
                 </div>
                 <button
