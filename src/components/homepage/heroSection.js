@@ -43,14 +43,24 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="h-screen relative overflow-hidden flex items-center justify-center bg-slate-900 text-center bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/heroBG.jpg')" }}
+      className="h-screen relative overflow-hidden flex items-center justify-center bg-slate-900 text-center"
     >
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/hero.mp4" type="video/mp4" />
+      </video>
+
       {/* Dark Overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-slate-900/70 z-0"></div>
+      <div className="absolute inset-0 bg-slate-900/50 z-0"></div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center h-full">
-        
         
 
         <h1 className="font-display mt-25 text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-7xl mx-auto">
