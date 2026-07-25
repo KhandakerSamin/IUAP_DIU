@@ -1153,7 +1153,7 @@ export default function RegistrationForm() {
             )}
 
             <OptionGroup
-              legend="Are you/your university a member of IAUP/ AUAP/ DIU's Partner University?"
+              legend="Are you/your university a member of IAUP/ AUAP/ EURAS/ DIU's Partner University?"
               name="isMemberUniversity"
               options={YES_NO_OPTIONS}
               value={formValues.isMemberUniversity}

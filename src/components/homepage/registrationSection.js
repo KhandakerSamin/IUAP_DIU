@@ -3,7 +3,7 @@ import Link from "next/link";
 const pricingPlans = [
   {
     attendeeId: "member",
-    name: "IAUP, AUAP Members and Daffodil's Partner Institutions",
+    name: "IAUP, AUAP, EURAS Members and Daffodil's Partner Institutions",
     subtitle: "Special rate for association members and partner universities",
     pricing: [
       { label: "Early Bird", price: "USD 400" },

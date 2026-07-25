@@ -1,4 +1,4 @@
-import { CheckCircle2, Mail, CalendarDays, UserSquare2 } from "lucide-react";
+import { CheckCircle2, CalendarDays, UserSquare2 } from "lucide-react";
 
 export default function SpeakersSection() {
   const themes = [
