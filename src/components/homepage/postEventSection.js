@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function PostEventSection() {
   return (
-    <section id="post-event-tour" className="py-24 lg:py-32 bg-white">
+    <section id="post-event-tour" className="py-20 lg:pt-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="reveal">
           <div className="text-center mb-12">

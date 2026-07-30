@@ -47,7 +47,7 @@ const schedule = [
 
 export default function TentativeProgramSection() {
   return (
-    <section id="program" className="pt-20 md:py-24 px-3 lg:py-32 bg-white relative">
+    <section id="program" className="pt-10 md:py-24 px-3 lg:pt-32 bg-white relative">
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 reveal">
           <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4">

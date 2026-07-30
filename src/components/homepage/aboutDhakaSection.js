@@ -29,13 +29,13 @@ export default function AboutDhakaSection() {
             <p className="text-lg text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-2">
               Dhaka, the capital of Bangladesh, is one of South Asia’s largest and most dynamic cities. Home to more than 20 million people, it is the country&apos;s centre of government, commerce, culture, and higher education, where tradition and progress exist side by side.
             </p>
-            <p className="text-muted text-justify leading-relaxed mb-6 reveal reveal-delay-3">
+            <p className="text-lg  text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-3">
               With a history spanning more than four centuries, Dhaka offers a rich cultural landscape shaped by Mughal heritage, vibrant artistic traditions, and the warmth of Bangladeshi hospitality. Visitors can explore historic landmarks, experience renowned Bengali cuisine, discover thriving artisan crafts, and enjoy the energy of a city that never stands still.
             </p>
-            <p className="text-muted text-justify leading-relaxed mb-6 reveal reveal-delay-4">
+            <p className="text-lg  text-justify text-muted leading-relaxed mb-6 reveal reveal-delay-4">
               As Bangladesh continues its remarkable economic and social transformation, Dhaka has become a meeting place for ideas, entrepreneurship, and academic collaboration. The city is home to many of the nation&apos;s leading universities, research institutions, and industries, making it a fitting venue for global conversations on the future of higher education.
             </p>
-            <p className="text-muted text-justify leading-relaxed reveal reveal-delay-4">
+            <p className="text-lg  text-justify text-muted leading-relaxed reveal reveal-delay-4">
               We look forward to welcoming you to Dhaka and hope your visit offers not only professional engagement but also an opportunity to experience the history, culture, and hospitality that make Bangladesh unique.
             </p>
           </div>
