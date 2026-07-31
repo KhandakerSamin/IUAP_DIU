@@ -19,7 +19,7 @@ export default function Footer() {
     { href: "/registration", label: "Registration" },
     { href: "/#venues", label: "Venues" },
     { href: "/#important-dates", label: "Important Dates" },
-    { href: "/#visa-guidelines", label: "Visa Guidelines" },
+    { href: "/pre-departure-guidelines", label: "Pre-Departure Guidelines" },
   ];
 
   const logoUrl = "/navLogo.png";

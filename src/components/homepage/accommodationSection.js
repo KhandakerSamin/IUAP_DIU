@@ -16,7 +16,7 @@ const accommodations = [
 
 export default function AccommodationSection() {
   return (
-    <section id="accommodation" className="py-24 lg:py-32 bg-slate-50">
+    <section id="accommodation" className="py-15 lg:py-24 bg-slate-100">
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4 reveal">
