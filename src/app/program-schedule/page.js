@@ -51,9 +51,7 @@ function Item({ time, type, title, children, dressCode }) {
             <h3 className="font-serif text-[18px] font-medium leading-snug text-[#16241C] sm:text-[20px]">
               {title}
             </h3>
-            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-[#8A8577]">
-              {t.label}
-            </span>
+            
             {dressCode && (
               <span className="rounded-full border border-[#E3E0D6] px-2.5 py-0.5 font-sans text-[11px] font-medium text-[#5B6660]">
                 Dress code: {dressCode}

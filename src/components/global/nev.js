@@ -20,12 +20,10 @@ const callForContributionLinks = [
   {
     href: "/call-for-contributions#call-for-speakers",
     label: "Call For Panel Speaker",
-    description: "Submit a panel speaker proposal",
   },
   {
     href: "/call-for-contributions#poster-presentation",
     label: "Call For Poster Presentation",
-    description: "Share a poster presentation",
   },
 ];
 
@@ -84,11 +82,10 @@ export default function Nev() {
                 Call for Contributions
               </Link>
 
-              <div className="invisible absolute left-1/2 top-full z-50 mt-4 w-[340px] -translate-x-1/2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="invisible absolute left-1/2 top-full z-50 mt-4 w-85 -translate-x-1/2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                 <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white p-2 shadow-2xl ring-1 ring-black/5">
                   <div className="px-4 py-3 border-b border-slate-100">
                     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">Call for Contributions</p>
-                    <p className="mt-1 text-sm text-slate-500">Choose the proposal path you need.</p>
                   </div>
                   <div className="p-2 space-y-2">
                     {callForContributionLinks.map((item) => (
@@ -98,7 +95,6 @@ export default function Nev() {
                         className="block rounded-2xl px-4 py-3 transition-colors hover:bg-slate-50"
                       >
                         <div className="text-sm font-semibold text-dark">{item.label}</div>
-                        <div className="mt-1 text-xs leading-5 text-slate-500">{item.description}</div>
                       </Link>
                     ))}
                   </div>
