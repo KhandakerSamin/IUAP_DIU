@@ -45,17 +45,12 @@ export default function HeroSection() {
       id="hero"
       className="h-screen relative overflow-hidden flex items-center justify-center bg-slate-900 text-center"
     >
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="absolute top-1/2 left-1/2 z-0 w-auto h-auto min-w-full min-h-full max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
-      >
-        <source src="https://res.cloudinary.com/xmcj37va/video/upload/v1785006264/hero_1_nuhtco.mp4" type="video/mp4" />
-      </video>
+      {/* Background Image */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/heroBG.jpg')" }}
+      />
 
       {/* Dark Overlay to ensure text readability */}
       <div className="absolute inset-0 bg-slate-900/50 z-0"></div>
