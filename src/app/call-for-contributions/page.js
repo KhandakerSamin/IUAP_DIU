@@ -14,7 +14,7 @@ export default function CallForContributionsPage() {
   return (
     <>
       <Nev />
-      <main className="pt-24">
+      <main className="">
         <SpeakersSection />
         <PosterPresentationSection />
       </main>

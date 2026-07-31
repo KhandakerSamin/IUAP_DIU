@@ -93,7 +93,7 @@ function SpeakerFormModal({ open, onClose }) {
       />
 
       {/* Panel */}
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-border">
+      <div className="relative w-full max-w-2xl  rounded-3xl shadow-2xl border border-border">
         <div className="flex items-start justify-between gap-4 px-6 sm:px-10 pt-8 sm:pt-10 pb-6 border-b border-border">
           <div>
             <span className="inline-block text-primary font-semibold tracking-wide uppercase text-xs mb-2">
@@ -341,10 +341,10 @@ export default function SpeakersSection() {
       {/* Call for Speakers Section */}
       <section
         id="call-for-speakers"
-        className="py-24 lg:py-32 bg-white relative border-b border-slate-100"
+        className="py-20 lg:py-28 bg-light relative border-b border-slate-100"
       >
         <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto mb-16 reveal">
+          <div className="text-center max-w-4xl mx-auto mb-12 reveal">
             <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4">
               Call for Participation
             </span>
@@ -362,9 +362,9 @@ export default function SpeakersSection() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Column: Themes */}
-            <div className="bg-slate-50 rounded-3xl p-8 sm:p-10 border border-border shadow-sm reveal reveal-delay-1 h-full">
+            <div className="bg-slate-50 rounded-4xl p-7 sm:p-9 border border-border shadow-sm reveal reveal-delay-1 h-full">
               <h3 className="font-display text-2xl font-bold text-dark mb-6 border-b border-border pb-4">
                 Thematic Areas
               </h3>
@@ -393,8 +393,8 @@ export default function SpeakersSection() {
             </div>
 
             {/* Right Column: Become a Speaker CTA */}
-            <div className="flex flex-col gap-8 reveal reveal-delay-2 h-full">
-              <div className="bg-white rounded-3xl p-8 sm:p-10 border border-border shadow-sm flex-1 flex flex-col justify-between">
+            <div className="flex flex-col gap-6 reveal reveal-delay-2 h-full">
+              <div className="bg-white rounded-4xl p-7 sm:p-9 border border-border shadow-sm flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-4 mb-5">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">

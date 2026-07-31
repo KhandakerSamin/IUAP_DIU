@@ -10,11 +10,23 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/#about", label: "About IAUP" },
   { href: "/why-diu", label: "Why DIU" },
-  { href: "/call-for-contributions", label: "Call for Contributions" },
   { href: "/speakers", label: "Speakers" },
   { href: "/program-schedule", label: "Program Schedule" },
   { href: "/pre-departure-guidelines", label: "Pre-Departure Guidelines" },
   { href: "/#contact", label: "Contact" },
+];
+
+const callForContributionLinks = [
+  {
+    href: "/call-for-contributions#call-for-speakers",
+    label: "Call For Panel Speaker",
+    description: "Submit a panel speaker proposal",
+  },
+  {
+    href: "/call-for-contributions#poster-presentation",
+    label: "Call For Poster Presentation",
+    description: "Share a poster presentation",
+  },
 ];
 
 const logoUrl = "/navLogo.png";
@@ -53,16 +65,46 @@ export default function Nev() {
             </Link>
           </div>
 
-          <div className="hidden xl:flex  items-center justify-center flex-1 gap-4 2xl:gap-8">
+          <div className="hidden xl:flex items-center justify-center flex-1 gap-4 2xl:gap-8">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`${navIsScrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm `}
+                className={`${navIsScrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm`}
               >
                 {link.label}
               </Link>
             ))}
+
+            <div className="relative group">
+              <Link
+                href="/call-for-contributions"
+                className={`${navIsScrolled ? "text-slate-600" : "text-white/90"} hover:text-secondary font-medium transition-colors text-xs xl:text-sm`}
+              >
+                Call for Contributions
+              </Link>
+
+              <div className="invisible absolute left-1/2 top-full z-50 mt-4 w-[340px] -translate-x-1/2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white p-2 shadow-2xl ring-1 ring-black/5">
+                  <div className="px-4 py-3 border-b border-slate-100">
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">Call for Contributions</p>
+                    <p className="mt-1 text-sm text-slate-500">Choose the proposal path you need.</p>
+                  </div>
+                  <div className="p-2 space-y-2">
+                    {callForContributionLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block rounded-2xl px-4 py-3 transition-colors hover:bg-slate-50"
+                      >
+                        <div className="text-sm font-semibold text-dark">{item.label}</div>
+                        <div className="mt-1 text-xs leading-5 text-slate-500">{item.description}</div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="hidden xl:flex items-center justify-end w-48 shrink-0">
@@ -96,6 +138,9 @@ export default function Nev() {
               {link.label}
             </Link>
           ))}
+          <Link href="/call-for-contributions" onClick={closeMenu} className="py-2 text-slate-800 font-medium hover:text-secondary transition-colors">
+            Call for Contributions
+          </Link>
           <Link href="/registration" onClick={closeMenu} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-all text-center mt-2 shadow-sm">
             Register Now
           </Link>

@@ -94,7 +94,7 @@ function DaySection({ eyebrow, dateLabel, title, venue, accent, children }) {
           {venue}
         </div>
       </div>
-      <ol className="relative before:absolute before:left-[3px] before:top-1 before:h-[calc(100%-1rem)] before:w-px before:bg-[#E3E0D6]">
+      <ol className="relative before:absolute before:left-0.75 before:top-1 before:h-[calc(100%-1rem)] before:w-px before:bg-[#E3E0D6]">
         {children}
       </ol>
     </section>
@@ -118,7 +118,7 @@ export default function ProgramSchedulePage() {
       >
         {/* Header Hero */}
         <section className="border-b border-[#E3E0D6]">
-          <div className="mx-auto max-w-[1360px] px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-340 px-4 py-12 sm:px-6 lg:px-8">
             <p className="font-sans text-[12px] font-bold uppercase tracking-[0.28em] text-[#0F6E4F]">
               Program Schedule &middot; Draft
             </p>
@@ -149,7 +149,7 @@ export default function ProgramSchedulePage() {
         {/* Sticky Day Navigation Tabs — sits just below the fixed site header (Nev),
            so it needs its own top offset instead of top-0, or it hides underneath it. */}
         <nav className="sticky top-20 z-30 border-b border-[#E3E0D6] bg-[#F6F5F1]/95 shadow-sm backdrop-blur-sm">
-          <div className="mx-auto flex max-w-[1360px] gap-3 overflow-x-auto px-4 py-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-340 gap-3 overflow-x-auto px-4 py-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-6 lg:px-8">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
@@ -177,7 +177,7 @@ export default function ProgramSchedulePage() {
         </nav>
 
         {/* Schedule Content */}
-        <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-340 px-4 sm:px-6 lg:px-8">
           {/* DAY 1 */}
           {activeTab === "day-1" && (
             <DaySection
@@ -364,7 +364,7 @@ export default function ProgramSchedulePage() {
         </div>
 
         {/* Legend Footer */}
-        <div className="mx-auto mt-4 max-w-[1360px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mt-4 max-w-340 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-[#E3E0D6] pt-6 font-sans text-[13px] text-[#5B6660]">
             {Object.values(TYPE_STYLES)
               .filter((v, i, arr) => arr.findIndex((x) => x.label === v.label) === i)
