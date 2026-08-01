@@ -10,7 +10,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/#about", label: "About IAUP" },
   { href: "/why-diu", label: "Why DIU" },
-  { href: "/speakers", label: "Speakers" },
+  //{ href: "/speakers", label: "Speakers" },
   { href: "/program-schedule", label: "Program Schedule" },
   { href: "/pre-departure-guidelines", label: "Pre-Departure Guidelines" },
   { href: "/#contact", label: "Contact" },
