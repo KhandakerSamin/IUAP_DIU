@@ -1,6 +1,7 @@
 import Footer from "@/components/global/footer";
 import Nev from "@/components/global/nev";
 import AccommodationSection from "@/components/homepage/accommodationSection";
+import HomeEffects from "@/components/homepage/homeEffects";
 import VisaGuidelineSection from "@/components/homepage/visaGuidelineSection";
 
 export const metadata = {
@@ -32,6 +33,7 @@ export default function PreDepartureGuidelinesPage() {
         <VisaGuidelineSection />
         <AccommodationSection />
       </main>
+      <HomeEffects />
       <Footer />
     </>
   );
