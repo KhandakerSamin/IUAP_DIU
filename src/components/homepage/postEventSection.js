@@ -107,7 +107,7 @@ export default function PostEventSection() {
               Optional Leisure Activities
             </h3>
             <p className="text-muted">
-              Playing golf at DSC/Kurmitola Golf Club ( Pre-Confirmation Required)
+              Playing golf at DSC/Kurmitola Golf Club (Pre-Confirmation Required)
             </p>
           </div>
 
