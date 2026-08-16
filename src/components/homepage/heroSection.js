@@ -43,19 +43,32 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="h-screen relative overflow-hidden flex items-center justify-center bg-slate-900 text-center"
+      className="relative min-h-dvh overflow-hidden flex items-center justify-center bg-slate-900 text-center"
     >
-      {/* Background Image */}
+      {/* Background video */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/heroBG.jpg')" }}
+        className="absolute inset-0 z-0 overflow-hidden bg-slate-950"
       />
 
-      {/* Dark Overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-slate-900/50 z-0"></div>
+      <video
+        aria-hidden="true"
+        className="absolute -inset-y-24 -inset-x-10 z-0 h-[calc(100%+12rem)] w-[calc(100%+5rem)] scale-110 object-cover object-center opacity-60"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster="/heroBG.jpg"
+      >
+        <source src="/hero.mp4" type="video/mp4" />
+      </video>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center justify-center h-full">
+      {/* Dark Overlay to ensure text readability */}
+      <div className="absolute inset-0 z-0 bg-slate-950/55" />
+      <div className="absolute inset-x-0 top-0 z-0 h-48 bg-linear-to-b from-slate-950/70 to-transparent" />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 w-full flex flex-col items-center justify-center min-h-dvh">
         
 
         <h1 className="font-display mt-25 text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-7xl mx-auto">

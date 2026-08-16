@@ -123,9 +123,9 @@ function PartnerFormModal({ open, onClose }) {
               Proposal received
             </h4>
             <p className="text-muted leading-relaxed max-w-sm">
-              Thank you for your interest in partnering with IAUP
-              Semi-Annual Meeting 2026. Our team will review your proposal
-              and reach out with next steps.
+              Thank you for your interest in partnering with IAUP Semi-Annual
+              Meeting 2026. Our team will review your proposal and reach out
+              with next steps.
             </p>
             <button
               type="button"
@@ -321,11 +321,21 @@ export default function PartnerSection() {
             Association of Private Universities of Bangladesh
           </p>
         </div>
-        <div className="flex justify-center items-center mt-8">
-          <div className="relative w-64 h-32 md:w-80 md:h-50">
+
+        {/* Partner Logos */}
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mt-8">
+          <div className="relative w-64 h-32 md:w-80 md:h-44">
+            <Image
+              src="/partner2.jpeg"
+              alt="Partner 2"
+              className="object-contain"
+              fill
+            />
+          </div>
+          <div className="relative w-64 h-32 md:w-80 md:h-44">
             <Image
               src="/partner.jpg"
-              alt="Our Partner"
+              alt="Partner 1"
               className="object-contain"
               fill
             />
