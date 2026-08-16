@@ -4,14 +4,16 @@ const leaders = [
   {
     name: "Dr. Shawn Chen",
     role1: "Chairman",
-    role2: "Sias University (China)",
+    role2: "Sias University",
+    role3: "(China)",
     position: "IAUP President",
     image: "/leader1.png"
   },
   {
     name: "Dr. Fernando León-García",
     role1: "President",
-    role2: "CETYS University (Mexico)",
+    role2: "CETYS University",
+    role3: "(Mexico)",
     position: "IAUP Chairman of the Board",
     image: "/leader3.jpeg"
   },
@@ -65,6 +67,7 @@ export default function IaupLeadersSection() {
                 <div className="text-sm md:text-base text-gray-600 mb-3 hover:text-gray-800 transition-colors">
                   <p>{leader.role1}</p>
                   <p className="font-medium">{leader.role2}</p>
+                  <p className="font-medium">{leader.role3}</p>
                 </div>
                 <div className="text-blue-700 font-semibold tracking-wide text-sm md:text-base">
                   {leader.position}
