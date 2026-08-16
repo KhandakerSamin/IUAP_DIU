@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function AboutIaupSection() {
   return (
-    <section id="about" className="py-24 lg:py-32 bg-white relative overflow-hidden">
+    <section id="about" className="-mt-px py-24 lg:py-32 bg-white relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-slate-50 to-transparent opacity-50" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />

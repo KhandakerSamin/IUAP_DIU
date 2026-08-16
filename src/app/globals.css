@@ -31,6 +31,9 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -51,6 +54,8 @@ body {
   font-family: var(--font-roboto), sans-serif;
   background: var(--card);
   color: var(--dark);
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
 }
 
@@ -434,3 +439,4 @@ button:focus-visible {
   color: #0f172a;
   font-weight: 600;
 }
+

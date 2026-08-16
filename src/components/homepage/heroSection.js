@@ -43,7 +43,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-dvh overflow-hidden flex items-center justify-center bg-slate-900 text-center"
+      className="relative -mb-px min-h-dvh overflow-hidden flex items-center justify-center bg-slate-900 text-center"
     >
       {/* Background video */}
       <div
@@ -53,7 +53,7 @@ export default function HeroSection() {
 
       <video
         aria-hidden="true"
-        className="absolute -inset-y-24 -inset-x-10 z-0 h-[calc(100%+12rem)] w-[calc(100%+5rem)] scale-110 object-cover object-center opacity-60"
+        className="absolute -inset-y-10 inset-x-0 z-0 h-[calc(100%+5rem)] w-full scale-[1.35] object-cover object-center opacity-60 md:-inset-y-24 md:-inset-x-10 md:h-[calc(100%+12rem)] md:w-[calc(100%+5rem)] md:scale-110"
         autoPlay
         muted
         loop
@@ -66,23 +66,23 @@ export default function HeroSection() {
 
       {/* Dark Overlay to ensure text readability */}
       <div className="absolute inset-0 z-0 bg-slate-950/55" />
-      <div className="absolute inset-x-0 top-0 z-0 h-48 bg-linear-to-b from-slate-950/70 to-transparent" />
+      <div className="absolute inset-x-0 top-0 z-0 hidden h-48 bg-linear-to-b from-slate-950/70 to-transparent md:block" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 w-full flex flex-col items-center justify-center min-h-dvh">
         
 
-        <h1 className="font-display mt-25 text-3xl sm:text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-7xl mx-auto">
+        <h1 className="font-display mt-25 text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-7xl mx-auto">
           IAUP Semi-Annual{" "}
           <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent drop-shadow-sm">
             Meeting 2026
           </span>
         </h1>
 
-        <p className="text-xl sm:text-3xl text-white font-display font-bold mb-4 reveal reveal-delay-1 drop-shadow-sm">
+        <p className="text-2xl sm:text-3xl text-white font-display font-bold mb-4 reveal reveal-delay-1 drop-shadow-sm">
           19–21 November
         </p>
 
-        <p className="text-xl sm:text-2xl lg:text-3xl font-display font-extrabold mb-4 reveal reveal-delay-2 max-w-6xl leading-snug tracking-wide drop-shadow-sm">
+        <p className="text-lg sm:text-2xl lg:text-3xl font-display font-extrabold mb-4 reveal reveal-delay-2 max-w-6xl leading-snug tracking-wide drop-shadow-sm">
           <span className="bg-linear-to-r from-amber-200 via-white to-secondary bg-clip-text text-transparent">
             Transforming Higher Education for a Sustainable, Innovative, and AI-Enabled Future
           </span>
@@ -92,7 +92,7 @@ export default function HeroSection() {
 
         <div className="text-base sm:text-lg text-slate-200 mb-8 max-w-2xl reveal reveal-delay-2 flex flex-col items-center gap-1 md:gap-1 font-medium ">
           <p className="font-bold text-white text-lg">Daffodil International University</p>
-          <p>Daffodil Smart City, Birulia, Savar, Dhaka – 1216, Bangladesh</p>
+          <p className="text-sm md:text-normal">Daffodil Smart City, Birulia, Savar, Dhaka – 1216, Bangladesh</p>
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 reveal reveal-delay-3 mb-10">
@@ -138,7 +138,8 @@ export default function HeroSection() {
       </div> */}
 
       {/* Smooth transition to the light section below (hidden or darkened as we are on dark bg now) */}
-      <div className="absolute bottom-0 inset-x-0 h-32 bg-linear-to-b from-transparent to-slate-900 pointer-events-none" />
+      <div className="absolute -bottom-1 inset-x-0 z-10 h-2 bg-slate-900 pointer-events-none md:hidden" />
+      <div className="absolute bottom-0 inset-x-0 hidden h-32 bg-linear-to-b from-transparent to-slate-900 pointer-events-none md:block" />
     </section>
   );
 }
