@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import PhoneInput from "react-phone-input-2";
+import PhoneInputField from "@/components/registration/phoneInputField";
 import { calculatePricing, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
@@ -312,6 +312,7 @@ export default function RegistrationForm() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
+  const [wireModalData, setWireModalData] = useState(null);
 
   useEffect(() => {
     try {
@@ -367,7 +368,6 @@ export default function RegistrationForm() {
 
   const participantName = `${normalizeSpaces(formValues.givenName)} ${normalizeSpaces(formValues.surname)}`.trim();
   const isOnlinePayment = formValues.paymentMethod === "online-payment";
-  const phoneInputValue = formValues.phone;
 
   const pricing = useMemo(
     () =>
@@ -428,24 +428,6 @@ export default function RegistrationForm() {
         setErrors(validateForm(updated));
       }
 
-      return updated;
-    });
-  };
-
-  const handlePhoneInputChange = (value, countryData) => {
-    const dialCode = normalizePhoneCountryCode(`+${countryData?.dialCode || ""}`);
-    const countryIso2 = String(countryData?.countryCode || "bd").toLowerCase();
-
-    setFormValues((prev) => {
-      const updated = {
-        ...prev,
-        phoneCountryCode: dialCode,
-        phoneCountryIso2: countryIso2,
-        phone: (value || "").replace(/\D/g, "").slice(0, FIELD_LIMITS.phone),
-      };
-      if (hasSubmitted) {
-        setErrors(validateForm(updated));
-      }
       return updated;
     });
   };
@@ -634,15 +616,6 @@ export default function RegistrationForm() {
     setIsSubmitting(true);
 
     try {
-      if (normalized.paymentMethod === "wire-transfer") {
-        // Wire-transfer: skip backend registration for now; organizer handles manually.
-        setStatus({
-          type: "wire",
-          name: `${normalized.givenName} ${normalized.surname}`.trim(),
-        });
-        return;
-      }
-
       const formData = new FormData();
       for (const [key, value] of Object.entries(submissionValues)) {
         if (typeof value === "string") {
@@ -677,6 +650,15 @@ export default function RegistrationForm() {
         setStatus({
           type: "error",
           message: payload?.error || "Could not save your registration. Please try again.",
+        });
+        return;
+      }
+
+      if (normalized.paymentMethod === "wire-transfer") {
+        setWireModalData({
+          name: `${normalized.givenName} ${normalized.surname}`.trim(),
+          regId: payload.reg_id,
+          email: normalized.email,
         });
         return;
       }
@@ -983,30 +965,42 @@ export default function RegistrationForm() {
               <label htmlFor="phone" className="mb-2 block text-sm text-start font-semibold text-slate-700">
                 Phone Number<RequiredMark />
               </label>
-              <div className="iaup-phone-shell" style={{ "--iaup-phone-code": formValues.phoneCountryCode.replace("+", "") }}>
-                <PhoneInput
-                  country={formValues.phoneCountryIso2 || "bd"}
-                  value={phoneInputValue}
-                  onChange={handlePhoneInputChange}
-                  enableSearch
-                  disableSearchIcon
-                  disableCountryCode
-                  countryCodeEditable={false}
-                  inputProps={{
-                    id: "phone",
-                    name: "phone",
-                    required: true,
-                    autoComplete: "tel",
-                  }}
-                  containerClass="iaup-phone-input"
-                  buttonClass="iaup-phone-button"
-                  dropdownClass="iaup-phone-dropdown"
-                  searchClass="iaup-phone-search"
-                  inputClass="iaup-phone-number"
-                  specialLabel=""
-                  placeholder="Phone number"
-                />
-              </div>
+              <PhoneInputField
+                id="phone"
+                name="phone"
+                countryIso2={formValues.phoneCountryIso2}
+                countryCode={formValues.phoneCountryCode}
+                phoneValue={formValues.phone}
+                onCountryChange={({ iso2, dialCode }) => {
+                  setFormValues((prev) => {
+                    const updated = {
+                      ...prev,
+                      phoneCountryIso2: iso2,
+                      phoneCountryCode: dialCode,
+                    };
+                    if (hasSubmitted) {
+                      setErrors(validateForm(updated));
+                    }
+                    return updated;
+                  });
+                }}
+                onPhoneChange={(val) => {
+                  setFormValues((prev) => {
+                    const updated = {
+                      ...prev,
+                      phone: val,
+                    };
+                    if (hasSubmitted) {
+                      setErrors(validateForm(updated));
+                    }
+                    return updated;
+                  });
+                }}
+                maxLength={FIELD_LIMITS.phone}
+                placeholder="Phone number"
+                required
+                error={errors.phone || errors.phoneCountryCode}
+              />
               {errors.phoneCountryCode && <p className="mt-2 text-sm text-red-600">{errors.phoneCountryCode}</p>}
               {errors.phone && <p className="mt-2 text-sm text-red-600">{errors.phone}</p>}
             </div>
@@ -1526,19 +1520,69 @@ export default function RegistrationForm() {
             <p className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{status.message}</p>
           )}
 
-          {status?.type === "wire" && (
-            <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
-              <p>Dear {status.name || "Participant"},</p>
-              <p className="mt-3">
-                You have successfully submitted the registration form and your data has been recorded for further wire
-                transfer guidelines from us. Thank you for your interest in joining the IAUP Semi Annual Meeting 2026.
-              </p>
-              <p className="mt-3">
-                Should you have any queries, feel free to contact us at iaup-bd2026@daffodilvarsity.edu.bd
-              </p>
-              <p className="mt-6">Best regards,</p>
-              <p className="mt-1">DIU Secretariat, IAUP Semi-Annual Meeting 2026</p>
-              <p>Daffodil International University, Bangladesh</p>
+          {/* Wire Transfer Confirmation Pop-up Modal */}
+          {wireModalData && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+              <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200 text-center">
+                {/* Success Icon */}
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-5 shadow-inner">
+                  <svg className="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
+                  Registration Submitted!
+                </h3>
+
+                {wireModalData.regId && (
+                  <div className="mt-2 inline-block rounded-full bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-700 tracking-wide">
+                    Reg ID: <span className="font-mono text-primary font-bold">{wireModalData.regId}</span>
+                  </div>
+                )}
+
+                <div className="mt-5 rounded-xl bg-emerald-50/70 border border-emerald-100 p-4 text-start text-sm text-slate-700 space-y-3 leading-relaxed">
+                  <p className="font-medium text-emerald-950">
+                    Dear {wireModalData.name || "Participant"},
+                  </p>
+                  <p>
+                    You have successfully submitted the registration form and your data has been recorded for further wire transfer guidelines from us.
+                  </p>
+                  <p>
+                    Thank you for your interest in joining the <strong>IAUP Semi-Annual Meeting 2026</strong>.
+                  </p>
+                  <div className="pt-2 border-t border-emerald-200/60 text-xs text-slate-600">
+                    <span className="font-semibold text-slate-800">Queries? </span>
+                    Contact us at{" "}
+                    <a
+                      href="mailto:iaup-bd2026@daffodilvarsity.edu.bd"
+                      className="font-medium text-primary hover:underline"
+                    >
+                      iaup-bd2026@daffodilvarsity.edu.bd
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWireModalData(null);
+                      router.push("/");
+                    }}
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition shadow-md hover:shadow-lg cursor-pointer"
+                  >
+                    Back to Home
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setWireModalData(null)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </form>
