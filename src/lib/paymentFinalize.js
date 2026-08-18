@@ -7,7 +7,7 @@ import {
   setInvoicePath,
 } from "@/lib/db";
 import { writeInvoiceToDisk } from "@/lib/invoice";
-import { sendInvoiceEmail, sendWireInstructionsEmail } from "@/lib/mailer";
+import { sendInvoiceEmail, sendWireConfirmationEmail } from "@/lib/mailer";
 import { calculatePricing } from "@/lib/pricing";
 
 // In-flight deduplication so concurrent calls (IPN + payment-result page load)
@@ -135,7 +135,7 @@ async function runWireFinalize(regId) {
         isMember: registration.is_member_university === "Yes",
         familyMembersCount: familyMembers.length,
       });
-      const result = await sendWireInstructionsEmail({
+      const result = await sendWireConfirmationEmail({
         to: registration.email,
         participantName:
           `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant",

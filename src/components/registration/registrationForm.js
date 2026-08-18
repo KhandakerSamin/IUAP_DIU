@@ -1547,8 +1547,7 @@ export default function RegistrationForm() {
                     Dear {wireModalData.name || "Participant"},
                   </p>
                   <p>
-                    You have successfully submitted the registration form. A proforma invoice with our bank details
-                    and the amount due
+                    Your registration is confirmed. An invoice with the amount due
                     {wireModalData.emailed ? (
                       <>
                         {" "}has been emailed to <strong>{wireModalData.email}</strong>.
@@ -1556,7 +1555,7 @@ export default function RegistrationForm() {
                     ) : (
                       " will be emailed to you shortly."
                     )}{" "}
-                    Please quote the invoice number above as the reference on your transfer.
+                    Our Secretariat will contact you at that address with the wire transfer instructions.
                   </p>
                   <p>
                     Thank you for your interest in joining the <strong>IAUP Semi-Annual Meeting 2026</strong>.

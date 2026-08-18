@@ -5,7 +5,7 @@ import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { dataDir } from "@/lib/db";
 import { calculatePricing, FAMILY_MEMBER_FEE_USD, REGISTRATION_PERIODS } from "@/lib/pricing";
-import { WIRE_DETAILS, WIRE_NOTE } from "@/lib/bank";
+import { WIRE_NOTE } from "@/lib/wire";
 
 const LOGO_PATH = path.join(process.cwd(), "public", "iuap_invoice.jpg");
 const LOGO_DATA_URI = existsSync(LOGO_PATH)
@@ -286,21 +286,23 @@ function InvoiceDoc({ registration, familyMembers }) {
 
         {isWire ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Wire transfer instructions</Text>
+            <Text style={styles.sectionTitle}>Payment details</Text>
             <View style={styles.paymentGrid}>
-              {WIRE_DETAILS.map(([label, value]) => (
-                <View key={label} style={styles.paymentItem}>
-                  <Text style={styles.paymentLabel}>{label}</Text>
-                  <Text style={styles.paymentValue}>{value}</Text>
-                </View>
-              ))}
               <View style={styles.paymentItem}>
-                <Text style={styles.paymentLabel}>Transfer reference</Text>
+                <Text style={styles.paymentLabel}>Method</Text>
+                <Text style={styles.paymentValue}>Wire Transfer</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Invoice reference</Text>
                 <Text style={styles.paymentValue}>{reffId}</Text>
               </View>
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Currency</Text>
                 <Text style={styles.paymentValue}>{currency}</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Status</Text>
+                <Text style={styles.paymentValue}>Awaiting transfer</Text>
               </View>
             </View>
             <Text style={styles.wireNote}>{WIRE_NOTE}</Text>
