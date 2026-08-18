@@ -1,10 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
+const NAV = [
+  { href: "/admin/registrations", label: "Registrations" },
+  { href: "/admin/speakers", label: "Panel Speakers" },
+];
 
 export default function AdminShell({ children }) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" }).catch(() => {});
@@ -19,13 +25,22 @@ export default function AdminShell({ children }) {
           <Link href="/admin/registrations" className="text-base font-semibold text-slate-900">
             IAUP Admin
           </Link>
-          <div className="flex items-center gap-3 text-sm">
-            <Link
-              href="/admin/registrations"
-              className="rounded-lg px-3 py-1.5 text-slate-700 hover:bg-slate-100"
-            >
-              Registrations
-            </Link>
+          <nav className="flex items-center gap-2 text-sm">
+            {NAV.map((item) => {
+              const active = pathname?.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`rounded-lg px-3 py-1.5 font-medium transition ${
+                    active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
             <button
               type="button"
               onClick={handleLogout}
@@ -33,7 +48,7 @@ export default function AdminShell({ children }) {
             >
               Log out
             </button>
-          </div>
+          </nav>
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{children}</main>
