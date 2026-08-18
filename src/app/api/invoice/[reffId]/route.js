@@ -1,6 +1,6 @@
 import { getRegistrationByReffId } from "@/lib/db";
 import { readInvoiceFromDisk } from "@/lib/invoice";
-import { finalizePaidPayment } from "@/lib/paymentFinalize";
+import { finalizePaidPayment, finalizeWireRegistration } from "@/lib/paymentFinalize";
 
 export const dynamic = "force-dynamic";
 
@@ -14,12 +14,19 @@ export async function GET(_request, ctx) {
   if (!row) {
     return new Response("Not found", { status: 404 });
   }
-  if (row.payment_status !== "paid") {
+  // Wire transfers are invoiced before payment arrives, so an unpaid wire row
+  // still gets its proforma; online payments must be validated first.
+  const isWire = row.payment_method === "wire-transfer";
+  if (!isWire && row.payment_status !== "paid") {
     return new Response("Payment not completed.", { status: 403 });
   }
 
   if (!row.invoice_path) {
-    await finalizePaidPayment(reffId).catch(() => null);
+    if (isWire) {
+      await finalizeWireRegistration(row.reg_id).catch(() => null);
+    } else {
+      await finalizePaidPayment(reffId).catch(() => null);
+    }
     row = getRegistrationByReffId(reffId);
   }
 
@@ -39,7 +46,7 @@ export async function GET(_request, ctx) {
   return new Response(buffer, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="IAUP-2026-Invoice-${safeReff}.pdf"`,
+      "Content-Disposition": `attachment; filename="IAUP-2026-${isWire ? "Proforma-" : ""}Invoice-${safeReff}.pdf"`,
       "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
     },

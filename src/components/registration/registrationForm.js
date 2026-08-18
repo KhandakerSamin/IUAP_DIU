@@ -659,6 +659,7 @@ export default function RegistrationForm() {
           name: `${normalized.givenName} ${normalized.surname}`.trim(),
           regId: payload.reg_id,
           email: normalized.email,
+          emailed: payload.invoice_emailed === true,
         });
         return;
       }
@@ -1546,7 +1547,16 @@ export default function RegistrationForm() {
                     Dear {wireModalData.name || "Participant"},
                   </p>
                   <p>
-                    You have successfully submitted the registration form and your data has been recorded for further wire transfer guidelines from us.
+                    You have successfully submitted the registration form. A proforma invoice with our bank details
+                    and the amount due
+                    {wireModalData.emailed ? (
+                      <>
+                        {" "}has been emailed to <strong>{wireModalData.email}</strong>.
+                      </>
+                    ) : (
+                      " will be emailed to you shortly."
+                    )}{" "}
+                    Please quote the invoice number above as the reference on your transfer.
                   </p>
                   <p>
                     Thank you for your interest in joining the <strong>IAUP Semi-Annual Meeting 2026</strong>.
@@ -1564,6 +1574,12 @@ export default function RegistrationForm() {
                 </div>
 
                 <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                  <a
+                    href={`/api/invoice/${encodeURIComponent(wireModalData.regId)}`}
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition shadow-md hover:shadow-lg"
+                  >
+                    Download Invoice
+                  </a>
                   <button
                     type="button"
                     onClick={() => {

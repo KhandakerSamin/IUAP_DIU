@@ -1,5 +1,6 @@
 import { insertFamilyMember, insertRegistration, runInTransaction } from "@/lib/db";
 import { saveUpload } from "@/lib/fileStorage";
+import { finalizeWireRegistration } from "@/lib/paymentFinalize";
 
 export const dynamic = "force-dynamic";
 
@@ -182,6 +183,9 @@ export async function POST(request) {
         insertFamilyMember({
           registration_id: registrationId,
           full_name: fm.fullName,
+          // The form dropped the relationship field; the column and the admin
+          // detail view still support it, so pass null rather than omit it.
+          relationship: null,
           passport_no: fm.passportNo || null,
           email: fm.email || null,
           phone: fm.phone || null,
@@ -194,6 +198,20 @@ export async function POST(request) {
   } catch (err) {
     console.error("[registration] DB insert failed", err);
     return Response.json({ error: "Could not save registration. Please try again." }, { status: 500 });
+  }
+
+  // Wire transfer has no gateway step, so the proforma invoice + payment
+  // instructions go out here. A failure must not lose the registration.
+  if (registrationRow.payment_method === "wire-transfer") {
+    const result = await finalizeWireRegistration(regId).catch((err) => {
+      console.error("[registration] wire finalize failed", regId, err);
+      return { state: "failed" };
+    });
+    return Response.json({
+      reg_id: regId,
+      wire: true,
+      invoice_emailed: result?.email_sent === true,
+    });
   }
 
   return Response.json({ reg_id: regId });
