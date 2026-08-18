@@ -61,7 +61,7 @@ export default function HeroSection() {
         preload="auto"
         poster="/heroBG.jpg"
       >
-        <source src="/hero.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/xmcj37va/video/upload/v1787079176/hero_fpk3dj.mp4" type="video/mp4" />
       </video>
 
       {/* Dark Overlay to ensure text readability */}
