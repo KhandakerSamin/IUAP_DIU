@@ -2,7 +2,21 @@
 
 import { useRouter } from "next/navigation";
 import { Fragment, useMemo, useState } from "react";
-import { shortPanelLabel } from "@/lib/panels";
+import { PANELS, shortPanelLabel } from "@/lib/panels";
+
+const EDIT_FIELDS = [
+  { key: "full_name", label: "Full Name", type: "text" },
+  { key: "designation", label: "Designation", type: "text" },
+  { key: "institution", label: "Institution", type: "text" },
+  { key: "country", label: "Country", type: "text" },
+  { key: "email", label: "Email", type: "email" },
+  { key: "panel", label: "Preferred Panel", type: "panel", full: true },
+  { key: "abstract", label: "Session Abstract", type: "textarea", full: true, rows: 5 },
+  { key: "bio", label: "Short Bio", type: "textarea", full: true, rows: 4 },
+];
+
+const inputClass =
+  "w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-primary";
 
 function formatDate(iso) {
   if (!iso) return "";
@@ -42,10 +56,128 @@ function ConfirmModal({ open, title, message, onConfirm, onCancel, busy }) {
   );
 }
 
+function EditModal({ row, onClose, onSaved }) {
+  const [values, setValues] = useState(() => {
+    const seed = {};
+    for (const f of EDIT_FIELDS) seed[f.key] = row?.[f.key] ?? "";
+    return seed;
+  });
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  if (!row) return null;
+
+  const handleChange = (key) => (e) => setValues((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const handleSave = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/speakers", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ proposal_id: row.proposal_id, updates: values }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error || "Failed to save.");
+        setBusy(false);
+        return;
+      }
+      onSaved();
+    } catch {
+      setError("Network error.");
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
+      <div className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl">
+        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900">Edit speaker proposal</h3>
+            <p className="font-mono text-xs text-slate-500">{row.proposal_id}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={busy}
+            className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="max-h-[60vh] overflow-y-auto px-6 py-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {EDIT_FIELDS.map((f) => (
+              <div key={f.key} className={f.full ? "sm:col-span-2" : ""}>
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {f.label}
+                </label>
+                {f.type === "panel" ? (
+                  <select
+                    value={values[f.key] || ""}
+                    onChange={handleChange(f.key)}
+                    className={inputClass}
+                  >
+                    {PANELS.map((p) => (
+                      <option key={p} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                ) : f.type === "textarea" ? (
+                  <textarea
+                    rows={f.rows || 4}
+                    value={values[f.key] || ""}
+                    onChange={handleChange(f.key)}
+                    className={`${inputClass} resize-y`}
+                  />
+                ) : (
+                  <input
+                    type={f.type}
+                    value={values[f.key] || ""}
+                    onChange={handleChange(f.key)}
+                    className={inputClass}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          {error && (
+            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+          )}
+        </div>
+        <div className="flex justify-end gap-2 border-t border-slate-200 px-6 py-4">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={busy}
+            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={busy}
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
+          >
+            {busy ? "Saving…" : "Save changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function SpeakersTable({ rows }) {
   const router = useRouter();
   const [selected, setSelected] = useState(() => new Set());
   const [expanded, setExpanded] = useState(null);
+  const [editRow, setEditRow] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [busy, setBusy] = useState(false);
 
@@ -196,6 +328,13 @@ export default function SpeakersTable({ rows }) {
                         >
                           {isOpen ? "Hide" : "View"}
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditRow(r)}
+                          className="rounded-lg border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                        >
+                          Edit
+                        </button>
                         {r.cv_path ? (
                           <a
                             href={`/api/admin/files/${r.cv_path}`}
@@ -264,6 +403,17 @@ export default function SpeakersTable({ rows }) {
           </tbody>
         </table>
       </div>
+
+      {editRow && (
+        <EditModal
+          row={editRow}
+          onClose={() => setEditRow(null)}
+          onSaved={() => {
+            setEditRow(null);
+            router.refresh();
+          }}
+        />
+      )}
 
       <ConfirmModal
         open={!!deleteTarget}

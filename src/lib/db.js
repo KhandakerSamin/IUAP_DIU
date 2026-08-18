@@ -456,3 +456,30 @@ export function deleteSpeakerProposalsByIds(proposalIds) {
   const placeholders = proposalIds.map(() => "?").join(",");
   return db.prepare(`DELETE FROM speaker_proposals WHERE proposal_id IN (${placeholders})`).run(...proposalIds);
 }
+
+const EDITABLE_SPEAKER_FIELDS = new Set([
+  "full_name",
+  "designation",
+  "institution",
+  "country",
+  "email",
+  "panel",
+  "abstract",
+  "bio",
+]);
+
+export function updateSpeakerProposalById(proposalId, fields) {
+  const db = getDatabase();
+  const allowed = {};
+  for (const [k, v] of Object.entries(fields || {})) {
+    if (EDITABLE_SPEAKER_FIELDS.has(k)) {
+      allowed[k] = v === undefined ? null : v;
+    }
+  }
+  const keys = Object.keys(allowed);
+  if (keys.length === 0) return { changes: 0 };
+  const setSql = keys.map((k) => `${k} = @${k}`).join(", ");
+  return db
+    .prepare(`UPDATE speaker_proposals SET ${setSql} WHERE proposal_id = @proposal_id`)
+    .run({ ...allowed, proposal_id: proposalId });
+}
