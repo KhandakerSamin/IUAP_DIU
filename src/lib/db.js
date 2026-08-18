@@ -79,7 +79,8 @@ CREATE TABLE IF NOT EXISTS speaker_proposals (
   abstract TEXT,
   bio TEXT,
   cv_path TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_speaker_proposals_email ON speaker_proposals(email);
@@ -93,6 +94,7 @@ const MIGRATIONS = [
   `ALTER TABLE family_members ADD COLUMN email TEXT`,
   `ALTER TABLE family_members ADD COLUMN phone TEXT`,
   `ALTER TABLE family_members ADD COLUMN tshirt_size TEXT`,
+  `ALTER TABLE speaker_proposals ADD COLUMN updated_at TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -480,6 +482,8 @@ export function updateSpeakerProposalById(proposalId, fields) {
   if (keys.length === 0) return { changes: 0 };
   const setSql = keys.map((k) => `${k} = @${k}`).join(", ");
   return db
-    .prepare(`UPDATE speaker_proposals SET ${setSql} WHERE proposal_id = @proposal_id`)
+    .prepare(
+      `UPDATE speaker_proposals SET ${setSql}, updated_at = datetime('now') WHERE proposal_id = @proposal_id`
+    )
     .run({ ...allowed, proposal_id: proposalId });
 }

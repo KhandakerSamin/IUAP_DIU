@@ -318,7 +318,14 @@ export default function SpeakersTable({ rows }) {
                         {shortPanelLabel(r.panel)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-500">{formatDate(r.created_at)}</td>
+                    <td className="px-4 py-3 text-slate-500">
+                      {formatDate(r.created_at)}
+                      {r.updated_at ? (
+                        <span className="block text-xs text-amber-700" title={formatDate(r.updated_at)}>
+                          edited {formatDate(r.updated_at)}
+                        </span>
+                      ) : null}
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
                         <button
