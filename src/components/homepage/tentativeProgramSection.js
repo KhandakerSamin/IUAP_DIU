@@ -51,7 +51,7 @@ export default function TentativeProgramSection() {
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 reveal">
           <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4">
-            Event Schedule
+            Program Schedule
           </span>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6">
             Tentative <span className="gradient-text">Schedule</span>

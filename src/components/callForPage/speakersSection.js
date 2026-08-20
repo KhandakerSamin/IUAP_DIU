@@ -11,6 +11,7 @@ import {
   UserRoundPen,
   UploadCloud,
   FileCheck2,
+  ChevronDown,
 } from "lucide-react";
 
 const PANELS = [
@@ -18,7 +19,6 @@ const PANELS = [
   "Panel Discussion 2: Transforming Higher Education to Empower Women in an AI-Driven World",
   "Panel Discussion 3: Sustainable Universities for a Sustainable Planet",
   "Panel Discussion 4: Open Science, AI, and the Future of Academic Research",
-  "Panel Discussion 5: One Student, One AI: Preparing Every Learner for an AI-Powered World",
 ];
 
 const EMPTY_FORM = {
@@ -37,6 +37,85 @@ function wordCount(text) {
   return trimmed ? trimmed.split(/\s+/).length : 0;
 }
 
+function CustomPanelSelect({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative w-full">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className={`${inputClass} flex items-center justify-between gap-3 text-start bg-white cursor-pointer hover:border-primary/60`}
+      >
+        <span
+          className={
+            value
+              ? "text-slate-900 font-medium text-xs sm:text-sm line-clamp-1"
+              : "text-slate-400 text-xs sm:text-sm"
+          }
+        >
+          {value || "Select a panel discussion"}
+        </span>
+        <ChevronDown
+          className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-200 ${
+            open ? "rotate-180 text-primary" : ""
+          }`}
+        />
+      </button>
+
+      <input
+        type="text"
+        required
+        value={value}
+        onChange={() => {}}
+        tabIndex={-1}
+        className="sr-only"
+        onInvalid={(e) => {
+          e.target.setCustomValidity("Please select a preferred panel.");
+        }}
+        onInput={(e) => {
+          e.target.setCustomValidity("");
+        }}
+      />
+
+      {open && (
+        <>
+          <div
+            className="fixed inset-0 z-20"
+            onClick={() => setOpen(false)}
+          />
+
+          <div className="absolute left-0 right-0 top-full mt-2 z-30 max-h-64 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl animate-in fade-in zoom-in-95 duration-150 thin-scrollbar">
+            {PANELS.map((panel) => {
+              const isSelected = value === panel;
+              return (
+                <button
+                  key={panel}
+                  type="button"
+                  onClick={() => {
+                    onChange(panel);
+                    setOpen(false);
+                  }}
+                  className={`w-full text-start p-3 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-between gap-3 ${
+                    isSelected
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <span className="leading-snug break-words">{panel}</span>
+                  {isSelected && (
+                    <CheckCircle2 className="w-4.5 h-4.5 text-primary shrink-0" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function SpeakerFormModal({ open, onClose }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [, setFile] = useState(null);
@@ -46,6 +125,7 @@ function SpeakerFormModal({ open, onClose }) {
   if (!open) return null;
 
   const update = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const setField = (field, val) => setForm((prev) => ({ ...prev, [field]: val }));
 
   const handleFile = (e) => {
     const selectedFile = e.target.files?.[0];
@@ -75,7 +155,7 @@ function SpeakerFormModal({ open, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-10 px-4"
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-10 px-4 thin-scrollbar"
       role="dialog"
       aria-modal="true"
       aria-labelledby="speaker-form-title"
@@ -138,7 +218,7 @@ function SpeakerFormModal({ open, onClose }) {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="px-6 sm:px-10 py-8 max-h-[75vh] overflow-y-auto bg-white"
+            className="px-6 sm:px-10 py-8 max-h-[75vh] overflow-y-auto bg-white thin-scrollbar"
           >
             <p className="text-slate-600 leading-relaxed mb-8">
               Share your expertise at the IAUP Semi-Annual Meeting 2026 by
@@ -202,21 +282,10 @@ function SpeakerFormModal({ open, onClose }) {
               </Field>
 
               <Field label="Preferred Panel" required className="sm:col-span-2">
-                <select
-                  required
+                <CustomPanelSelect
                   value={form.panel}
-                  onChange={update("panel")}
-                  className={`${inputClass} appearance-none bg-white text-slate-800`}
-                >
-                  <option value="" disabled>
-                    Select a panel discussion
-                  </option>
-                  {PANELS.map((panel) => (
-                    <option key={panel} value={panel}>
-                      {panel}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setField("panel", val)}
+                />
               </Field>
 
               <Field

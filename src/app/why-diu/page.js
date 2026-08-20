@@ -100,9 +100,9 @@ export default function WhyDiuPage() {
         {/* Hero */}
         <section className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm sm:p-12">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">Why DIU</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">Daffodil International University</p>
             <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-5xl">Why DIU</h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg text-justify">
               Daffodil International University is proud to host the IAUP Semi-Annual Meeting 2026,
               welcoming global higher education leaders to Bangladesh for strategic collaboration and
               innovative ideas that will shape the future of higher education.
@@ -118,7 +118,7 @@ export default function WhyDiuPage() {
               Why Daffodil International University?
             </h2>
 
-            <div className="mt-4 flex flex-col gap-4 text-base leading-7 text-slate-600">
+            <div className="mt-4 flex flex-col gap-4 text-base leading-7 text-slate-600 text-justify">
               <p>
                 Daffodil International University (DIU) is one of Bangladesh&apos;s leading private
                 universities, recognized for its commitment to academic excellence, innovation,
@@ -156,7 +156,7 @@ export default function WhyDiuPage() {
                   <CheckIcon />
                   <div>
                     <p className="font-semibold text-slate-900">{item.title}</p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">{item.detail}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600 text-justify">{item.detail}</p>
                   </div>
                 </li>
               ))}
@@ -181,7 +181,7 @@ export default function WhyDiuPage() {
               Daffodil Smart City Experience
             </h2>
 
-            <p className="mt-4 text-base leading-7 text-slate-600">
+            <p className="mt-4 text-base leading-7 text-slate-600 text-justify">
               Experience the future of higher education at Daffodil Smart City (DSC)—Bangladesh&apos;s
               first integrated smart, green, and education-centric campus. Spread across 150+ acres of
               beautifully landscaped greenery, DSC is home to Daffodil International University (DIU)
@@ -198,13 +198,13 @@ export default function WhyDiuPage() {
                   <CheckIcon />
                   <div>
                     <p className="font-semibold text-slate-900">{item.title}</p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">{item.detail}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600 text-justify">{item.detail}</p>
                   </div>
                 </li>
               ))}
             </ul>
 
-            <p className="mt-8 text-base leading-7 text-slate-600">
+            <p className="mt-8 text-base leading-7 text-slate-600 text-justify">
               Daffodil Smart City is more than a university campus—it is a vibrant destination where
               academic excellence meets innovation, sustainability, recreation, and hospitality. During
               the IAUP 2026 Semi-Annual Meeting, delegates will experience a dynamic environment designed

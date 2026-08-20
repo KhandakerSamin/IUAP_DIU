@@ -1147,7 +1147,7 @@ export default function RegistrationForm() {
             )}
 
             <OptionGroup
-              legend="Are you/your university a member of IAUP/ AUAP/ EURAS/ DIU's Partner University?"
+              legend="Are you or your university a member of IAUP, AUAP, or EURAS, or a partner institution of DIU?"
               name="isMemberUniversity"
               options={YES_NO_OPTIONS}
               value={formValues.isMemberUniversity}
@@ -1532,12 +1532,12 @@ export default function RegistrationForm() {
                 </div>
 
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
-                  Registration Submitted!
+                  Registration Submitted Successfully!
                 </h3>
 
                 {wireModalData.regId && (
                   <div className="mt-2 inline-block rounded-full bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-700 tracking-wide">
-                    Reg ID: <span className="font-mono text-primary font-bold">{wireModalData.regId}</span>
+                    Ref: <span className="font-mono text-primary font-bold">{wireModalData.regId}</span>
                   </div>
                 )}
 
@@ -1545,11 +1545,21 @@ export default function RegistrationForm() {
                   <p className="font-medium text-emerald-950">
                     Dear {wireModalData.name || "Participant"},
                   </p>
-                  <p>
-                    You have successfully submitted the registration form and your data has been recorded for further wire transfer guidelines from us.
+                  <p className="font-semibold text-slate-900">
+                    Thank you for registering for the IAUP Semi-Annual Meeting 2026.
                   </p>
                   <p>
-                    Thank you for your interest in joining the <strong>IAUP Semi-Annual Meeting 2026</strong>.
+                    Your registration has been successfully received. An invoice will be sent to your registered email address shortly. The invoice will include the bank details for payment. After completing the payment, please send the payment receipt to{" "}
+                    <a
+                      href="mailto:iaup-bd2026@daffodilvarsity.edu.bd"
+                      className="font-medium text-primary hover:underline"
+                    >
+                      iaup-bd2026@daffodilvarsity.edu.bd
+                    </a>{" "}
+                    for confirmation.
+                  </p>
+                  <p>
+                    Thank you for your interest in joining the IAUP Semi-Annual Meeting 2026.
                   </p>
                   <div className="pt-2 border-t border-emerald-200/60 text-xs text-slate-600">
                     <span className="font-semibold text-slate-800">Queries? </span>

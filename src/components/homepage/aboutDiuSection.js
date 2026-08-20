@@ -3,7 +3,7 @@ import Image from "next/image";
 const universityStats = [
   { value: "25K+", label: "Students" },
   { value: "30+", label: "Departments" },
-  { value: "100+", label: "International Students" },
+  { value: "7.7K+", label: "Scopus Publications" },
   { value: "600+", label: "International Partner Institutions" },
 ];
 

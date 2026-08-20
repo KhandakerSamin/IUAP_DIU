@@ -3,7 +3,7 @@ import Link from "next/link";
 const pricingPlans = [
   {
     attendeeId: "member",
-    name: "IAUP, AUAP, EURAS Members and Daffodil's Partner Institutions",
+    name: "IAUP, AUAP, EURAS Members and Daffodil Partner Institutions",
     subtitle: "Special rate for association members and partner universities",
     pricing: [
       { label: "Early Bird", price: "USD 400" },
@@ -80,7 +80,7 @@ export default function RegistrationSection() {
             Registration Options
           </h2>
           <p className="text-lg text-muted reveal reveal-delay-2">
-            Registration to the meeting is now open. DIU 2026 will take place as an in-person event only.
+            Registration is now open. Join us in Dhaka for this exciting gathering.
           </p>
         </div>
 

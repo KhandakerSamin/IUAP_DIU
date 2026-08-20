@@ -77,7 +77,7 @@ function PartnerFormModal({ open, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-10 px-4"
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-10 px-4 thin-scrollbar"
       role="dialog"
       aria-modal="true"
       aria-labelledby="partner-form-title"
@@ -138,7 +138,7 @@ function PartnerFormModal({ open, onClose }) {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="px-6 sm:px-10 py-8 max-h-[70vh] overflow-y-auto"
+            className="px-6 sm:px-10 py-8 max-h-[70vh] overflow-y-auto thin-scrollbar"
           >
             <p className="text-muted leading-relaxed mb-8">
               Share your organization&apos;s details to partner with IAUP
@@ -307,24 +307,29 @@ export default function PartnerSection() {
   return (
     <section
       id="partner"
-      className="pb-24 lg:pb-32 bg-slate-50 relative overflow-hidden"
+      className="py-24 lg:py-32 bg-slate-50 relative overflow-hidden"
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
         <div>
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-6">
-            <Users className="w-8 h-8" />
+            <Handshake  className="w-8 h-8" />
           </div>
-          <h2 className="font-display text-4xl font-bold text-dark mb-4">
+          <h2 className="font-display text-4xl font-bold text-dark mb-12">
             Our Partners
           </h2>
-          <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto font-light">
-            Association of Private Universities of Bangladesh
-          </p>
         </div>
 
         {/* Partner Logos */}
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mt-8">
-          <div className="relative w-64 h-32 md:w-80 md:h-44">
+        <div className="grid grid-cols-3 items-center justify-items-center gap-4 sm:gap-8 md:gap-12 mt-8 max-w-4xl mx-auto">
+          <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
+            <Image
+              src="/partner.jpg"
+              alt="Partner 1"
+              className="object-contain"
+              fill
+            />
+          </div>
+          <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
             <Image
               src="/partner2.jpeg"
               alt="Partner 2"
@@ -332,10 +337,10 @@ export default function PartnerSection() {
               fill
             />
           </div>
-          <div className="relative w-64 h-32 md:w-80 md:h-44">
+          <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
             <Image
-              src="/partner.jpg"
-              alt="Partner 1"
+              src="/partner3.jpg"
+              alt="Partner 3"
               className="object-contain"
               fill
             />

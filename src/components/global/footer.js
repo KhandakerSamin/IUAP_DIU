@@ -11,7 +11,7 @@ export default function Footer() {
   const quickLinks = [
     { href: "/#about", label: "About IAUP" },
     { href: "/#about-diu", label: "About DIU" },
-    { href: "/#program", label: "Event Schedule" },
+    { href: "/program-schedule", label: "Program Schedule" },
     { href: "/#speakers", label: "Speakers" },
   ];
 
@@ -44,13 +44,13 @@ export default function Footer() {
               Daffodil International University (DIU) is a leading private university in Bangladesh, recognized for its commitment to digital transformation and global academic leadership.
             </p>
             <div className="flex gap-4">
-              <a href="https://www.facebook.com/daffodilvarsity.edu.bd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
+              <a href="https://www.facebook.com/profile.php?id=61591646473173" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="https://www.instagram.com/daffodil.university/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
+              <a href="https://www.instagram.com/iaupbd2026?igsh=aGp1cDN4aHJsYzZs&igsi=aGp1cDN4aHJsYzZs" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="https://linkedin.com/school/daffodil-international-university" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
+              <a href="https://www.linkedin.com/showcase/iaup-semi-annual-meeting-2026-bangladesh/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
                 <Linkedin className="w-5 h-5" />
               </a>
               <a href="https://www.youtube.com/@daffodiluniversity" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
