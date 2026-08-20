@@ -10,6 +10,8 @@ const EXT_MIME = {
   ".png": "image/png",
   ".webp": "image/webp",
   ".pdf": "application/pdf",
+  ".doc": "application/msword",
+  ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 
 export async function GET(_request, ctx) {

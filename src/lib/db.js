@@ -66,6 +66,25 @@ CREATE TABLE IF NOT EXISTS family_members (
 );
 
 CREATE INDEX IF NOT EXISTS idx_family_members_reg ON family_members(registration_id);
+
+CREATE TABLE IF NOT EXISTS speaker_proposals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  proposal_id TEXT UNIQUE NOT NULL,
+  full_name TEXT NOT NULL,
+  designation TEXT,
+  institution TEXT,
+  country TEXT,
+  email TEXT NOT NULL,
+  panel TEXT,
+  abstract TEXT,
+  bio TEXT,
+  cv_path TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_speaker_proposals_email ON speaker_proposals(email);
+CREATE INDEX IF NOT EXISTS idx_speaker_proposals_panel ON speaker_proposals(panel);
 `;
 
 const MIGRATIONS = [
@@ -75,6 +94,7 @@ const MIGRATIONS = [
   `ALTER TABLE family_members ADD COLUMN email TEXT`,
   `ALTER TABLE family_members ADD COLUMN phone TEXT`,
   `ALTER TABLE family_members ADD COLUMN tshirt_size TEXT`,
+  `ALTER TABLE speaker_proposals ADD COLUMN updated_at TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -375,4 +395,95 @@ export function deleteRegistrationsByRegIds(regIds) {
   const placeholders = regIds.map(() => "?").join(",");
   const stmt = db.prepare(`DELETE FROM registrations WHERE reg_id IN (${placeholders})`);
   return stmt.run(...regIds);
+}
+
+export function insertSpeakerProposal(row) {
+  const db = getDatabase();
+  const stmt = db.prepare(`
+    INSERT INTO speaker_proposals (
+      proposal_id, full_name, designation, institution, country, email, panel, abstract, bio, cv_path
+    ) VALUES (
+      @proposal_id, @full_name, @designation, @institution, @country, @email, @panel, @abstract, @bio, @cv_path
+    )
+  `);
+  return stmt.run(row).lastInsertRowid;
+}
+
+export function listSpeakerProposals({ limit = 500, offset = 0, panel, search } = {}) {
+  const db = getDatabase();
+  const where = [];
+  const params = [];
+
+  if (panel) {
+    where.push("panel = ?");
+    params.push(panel);
+  }
+
+  const q = typeof search === "string" ? search.trim() : "";
+  if (q) {
+    where.push("(full_name LIKE ? OR email LIKE ? OR institution LIKE ? OR country LIKE ? OR proposal_id LIKE ?)");
+    const like = `%${q}%`;
+    params.push(like, like, like, like, like);
+  }
+
+  const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
+  return db
+    .prepare(`SELECT * FROM speaker_proposals ${whereSql} ORDER BY id DESC LIMIT ? OFFSET ?`)
+    .all(...params, limit, offset);
+}
+
+export function countSpeakerProposals() {
+  const db = getDatabase();
+  const total = db.prepare("SELECT COUNT(*) AS n FROM speaker_proposals").get()?.n || 0;
+  const byPanel = db
+    .prepare("SELECT panel, COUNT(*) AS n FROM speaker_proposals GROUP BY panel ORDER BY panel")
+    .all();
+  return { total, byPanel };
+}
+
+export function collectCvPathsForProposalIds(proposalIds) {
+  if (!Array.isArray(proposalIds) || proposalIds.length === 0) return [];
+  const db = getDatabase();
+  const placeholders = proposalIds.map(() => "?").join(",");
+  return db
+    .prepare(`SELECT cv_path FROM speaker_proposals WHERE proposal_id IN (${placeholders})`)
+    .all(...proposalIds)
+    .map((r) => r.cv_path)
+    .filter(Boolean);
+}
+
+export function deleteSpeakerProposalsByIds(proposalIds) {
+  if (!Array.isArray(proposalIds) || proposalIds.length === 0) return { changes: 0 };
+  const db = getDatabase();
+  const placeholders = proposalIds.map(() => "?").join(",");
+  return db.prepare(`DELETE FROM speaker_proposals WHERE proposal_id IN (${placeholders})`).run(...proposalIds);
+}
+
+const EDITABLE_SPEAKER_FIELDS = new Set([
+  "full_name",
+  "designation",
+  "institution",
+  "country",
+  "email",
+  "panel",
+  "abstract",
+  "bio",
+]);
+
+export function updateSpeakerProposalById(proposalId, fields) {
+  const db = getDatabase();
+  const allowed = {};
+  for (const [k, v] of Object.entries(fields || {})) {
+    if (EDITABLE_SPEAKER_FIELDS.has(k)) {
+      allowed[k] = v === undefined ? null : v;
+    }
+  }
+  const keys = Object.keys(allowed);
+  if (keys.length === 0) return { changes: 0 };
+  const setSql = keys.map((k) => `${k} = @${k}`).join(", ");
+  return db
+    .prepare(
+      `UPDATE speaker_proposals SET ${setSql}, updated_at = datetime('now') WHERE proposal_id = @proposal_id`
+    )
+    .run({ ...allowed, proposal_id: proposalId });
 }

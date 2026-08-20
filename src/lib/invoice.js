@@ -5,6 +5,7 @@ import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { dataDir } from "@/lib/db";
 import { calculatePricing, FAMILY_MEMBER_FEE_USD, REGISTRATION_PERIODS } from "@/lib/pricing";
+import { WIRE_NOTE } from "@/lib/wire";
 
 const LOGO_PATH = path.join(process.cwd(), "public", "iuap_invoice.jpg");
 const LOGO_DATA_URI = existsSync(LOGO_PATH)
@@ -124,6 +125,20 @@ const styles = StyleSheet.create({
     fontSize: 9,
     borderRadius: 10,
   },
+
+  duePill: {
+    alignSelf: "flex-start",
+    marginTop: 8,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    backgroundColor: "#fef3c7",
+    color: "#92400e",
+    fontFamily: "Helvetica-Bold",
+    fontSize: 9,
+    borderRadius: 10,
+  },
+  wireTitleSize: { fontSize: 18 },
+  wireNote: { fontSize: 9, color: MUTED, marginTop: 8, lineHeight: 1.4 },
 });
 
 function formatAmount(n, currency = "BDT") {
@@ -139,6 +154,13 @@ function formatDate(value) {
   return d.toLocaleString("en-GB", { dateStyle: "long", timeStyle: "short" });
 }
 
+function formatDay(value) {
+  if (!value) return "\u2014";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleDateString("en-GB", { dateStyle: "long" });
+}
+
 function InvoiceDoc({ registration, familyMembers }) {
   const fullName = `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant";
   const amount = registration.payment_amount || "0";
@@ -147,6 +169,10 @@ function InvoiceDoc({ registration, familyMembers }) {
   const reffId = registration.payment_reff_id || "—";
   const familyCount = familyMembers.length;
   const isMember = registration.is_member_university === "Yes";
+  // Wire transfers are invoiced before money moves, so the same document doubles
+  // as a proforma: amber "payment due" pill, a due date, and bank instructions
+  // instead of the gateway transaction block.
+  const isWire = registration.payment_method === "wire-transfer";
 
   const storedPeriodKey = registration.registration_period;
   const periodMeta = REGISTRATION_PERIODS.find((p) => p.key === storedPeriodKey);
@@ -156,13 +182,14 @@ function InvoiceDoc({ registration, familyMembers }) {
   });
   const periodLabel = periodMeta?.label || pricing.period.label;
   const periodRange = periodMeta?.range || pricing.period.range;
+  const dueISO = periodMeta?.endsISO || pricing.period.endsISO;
   const baseFee = pricing.baseFeeUsd;
   const familyFee = pricing.familyFeeUsd;
 
   const baseLabel = `IAUP Semi-Annual Meeting 2026 — Registration (${isMember ? "Member" : "Non-member"} · ${periodLabel})`;
 
   return (
-    <Document title={`IAUP Invoice ${reffId}`} author="IAUP Secretariat">
+    <Document title={`IAUP ${isWire ? "Proforma " : ""}Invoice ${reffId}`} author="IAUP Secretariat">
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
@@ -174,10 +201,12 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
               </>
             )}
-            <Text style={styles.paidPill}>PAID</Text>
+            <Text style={isWire ? styles.duePill : styles.paidPill}>{isWire ? "PAYMENT DUE" : "PAID"}</Text>
           </View>
           <View>
-            <Text style={styles.invoiceTitle}>INVOICE</Text>
+            <Text style={isWire ? [styles.invoiceTitle, styles.wireTitleSize] : styles.invoiceTitle}>
+              {isWire ? "PROFORMA INVOICE" : "INVOICE"}
+            </Text>
             <View style={styles.invoiceMetaRow}>
               <Text style={styles.invoiceMetaLabel}>Invoice #</Text>
               <Text style={styles.invoiceMetaValue}>{reffId}</Text>
@@ -186,6 +215,12 @@ function InvoiceDoc({ registration, familyMembers }) {
               <Text style={styles.invoiceMetaLabel}>Date</Text>
               <Text style={styles.invoiceMetaValue}>{formatDate(registration.updated_at || new Date().toISOString())}</Text>
             </View>
+            {isWire ? (
+              <View style={styles.invoiceMetaRow}>
+                <Text style={styles.invoiceMetaLabel}>Payment due by</Text>
+                <Text style={styles.invoiceMetaValue}>{formatDay(dueISO)}</Text>
+              </View>
+            ) : null}
           </View>
         </View>
 
@@ -242,37 +277,62 @@ function InvoiceDoc({ registration, familyMembers }) {
               </View>
               <View style={styles.totalsDivider} />
               <View style={styles.totalsRow}>
-                <Text style={styles.totalsTotalLabel}>Total</Text>
+                <Text style={styles.totalsTotalLabel}>{isWire ? "Total due" : "Total"}</Text>
                 <Text style={styles.totalsTotalValue}>{formatAmount(amount, currency)}</Text>
               </View>
             </View>
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment details</Text>
-          <View style={styles.paymentGrid}>
-            <View style={styles.paymentItem}>
-              <Text style={styles.paymentLabel}>Transaction ID</Text>
-              <Text style={styles.paymentValue}>{tranId}</Text>
+        {isWire ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Payment details</Text>
+            <View style={styles.paymentGrid}>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Method</Text>
+                <Text style={styles.paymentValue}>Wire Transfer</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Invoice reference</Text>
+                <Text style={styles.paymentValue}>{reffId}</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Currency</Text>
+                <Text style={styles.paymentValue}>{currency}</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Status</Text>
+                <Text style={styles.paymentValue}>Awaiting transfer</Text>
+              </View>
             </View>
-            <View style={styles.paymentItem}>
-              <Text style={styles.paymentLabel}>Gateway reference</Text>
-              <Text style={styles.paymentValue}>{reffId}</Text>
-            </View>
-            <View style={styles.paymentItem}>
-              <Text style={styles.paymentLabel}>Method</Text>
-              <Text style={styles.paymentValue}>Online Payment · 1Card</Text>
-            </View>
-            <View style={styles.paymentItem}>
-              <Text style={styles.paymentLabel}>Currency</Text>
-              <Text style={styles.paymentValue}>{currency}</Text>
+            <Text style={styles.wireNote}>{WIRE_NOTE}</Text>
+          </View>
+        ) : (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Payment details</Text>
+            <View style={styles.paymentGrid}>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Transaction ID</Text>
+                <Text style={styles.paymentValue}>{tranId}</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Gateway reference</Text>
+                <Text style={styles.paymentValue}>{reffId}</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Method</Text>
+                <Text style={styles.paymentValue}>Online Payment · 1Card</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Currency</Text>
+                <Text style={styles.paymentValue}>{currency}</Text>
+              </View>
             </View>
           </View>
-        </View>
+        )}
 
         <Text style={styles.footer}>
-          Thank you for registering. For any queries contact iaup-bd2026@daffodilvarsity.edu.bd · IAUP Secretariat,
+          {isWire ? "Registration recorded. " : ""}Thank you for registering. For any queries contact iaup-bd2026@daffodilvarsity.edu.bd · IAUP Secretariat,
           Daffodil International University, Bangladesh
         </Text>
       </Page>

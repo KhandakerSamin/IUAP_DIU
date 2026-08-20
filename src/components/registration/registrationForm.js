@@ -659,6 +659,7 @@ export default function RegistrationForm() {
           name: `${normalized.givenName} ${normalized.surname}`.trim(),
           regId: payload.reg_id,
           email: normalized.email,
+          emailed: payload.invoice_emailed === true,
         });
         return;
       }
@@ -1549,14 +1550,7 @@ export default function RegistrationForm() {
                     Thank you for registering for the IAUP Semi-Annual Meeting 2026.
                   </p>
                   <p>
-                    Your registration has been successfully received. An invoice will be sent to your registered email address shortly. The invoice will include the bank details for payment. After completing the payment, please send the payment receipt to{" "}
-                    <a
-                      href="mailto:iaup-bd2026@daffodilvarsity.edu.bd"
-                      className="font-medium text-primary hover:underline"
-                    >
-                      iaup-bd2026@daffodilvarsity.edu.bd
-                    </a>{" "}
-                    for confirmation.
+                    You have successfully submitted the registration form and your data has been recorded for further wire transfer guidelines from us.
                   </p>
                   <p>
                     Thank you for your interest in joining the IAUP Semi-Annual Meeting 2026.
@@ -1574,6 +1568,12 @@ export default function RegistrationForm() {
                 </div>
 
                 <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                  <a
+                    href={`/api/invoice/${encodeURIComponent(wireModalData.regId)}`}
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition shadow-md hover:shadow-lg"
+                  >
+                    Download Invoice
+                  </a>
                   <button
                     type="button"
                     onClick={() => {

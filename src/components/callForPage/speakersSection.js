@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PANELS } from "@/lib/panels";
 import {
   CheckCircle2,
   CalendarDays,
@@ -14,12 +15,6 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const PANELS = [
-  "Panel Discussion 1: Building Entrepreneurial Universities for Sustainable Economic Growth",
-  "Panel Discussion 2: Transforming Higher Education to Empower Women in an AI-Driven World",
-  "Panel Discussion 3: Sustainable Universities for a Sustainable Planet",
-  "Panel Discussion 4: Open Science, AI, and the Future of Academic Research",
-];
 
 const EMPTY_FORM = {
   fullName: "",
@@ -118,9 +113,12 @@ function CustomPanelSelect({ value, onChange }) {
 
 function SpeakerFormModal({ open, onClose }) {
   const [form, setForm] = useState(EMPTY_FORM);
-  const [, setFile] = useState(null);
+  const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [proposalId, setProposalId] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   if (!open) return null;
 
@@ -135,9 +133,44 @@ function SpeakerFormModal({ open, onClose }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (busy) return;
+
+    setError("");
+
+    if (!file) {
+      setError("Please attach your CV.");
+      return;
+    }
+
+    setBusy(true);
+    try {
+      const body = new FormData();
+      for (const [key, value] of Object.entries(form)) {
+        body.append(key, value);
+      }
+      body.append("cv", file);
+
+      let res;
+      try {
+        res = await fetch("/api/speakers", { method: "POST", body });
+      } catch {
+        setError("Network error. Please try again.");
+        return;
+      }
+
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok || !payload?.proposal_id) {
+        setError(payload?.error || "Could not submit your proposal. Please try again.");
+        return;
+      }
+
+      setProposalId(payload.proposal_id);
+      setSubmitted(true);
+    } finally {
+      setBusy(false);
+    }
   };
 
   const handleClose = () => {
@@ -147,6 +180,8 @@ function SpeakerFormModal({ open, onClose }) {
       setFile(null);
       setFileName("");
       setSubmitted(false);
+      setProposalId("");
+      setError("");
     }, 200);
   };
 
@@ -207,6 +242,11 @@ function SpeakerFormModal({ open, onClose }) {
               Meeting 2026. Our team will review your proposal and get back to
               you before the panel selections are finalized.
             </p>
+            {proposalId && (
+              <p className="rounded-full bg-slate-100 px-3.5 py-1 text-xs font-semibold tracking-wide text-slate-700">
+                Reference: <span className="font-mono font-bold text-primary">{proposalId}</span>
+              </p>
+            )}
             <button
               type="button"
               onClick={handleClose}
@@ -347,19 +387,25 @@ function SpeakerFormModal({ open, onClose }) {
               </Field>
             </div>
 
+            {error && (
+              <p className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
+            )}
+
             <div className="mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3">
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-6 py-3 rounded-full border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition-colors"
+                disabled={busy}
+                className="px-6 py-3 rounded-full border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition-colors disabled:opacity-60"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-colors inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                disabled={busy}
+                className="px-6 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-colors inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-70"
               >
-                Submit Proposal
+                {busy ? "Submitting…" : "Submit Proposal"}
                 <Send className="w-4 h-4" />
               </button>
             </div>
