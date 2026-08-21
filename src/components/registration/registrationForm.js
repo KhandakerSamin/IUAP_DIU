@@ -12,6 +12,16 @@ const STORAGE_KEY = "iaup_registration";
 const TITLE_OPTIONS = ["Mr.", "Ms.", "Dr.", "Prof.", "Prof. Dr.", "Others"];
 const GENDER_OPTIONS = ["Male", "Female"];
 const TSHIRT_OPTIONS = ["S", "M", "L", "XL", "XXL"];
+
+// Indicative European unisex sizing (cm). Replace with the supplier's own spec
+// sheet once the garment is confirmed — delegates order against these numbers.
+const TSHIRT_SIZE_CHART = [
+  { size: "S", chest: "88 – 96", length: "70", shoulder: "44" },
+  { size: "M", chest: "96 – 104", length: "72", shoulder: "46" },
+  { size: "L", chest: "104 – 112", length: "74", shoulder: "48" },
+  { size: "XL", chest: "112 – 120", length: "76", shoulder: "50" },
+  { size: "XXL", chest: "120 – 128", length: "78", shoulder: "52" },
+];
 const FOOD_OPTIONS = ["Vegan", "Vegetarian", "Halal", "Other", "None"];
 const YES_NO_OPTIONS = ["Yes", "No"];
 const FAMILY_MEMBER_OPTIONS = ["1", "2", "3", "4", "Others"];
@@ -1147,6 +1157,43 @@ export default function RegistrationForm() {
               error={errors.tShirtSize}
               required
             />
+
+            <details className="sm:col-span-2 -mt-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-700">
+                View size chart (European sizing)
+              </summary>
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full min-w-100 text-start text-sm">
+                  <caption className="sr-only">
+                    T-shirt measurements in centimetres, European unisex sizing
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-slate-300 text-xs uppercase tracking-wide text-slate-500">
+                      <th scope="col" className="py-2 pe-4 text-start font-semibold">Size</th>
+                      <th scope="col" className="py-2 pe-4 text-start font-semibold">Chest (cm)</th>
+                      <th scope="col" className="py-2 pe-4 text-start font-semibold">Body length (cm)</th>
+                      <th scope="col" className="py-2 text-start font-semibold">Shoulder (cm)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {TSHIRT_SIZE_CHART.map((row) => (
+                      <tr key={row.size} className="border-b border-slate-200 last:border-0">
+                        <th scope="row" className="py-2 pe-4 text-start font-semibold text-slate-800">
+                          {row.size}
+                        </th>
+                        <td className="py-2 pe-4 text-slate-600">{row.chest}</td>
+                        <td className="py-2 pe-4 text-slate-600">{row.length}</td>
+                        <td className="py-2 text-slate-600">{row.shoulder}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="mt-3 text-xs text-slate-500">
+                  Measurements are indicative and may vary slightly by garment. Chest is measured
+                  as a full circumference.
+                </p>
+              </div>
+            </details>
 
             <OptionGroup
               legend="Any food requirements?"
