@@ -26,6 +26,9 @@ export default function AboutDiuSection() {
             <p className="text-lg  text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-2">
              DIU is the number one private university in Bangladesh in terms of Scopus and Web of Science indexed research publications. QS World University Rankings also recognizes DIU as a &quot;Very High Research Intensive University&quot;.
             </p>
+            <p className="text-lg text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-2">
+             DIU hosts over 25,000 students across 7 faculties and 32 departments, including 100+ international students, offering a globally inclusive learning environment with modern facilities and strong industry connections.
+            </p>
             <p className="text-lg text-muted leading-relaxed text-justify mb-4 reveal reveal-delay-4">
              The university maintains over 600 international partnerships and actively engages in student and faculty exchange, international internships, research collaboration, scholarships, and global mobility programs
             </p>

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 const NAV = [
   { href: "/admin/registrations", label: "Registrations" },
   { href: "/admin/speakers", label: "Panel Speakers" },
+  { href: "/admin/partners", label: "Partners" },
 ];
 
 export default function AdminShell({ children }) {

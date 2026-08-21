@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS registrations (
   family_members_count TEXT,
   family_members_other TEXT,
   needs_invitation_letter TEXT,
+  post_event_tour TEXT,
   payment_method TEXT,
   profile_photo_path TEXT,
   passport_scan_path TEXT,
@@ -85,6 +86,22 @@ CREATE TABLE IF NOT EXISTS speaker_proposals (
 
 CREATE INDEX IF NOT EXISTS idx_speaker_proposals_email ON speaker_proposals(email);
 CREATE INDEX IF NOT EXISTS idx_speaker_proposals_panel ON speaker_proposals(panel);
+
+CREATE TABLE IF NOT EXISTS partner_proposals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  proposal_id TEXT UNIQUE NOT NULL,
+  org_name TEXT NOT NULL,
+  org_type TEXT,
+  country TEXT,
+  contact_person TEXT,
+  designation TEXT,
+  email TEXT NOT NULL,
+  interest TEXT,
+  proposal_path TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_partner_proposals_email ON partner_proposals(email);
 `;
 
 const MIGRATIONS = [
@@ -95,6 +112,7 @@ const MIGRATIONS = [
   `ALTER TABLE family_members ADD COLUMN phone TEXT`,
   `ALTER TABLE family_members ADD COLUMN tshirt_size TEXT`,
   `ALTER TABLE speaker_proposals ADD COLUMN updated_at TEXT`,
+  `ALTER TABLE registrations ADD COLUMN post_event_tour TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -154,13 +172,13 @@ export function insertRegistration(row) {
       date_of_birth, organization, position, department, address, zip_code, city, country,
       phone, whatsapp, email, alternative_email, tshirt_size, food_requirement, other_food,
       is_member_university, has_family_members, family_members_count, family_members_other,
-      needs_invitation_letter, payment_method, profile_photo_path, passport_scan_path
+      needs_invitation_letter, post_event_tour, payment_method, profile_photo_path, passport_scan_path
     ) VALUES (
       @reg_id, @title, @other_title, @given_name, @surname, @gender, @passport_no, @nationality,
       @date_of_birth, @organization, @position, @department, @address, @zip_code, @city, @country,
       @phone, @whatsapp, @email, @alternative_email, @tshirt_size, @food_requirement, @other_food,
       @is_member_university, @has_family_members, @family_members_count, @family_members_other,
-      @needs_invitation_letter, @payment_method, @profile_photo_path, @passport_scan_path
+      @needs_invitation_letter, @post_event_tour, @payment_method, @profile_photo_path, @passport_scan_path
     )
   `);
   const result = stmt.run(row);
@@ -334,6 +352,7 @@ const EDITABLE_FIELDS = new Set([
   "family_members_count",
   "family_members_other",
   "needs_invitation_letter",
+  "post_event_tour",
   "payment_method",
   "payment_status",
 ]);
@@ -486,4 +505,32 @@ export function updateSpeakerProposalById(proposalId, fields) {
       `UPDATE speaker_proposals SET ${setSql}, updated_at = datetime('now') WHERE proposal_id = @proposal_id`
     )
     .run({ ...allowed, proposal_id: proposalId });
+}
+
+export function insertPartnerProposal(row) {
+  const db = getDatabase();
+  return db
+    .prepare(
+      `INSERT INTO partner_proposals (
+         proposal_id, org_name, org_type, country, contact_person, designation, email, interest, proposal_path
+       ) VALUES (
+         @proposal_id, @org_name, @org_type, @country, @contact_person, @designation, @email, @interest, @proposal_path
+       )`
+    )
+    .run(row).lastInsertRowid;
+}
+
+export function listPartnerProposals({ limit = 500, offset = 0, search } = {}) {
+  const db = getDatabase();
+  const q = typeof search === "string" ? search.trim() : "";
+  const where = q ? "WHERE (org_name LIKE ? OR email LIKE ? OR country LIKE ? OR contact_person LIKE ?)" : "";
+  const params = q ? Array(4).fill(`%${q}%`) : [];
+  return db
+    .prepare(`SELECT * FROM partner_proposals ${where} ORDER BY id DESC LIMIT ? OFFSET ?`)
+    .all(...params, limit, offset);
+}
+
+export function countPartnerProposals() {
+  const db = getDatabase();
+  return db.prepare("SELECT COUNT(*) AS n FROM partner_proposals").get()?.n || 0;
 }

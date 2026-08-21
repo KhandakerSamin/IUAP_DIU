@@ -3,31 +3,29 @@ import Image from "next/image";
 const leaders = [
   {
     name: "Dr. Shawn Chen",
-    role1: "Chairman",
-    role2: "Sias University",
-    role3: "(China)",
+    role: "Chairman",
+    institution: "Sias University (China)",
     position: "IAUP President",
     image: "/leader1.png"
   },
   {
     name: "Dr. Fernando León-García",
-    role1: "President",
-    role2: "CETYS University",
-    role3: "(Mexico)",
+    role: "President",
+    institution: "CETYS University (Mexico)",
     position: "IAUP Chairman of the Board",
     image: "/leader3.jpeg"
   },
   {
     name: "Dr. Tomás Morales",
-    role1: "President",
-    role2: "California State University, San Bernardino (USA)",
+    role: "President",
+    institution: "California State University, San Bernardino (USA)",
     position: "President Elect 2024-2027",
     image: "/leader2.jpeg"
   },
   {
     name: "Prof. Tatsuro Tanioka",
-    role1: "Vice Chancellor",
-    role2: "Tanioka Gakuen Education Foundation (Japan)",
+    role: "Vice Chancellor",
+    institution: "Tanioka Gakuen Education Foundation (Japan)",
     position: "IAUP Secretary-General",
     image: "/leader2.png"
   }
@@ -63,11 +61,10 @@ export default function IaupLeadersSection() {
                 />
               </div>
               <div className="flex flex-col items-center">
-                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{leader.name}</h3>
-                <div className="text-sm md:text-base text-gray-600 mb-3 hover:text-gray-800 transition-colors">
-                  <p>{leader.role1}</p>
-                  <p className="font-medium">{leader.role2}</p>
-                  <p className="font-medium">{leader.role3}</p>
+                <h3 className="flex min-h-14 items-center text-lg md:text-xl font-bold text-gray-900 mb-2">{leader.name}</h3>
+                <div className="flex min-h-16 flex-col justify-start text-sm md:text-base text-gray-600 mb-3 hover:text-gray-800 transition-colors">
+                  <p>{leader.role}</p>
+                  <p className="font-medium">{leader.institution}</p>
                 </div>
                 <div className="text-blue-700 font-semibold tracking-wide text-sm md:text-base">
                   {leader.position}

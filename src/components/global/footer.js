@@ -89,7 +89,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="lg:col-span-3">
-            <h4 className="font-display font-semibold text-white text-lg mb-6">Contact Secretariat</h4>
+            <h4 className="font-display font-semibold text-white text-lg mb-6">Contact Event Secretariat</h4>
             <ul className="space-y-5 text-sm text-slate-400">
               <li className="flex items-start gap-3 hover:text-white transition-colors">
                 <Mail className="w-5 h-5 text-primary shrink-0 mt-0.5" />

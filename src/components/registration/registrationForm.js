@@ -88,6 +88,8 @@ const INITIAL_FORM = {
   phoneCountryIso2: "bd",
   phoneCountryCode: "+880",
   phone: "",
+  whatsappCountryIso2: "bd",
+  whatsappCountryCode: "+880",
   whatsapp: "",
   email: "",
   alternativeEmail: "",
@@ -99,6 +101,7 @@ const INITIAL_FORM = {
   familyMembersCount: "",
   familyMembersOther: "",
   needsInvitationLetter: "",
+  postEventTour: "",
   paymentMethod: "",
   agreeToPolicy: false,
   website: "",
@@ -195,9 +198,8 @@ function validateForm(values) {
     errors.phone = "Please provide a valid phone number.";
   }
 
-  if (!values.whatsapp.trim()) {
-    errors.whatsapp = "WhatsApp number is required.";
-  } else if (!isValidPhone(values.whatsapp.trim())) {
+  // WhatsApp is optional; only the format is checked when something is entered.
+  if (values.whatsapp.trim() && !isValidPhone(values.whatsapp.trim())) {
     errors.whatsapp = "Please provide a valid WhatsApp number.";
   }
 
@@ -252,6 +254,10 @@ function validateForm(values) {
         errors.familyMembersOther = "Please enter a valid number.";
       }
     }
+  }
+
+  if (!values.postEventTour || !YES_NO_OPTIONS.includes(values.postEventTour)) {
+    errors.postEventTour = "Please select Yes or No.";
   }
 
   if (!values.needsInvitationLetter || !YES_NO_OPTIONS.includes(values.needsInvitationLetter)) {
@@ -324,9 +330,9 @@ export default function RegistrationForm() {
         const next = { ...prev };
         for (const key of Object.keys(prev)) {
           if (typeof saved[key] !== "undefined") {
-            if (key === "phoneCountryCode") {
+            if (key === "phoneCountryCode" || key === "whatsappCountryCode") {
               next[key] = normalizePhoneCountryCode(saved[key]);
-            } else if (key === "phoneCountryIso2") {
+            } else if (key === "phoneCountryIso2" || key === "whatsappCountryIso2") {
               next[key] = String(saved[key] || "bd").toLowerCase();
             } else {
               next[key] = saved[key];
@@ -549,6 +555,7 @@ export default function RegistrationForm() {
       city: normalizeSpaces(formValues.city),
       country: normalizeSpaces(formValues.country),
       phoneCountryCode: normalizePhoneCountryCode(formValues.phoneCountryCode),
+      whatsappCountryCode: normalizePhoneCountryCode(formValues.whatsappCountryCode),
       otherFood: normalizeSpaces(formValues.otherFood),
       passportNo: formValues.passportNo.trim(),
       zipCode: formValues.zipCode.trim(),
@@ -606,10 +613,12 @@ export default function RegistrationForm() {
       return;
     }
 
-    const phoneDialCode = normalized.phoneCountryCode;
     const submissionValues = {
       ...normalized,
-      phone: `${phoneDialCode} ${normalized.phone}`.trim(),
+      phone: `${normalized.phoneCountryCode} ${normalized.phone}`.trim(),
+      whatsapp: normalized.whatsapp
+        ? `${normalized.whatsappCountryCode} ${normalized.whatsapp}`.trim()
+        : "",
     };
 
     setFormValues(normalized);
@@ -1007,19 +1016,40 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-              <label htmlFor="whatsapp" className="mb-2 block text-sm font-semibold text-slate-700">
+              <label htmlFor="whatsapp" className="mb-2 block text-sm text-start font-semibold text-slate-700">
                 WhatsApp No
               </label>
-              <input
+              <PhoneInputField
                 id="whatsapp"
                 name="whatsapp"
-                type="tel"
-                value={formValues.whatsapp}
-                onChange={handleChange}
+                countryIso2={formValues.whatsappCountryIso2}
+                countryCode={formValues.whatsappCountryCode}
+                phoneValue={formValues.whatsapp}
+                onCountryChange={({ iso2, dialCode }) => {
+                  setFormValues((prev) => {
+                    const updated = {
+                      ...prev,
+                      whatsappCountryIso2: iso2,
+                      whatsappCountryCode: dialCode,
+                    };
+                    if (hasSubmitted) {
+                      setErrors(validateForm(updated));
+                    }
+                    return updated;
+                  });
+                }}
+                onPhoneChange={(val) => {
+                  setFormValues((prev) => {
+                    const updated = { ...prev, whatsapp: val };
+                    if (hasSubmitted) {
+                      setErrors(validateForm(updated));
+                    }
+                    return updated;
+                  });
+                }}
                 maxLength={FIELD_LIMITS.whatsapp}
-                autoComplete="tel"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
                 placeholder="WhatsApp number"
+                error={errors.whatsapp}
               />
               {errors.whatsapp && <p className="mt-2 text-sm text-red-600">{errors.whatsapp}</p>}
             </div>
@@ -1380,6 +1410,16 @@ export default function RegistrationForm() {
             )}
 
             <OptionGroup
+              legend="Interested in joining the Optional Post-Event Tour?"
+              name="postEventTour"
+              options={YES_NO_OPTIONS}
+              value={formValues.postEventTour}
+              onChange={handleChange}
+              error={errors.postEventTour}
+              required
+            />
+
+            <OptionGroup
               legend="Do you need an Invitation Letter in order to apply for a Visa to Bangladesh?"
               name="needsInvitationLetter"
               options={YES_NO_OPTIONS}
@@ -1550,7 +1590,9 @@ export default function RegistrationForm() {
                     Thank you for registering for the IAUP Semi-Annual Meeting 2026.
                   </p>
                   <p>
-                    You have successfully submitted the registration form and your data has been recorded for further wire transfer guidelines from us.
+                    Your registration has been successfully received. An invoice will be sent to your registered email
+                    address shortly. The invoice will include the bank details for payment. After completing the
+                    payment, please send the payment receipt to iaup-bd2026@daffodilvarsity.edu.bd for confirmation.
                   </p>
                   <p>
                     Thank you for your interest in joining the IAUP Semi-Annual Meeting 2026.

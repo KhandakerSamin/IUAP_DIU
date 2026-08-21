@@ -1,16 +1,20 @@
 import Image from "next/image";
-import { BedDouble, Hotel } from "lucide-react";
+import { BedDouble, FileText, Hotel } from "lucide-react";
 
 const accommodations = [
   {
     name: "Hotel Sheraton",
     image: "/venue1.png",
     alt: "Hotel Sheraton",
+    bookingUrl:
+      "https://drive.google.com/file/d/1SqHQpCIUsCcQ3Z0LS5mKe5ednIX4fwxn/view?usp=sharing",
   },
   {
     name: "Hotel Sarina",
     image: "/sarina.jpg",
-    alt: "Hotel Sherina",
+    alt: "Hotel Sarina",
+    bookingUrl:
+      "https://drive.google.com/file/d/15BmjKxrBMmQNglJs9xV8T2YheFlMzggN/view?usp=sharing",
   },
 ];
 
@@ -35,9 +39,8 @@ export default function AccommodationSection() {
           {accommodations.map((hotel, index) => (
             <article
               key={hotel.name}
-              className={`card-hover overflow-hidden rounded-3xl border border-border bg-white shadow-sm reveal ${
-                index > 0 ? `reveal-delay-${index}` : ""
-              }`}
+              className={`card-hover overflow-hidden rounded-3xl border border-border bg-white shadow-sm reveal ${index > 0 ? `reveal-delay-${index}` : ""
+                }`}
             >
               <div className="relative h-96 sm:h-112 bg-slate-200">
                 <Image
@@ -56,20 +59,24 @@ export default function AccommodationSection() {
                   <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">{hotel.name}</h3>
                 </div>
               </div>
+
+              <div className="px-5 py-5 sm:px-6">
+                <a
+                  href={hotel.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold text-dark transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  <FileText className="h-4 w-4" aria-hidden="true" />
+                  Booking Instructions
+                  <span className="sr-only"> for {hotel.name}</span>
+                </a>
+                <p className="mt-2 text-xs text-muted">
+                  Discounted IAUP 2026 rates, inclusions, and reservation contacts.
+                </p>
+              </div>
             </article>
           ))}
-        </div>
-
-        <div className="mt-10 flex justify-center reveal reveal-delay-2">
-          <a
-            href="https://drive.google.com/drive/folders/1lylNbNZM2rvs9B9m8ZIeZXsuqycSF5YZ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-10 py-4 text-base font-semibold text-white transition hover:bg-primary-dark"
-          >
-            <Hotel className="h-5 w-5" />
-            Book Hotel
-          </a>
         </div>
       </div>
     </section>

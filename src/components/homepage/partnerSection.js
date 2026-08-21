@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import {
-  Users,
   Handshake,
   X,
   Send,
@@ -48,8 +47,10 @@ function Field({ label, required, className = "", children }) {
 
 function PartnerFormModal({ open, onClose }) {
   const [form, setForm] = useState(EMPTY_FORM);
-  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   if (!open) return null;
 
@@ -57,21 +58,40 @@ function PartnerFormModal({ open, onClose }) {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
   const handleFile = (e) => {
-    const file = e.target.files?.[0];
-    setFileName(file ? file.name : "");
+    setFile(e.target.files?.[0] || null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSubmitting(true);
+
+    const body = new FormData();
+    for (const [key, value] of Object.entries(form)) body.append(key, value);
+    if (file) body.append("proposal", file);
+
+    try {
+      const res = await fetch("/api/partners", { method: "POST", body });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok || !payload?.proposal_id) {
+        setError(payload?.error || "Could not submit your proposal. Please try again.");
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleClose = () => {
     onClose();
     setTimeout(() => {
       setForm(EMPTY_FORM);
-      setFileName("");
+      setFile(null);
       setSubmitted(false);
+      setError("");
     }, 200);
   };
 
@@ -254,17 +274,17 @@ function PartnerFormModal({ open, onClose }) {
                   htmlFor="proposal-upload"
                   className="flex items-center gap-3 rounded-xl border border-dashed border-border bg-slate-50 px-4 py-4 cursor-pointer hover:bg-slate-100 transition-colors"
                 >
-                  {fileName ? (
+                  {file ? (
                     <FileCheck2 className="w-5 h-5 text-primary shrink-0" />
                   ) : (
                     <UploadCloud className="w-5 h-5 text-muted shrink-0" />
                   )}
                   <span
                     className={`text-sm truncate ${
-                      fileName ? "text-dark font-medium" : "text-muted"
+                      file ? "text-dark font-medium" : "text-muted"
                     }`}
                   >
-                    {fileName || "Click to upload PDF or Word document"}
+                    {file ? file.name : "Click to upload PDF or Word document"}
                   </span>
                   <input
                     id="proposal-upload"
@@ -278,6 +298,12 @@ function PartnerFormModal({ open, onClose }) {
               </Field>
             </div>
 
+            {error && (
+              <p role="alert" className="mt-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                {error}
+              </p>
+            )}
+
             <div className="mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3">
               <button
                 type="button"
@@ -288,9 +314,10 @@ function PartnerFormModal({ open, onClose }) {
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-colors inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                disabled={submitting}
+                className="px-6 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-colors inline-flex items-center justify-center gap-2 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
-                Submit Proposal
+                {submitting ? "Submitting\u2026" : "Submit Proposal"}
                 <Send className="w-4 h-4" />
               </button>
             </div>
@@ -324,7 +351,7 @@ export default function PartnerSection() {
           <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
             <Image
               src="/partner.jpg"
-              alt="Partner 1"
+              alt="Association of Private Universities of Bangladesh (APUB)"
               className="object-contain"
               fill
             />
@@ -332,7 +359,7 @@ export default function PartnerSection() {
           <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
             <Image
               src="/partner2.jpeg"
-              alt="Partner 2"
+              alt="Association of Universities of Asia and the Pacific (AUAP)"
               className="object-contain"
               fill
             />
@@ -340,7 +367,7 @@ export default function PartnerSection() {
           <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
             <Image
               src="/partner3.jpg"
-              alt="Partner 3"
+              alt="Eurasian Universities Union (EURAS)"
               className="object-contain"
               fill
             />

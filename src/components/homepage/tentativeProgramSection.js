@@ -36,7 +36,7 @@ const schedule = [
     events: [
       "Reception",
       "Campus Tour – Daffodil Smart City",
-      "Join 25th Anniversary Program",
+      "Join 25th Anniversary Program of DIU",
       "MoU Signing Ceremony",
       "Closing Ceremony",
       "Lunch & Departure of Delegates",

@@ -9,6 +9,7 @@ import EventSpeakers from "@/components/homepage/EventSpeakers";
 import PostEventSection from "@/components/homepage/postEventSection";
 import RegistrationSection from "@/components/homepage/registrationSection";
 import VenuesSection from "@/components/homepage/venuesSection";
+import AccommodationSection from "@/components/homepage/accommodationSection";
 import PartnerSection from "@/components/homepage/partnerSection";
 import ContactSection from "@/components/homepage/contactSection";
 import CtaSection from "@/components/homepage/ctaSection";
@@ -25,6 +26,7 @@ const homeSections = [
   { id: "important-dates", Component: ImportantDatesSection },
   { id: "registration", Component: RegistrationSection },
   { id: "venues", Component: VenuesSection },
+  { id: "accommodation", Component: AccommodationSection },
   { id: "partner", Component: PartnerSection },
   { id: "contact", Component: ContactSection },
   { id: "cta", Component: CtaSection },
