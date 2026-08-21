@@ -78,6 +78,18 @@ export default function AccommodationSection() {
             </article>
           ))}
         </div>
+
+        <div className="mt-10 flex justify-center reveal reveal-delay-2">
+          <a
+            href="https://drive.google.com/drive/folders/1lylNbNZM2rvs9B9m8ZIeZXsuqycSF5YZ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-10 py-4 text-base font-semibold text-white transition hover:bg-primary-dark"
+          >
+            <Hotel className="h-5 w-5" />
+            Book Hotel
+          </a>
+        </div>
       </div>
     </section>
   );

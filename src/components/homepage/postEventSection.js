@@ -17,32 +17,32 @@ export default function PostEventSection() {
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
             <div className="group relative rounded-3xl overflow-hidden bg-slate-100 shadow-md">
-              <div className="relative h-96 w-full">
-                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+              <div className="relative aspect-video w-full">
+                <div className="absolute inset-0 bg-slate-900" />
                 <Image
                   src="/jaflong.jpg"
-                  alt="Tea Gardens in Jaflong"
+                  alt="Tea Gardens in Sreemangal"
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
                   <h4 className="font-display text-3xl font-bold text-white mb-2">
-                    Tea Gardens in Jaflong
+                    Tea Gardens in Sreemangal
                   </h4>
                 </div>
               </div>
             </div>
 
             <div className="group relative rounded-3xl overflow-hidden bg-slate-100 shadow-md">
-              <div className="relative h-96 w-full">
-                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+              <div className="relative aspect-video w-full">
+                <div className="absolute inset-0 bg-slate-900" />
                 <Image
                   src="/jaflong2.jpg"
                   alt="Jaflong view"
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/40 to-transparent" />
@@ -65,13 +65,13 @@ export default function PostEventSection() {
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-96 w-full">
-                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+              <div className="relative aspect-[3/2] w-full">
+                <div className="absolute inset-0 bg-slate-900" />
                 <Image
                   src="/img1.jpg"
                   alt="Site photo 1"
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
@@ -83,13 +83,13 @@ export default function PostEventSection() {
             </div>
 
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-96 w-full">
-                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+              <div className="relative aspect-[3/2] w-full">
+                <div className="absolute inset-0 bg-slate-900" />
                 <Image
                   src="/img2.jpeg"
                   alt="Site photo 2"
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
@@ -114,26 +114,26 @@ export default function PostEventSection() {
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-96 w-full">
-                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+              <div className="relative aspect-[3/2] w-full">
+                <div className="absolute inset-0 bg-slate-900" />
                 <Image
                   src="/img3.jpg"
                   alt="Leisure activity 1"
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>
 
             <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative h-96 w-full">
-                <div className="absolute inset-0 bg-slate-800 animate-pulse" />
+              <div className="relative aspect-[3/2] w-full">
+                <div className="absolute inset-0 bg-slate-900" />
                 <Image
                   src="/img4.jpg"
                   alt="Leisure activity 2"
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>

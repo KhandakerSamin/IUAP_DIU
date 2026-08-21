@@ -1,24 +1,36 @@
-import { Award, CheckCircle2, Download, ExternalLink } from "lucide-react";
+import { Award, CalendarDays, CheckCircle2, Download, ExternalLink, Printer } from "lucide-react";
 
 const themes = [
   "Higher Education Innovation and Transformation",
-  "Quality Assurance and Academic Excellence",
   "Internationalization of Higher Education",
-  "Sustainable Development Goals (SDGs)",
   "Climate Change and Sustainability Initiatives",
-  "Digital Transformation and AI in Education",
   "Research and Innovation Ecosystems",
-  "Industry-Academia Collaboration",
   "Student Success and Employability",
-  "Community Engagement and Social Impact",
   "Entrepreneurship and Innovation",
+  "Quality Assurance and Academic Excellence",
+  "Sustainable Development Goals (SDGs)",
+  "Digital Transformation and AI in Education",
+  "Industry-Academia Collaboration",
+  "Community Engagement and Social Impact",
   "Global Partnerships and Leadership",
+];
+
+// The practical constraints presenters need before they start designing. The
+// full structure and presentation rules stay in the downloadable guidelines.
+const posterSpecs = [
+  ["Poster Size", "A0 — Portrait orientation"],
+  ["Dimensions", "84.1 cm × 118.9 cm"],
+  ["Language", "English"],
+  ["Title Font", "Minimum 72 pt"],
+  ["Headings", "32 – 40 pt"],
+  ["Body Text", "24 – 28 pt"],
 ];
 
 const applyUrl =
   "https://docs.google.com/forms/d/e/1FAIpQLSdB0zO6KKHtXTUQR6ZIHeI7iJWJURtyaopiqs6uQ8WgNFl7ZQ/viewform";
-const guidelinesUrl =
-  "https://drive.google.com/uc?export=download&id=1VKSHyrh-ovVEcj-jKp6gziBLLEzn0UAY";
+// ponytail: served from public/ rather than Drive so the download never hits a
+// permission wall and the file keeps the name the guidelines refer to.
+const guidelinesUrl = "/IAUP_Poster_Guidelines.pdf";
 
 export default function PosterPresentationSection() {
   return (
@@ -43,7 +55,8 @@ export default function PosterPresentationSection() {
             <div className="rounded-full border border-red-300 bg-red-50 text-red-700 px-5 py-2.5 inline-flex items-center gap-2 mb-8">
               <Award className="h-4 w-4" aria-hidden="true" />
               <span className="text-sm font-semibold">
-                Best Poster Award - Top 3 posters recognized at closing ceremony
+                Best Poster Award — Top three posters will be recognized with
+                Best Poster Awards during the conference closing ceremony
               </span>
             </div>
 
@@ -65,9 +78,17 @@ export default function PosterPresentationSection() {
               </p>
             </div>
 
+            <div className="bg-slate-50 text-lg rounded-2xl p-5 mt-6 border border-slate-200">
+              <div className="flex items-center gap-3 text-slate-800 font-medium">
+                <CalendarDays className="w-5 h-5 text-primary" />
+                <span>Deadline: 30 September 2026</span>
+              </div>
+            </div>
+
             <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:items-center">
               <a
                 href={guidelinesUrl}
+                download
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-bold text-dark transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 View Guidelines
@@ -88,7 +109,7 @@ export default function PosterPresentationSection() {
           <div className="reveal reveal-delay-2 mt-8 lg:mt-0">
             <h3 className="text-2xl font-bold tracking-[0.18em] uppercase text-primary mb-6 flex items-center gap-3">
               <span className="inline-block w-1.5  h-5 bg-primary" />
-              Key Highlights
+              Suggested Themes
             </h3>
             <div className="space-y-3">
               {themes.map((theme) => (
@@ -102,6 +123,31 @@ export default function PosterPresentationSection() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="reveal mt-12 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h3 className="text-2xl font-bold tracking-[0.18em] uppercase text-primary mb-6 flex items-center gap-3">
+            <span className="inline-block w-1.5 h-5 bg-primary" />
+            Poster Format Requirements
+          </h3>
+
+          <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+            {posterSpecs.map(([label, value]) => (
+              <div key={label} className="border-b border-slate-100 pb-3">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</dt>
+                <dd className="mt-1 text-base font-medium text-dark">{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="mt-6 flex items-start gap-3 rounded-2xl bg-slate-50 border border-slate-200 px-5 py-4 text-slate-700">
+            <Printer className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+            <span>
+              All accepted posters will be professionally printed by DIU and displayed at the
+              conference venue — reaching university leaders, academics, policymakers, and
+              international delegates.
+            </span>
+          </p>
         </div>
       </div>
     </section>
