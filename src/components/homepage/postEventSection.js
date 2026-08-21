@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Helicopter } from "lucide-react";
 
 export default function PostEventSection() {
   return (
@@ -13,6 +14,12 @@ export default function PostEventSection() {
               Extend your trip and discover the natural beauty of Bangladesh with exclusive
               helicopter tours.
             </p>
+            <div className="mt-5 flex justify-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary">
+                <Helicopter className="h-4 w-4 shrink-0" aria-hidden="true" />
+                Travel by Helicopter
+              </span>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
