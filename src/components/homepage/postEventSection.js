@@ -71,38 +71,40 @@ export default function PostEventSection() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-            <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative aspect-[3/2] w-full">
-                <div className="absolute inset-0 bg-slate-900" />
+            <div className="group relative rounded-3xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md hover:shadow-2xl transition-all duration-300">
+              <div className="relative h-[320px] sm:h-[400px] lg:h-[460px] w-full flex items-center justify-center">
                 <Image
                   src="/img1.jpg"
-                  alt="Site photo 1"
+                  alt="Dhaka City Exploration"
                   fill
-                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="object-contain p-2 sm:p-3 transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
-                  <h4 className="font-display text-xl font-semibold text-white">
-                    Dhaka City Exploration
-                  </h4>
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none">
+                  <div className="inline-flex items-center rounded-xl bg-black/60 backdrop-blur-md px-4 py-2 border border-white/15 shadow-sm">
+                    <h4 className="font-display text-lg sm:text-xl font-bold text-white tracking-wide">
+                      Dhaka City Exploration
+                    </h4>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
-              <div className="relative aspect-[3/2] w-full">
-                <div className="absolute inset-0 bg-slate-900" />
+            <div className="group relative rounded-3xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md hover:shadow-2xl transition-all duration-300">
+              <div className="relative h-[320px] sm:h-[400px] lg:h-[460px] w-full flex items-center justify-center">
                 <Image
                   src="/img2.jpeg"
-                  alt="Site photo 2"
+                  alt="Bangladesh Parliament Visit"
                   fill
-                  className="object-contain hover:scale-105 transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  className="object-contain p-2 sm:p-3 transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute bottom-0 left-0 p-6 w-full bg-linear-to-t from-black/60 to-transparent">
-                  <h4 className="font-display text-xl font-semibold text-white">
-                    Bangladesh Parliament Visit
-                  </h4>
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none">
+                  <div className="inline-flex items-center rounded-xl bg-black/60 backdrop-blur-md px-4 py-2 border border-white/15 shadow-sm">
+                    <h4 className="font-display text-lg sm:text-xl font-bold text-white tracking-wide">
+                      Bangladesh Parliament Visit
+                    </h4>
+                  </div>
                 </div>
               </div>
             </div>
