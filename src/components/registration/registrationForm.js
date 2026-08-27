@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import PhoneInputField from "@/components/registration/phoneInputField";
-import { calculatePricing, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
+import { calculatePricing, formatCurrency, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
 
@@ -24,6 +24,7 @@ const TSHIRT_SIZE_CHART = [
 ];
 const FOOD_OPTIONS = ["Vegan", "Vegetarian", "Halal", "Other", "None"];
 const YES_NO_OPTIONS = ["Yes", "No"];
+const AFFILIATION_OPTIONS = ["IAUP", "AUAP", "EURAS", "Partner Institution"];
 const FAMILY_MEMBER_OPTIONS = ["1", "2", "3", "4", "Others"];
 const PAYMENT_OPTIONS = [
   { value: "wire-transfer", label: "Wire Transfer" },
@@ -106,7 +107,9 @@ const INITIAL_FORM = {
   tShirtSize: "",
   foodRequirement: "",
   otherFood: "",
+  isLocalParticipant: "",
   isMemberUniversity: "",
+  memberAffiliation: "",
   hasFamilyMembers: "",
   familyMembersCount: "",
   familyMembersOther: "",
@@ -243,8 +246,18 @@ function validateForm(values) {
     errors.otherFood = "Please describe your food preferences.";
   }
 
+  if (!values.isLocalParticipant || !YES_NO_OPTIONS.includes(values.isLocalParticipant)) {
+    errors.isLocalParticipant = "Please select Yes or No.";
+  }
+
   if (!values.isMemberUniversity || !YES_NO_OPTIONS.includes(values.isMemberUniversity)) {
     errors.isMemberUniversity = "Please select Yes or No.";
+  }
+
+  if (values.isMemberUniversity === "Yes") {
+    if (!values.memberAffiliation || !AFFILIATION_OPTIONS.includes(values.memberAffiliation)) {
+      errors.memberAffiliation = "Please specify your affiliation.";
+    }
   }
 
   if (!values.hasFamilyMembers || !YES_NO_OPTIONS.includes(values.hasFamilyMembers)) {
@@ -388,10 +401,11 @@ export default function RegistrationForm() {
   const pricing = useMemo(
     () =>
       calculatePricing({
+        isLocal: formValues.isLocalParticipant === "Yes",
         isMember: formValues.isMemberUniversity === "Yes",
         familyMembersCount: familyMembers.length,
       }),
-    [formValues.isMemberUniversity, familyMembers.length]
+    [formValues.isLocalParticipant, formValues.isMemberUniversity, familyMembers.length]
   );
 
   const handleChange = (event) => {
@@ -429,6 +443,10 @@ export default function RegistrationForm() {
 
       if (name === "foodRequirement" && nextValue !== "Other") {
         updated.otherFood = "";
+      }
+
+      if (name === "isMemberUniversity" && nextValue !== "Yes") {
+        updated.memberAffiliation = "";
       }
 
       if (name === "hasFamilyMembers" && nextValue !== "Yes") {
@@ -1225,6 +1243,16 @@ export default function RegistrationForm() {
             )}
 
             <OptionGroup
+              legend="Are you a local participant?"
+              name="isLocalParticipant"
+              options={YES_NO_OPTIONS}
+              value={formValues.isLocalParticipant}
+              onChange={handleChange}
+              error={errors.isLocalParticipant}
+              required
+            />
+
+            <OptionGroup
               legend="Are you or your university a member of IAUP, AUAP, or EURAS, or a partner institution of DIU?"
               name="isMemberUniversity"
               options={YES_NO_OPTIONS}
@@ -1233,6 +1261,18 @@ export default function RegistrationForm() {
               error={errors.isMemberUniversity}
               required
             />
+
+            {formValues.isMemberUniversity === "Yes" && (
+              <OptionGroup
+                legend="Please specify your affiliation:"
+                name="memberAffiliation"
+                options={AFFILIATION_OPTIONS}
+                value={formValues.memberAffiliation}
+                onChange={handleChange}
+                error={errors.memberAffiliation}
+                required
+              />
+            )}
 
             <OptionGroup
               legend="Will any of your family members join the event?"
@@ -1514,21 +1554,25 @@ export default function RegistrationForm() {
                 <div>
                   <dt className="text-slate-500">Category</dt>
                   <dd className="font-semibold text-slate-900">
-                    {formValues.isMemberUniversity === "Yes"
-                      ? "IAUP / AUAP / DIU partner"
+                    {formValues.isLocalParticipant === "Yes"
+                      ? "Local Participant"
+                      : formValues.isMemberUniversity === "Yes"
+                      ? `Member / Partner Institution${formValues.memberAffiliation ? ` (${formValues.memberAffiliation})` : ""}`
                       : formValues.isMemberUniversity === "No"
                       ? "Non-partner"
-                      : "Select partner-university option above to see category"}
+                      : "Select options above to see category"}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-slate-500">Base fee</dt>
-                  <dd className="font-semibold text-slate-900">{formatUsd(pricing.baseFeeUsd)}</dd>
+                  <dd className="font-semibold text-slate-900">{formatCurrency(pricing.baseFee, pricing.currency)}</dd>
                 </div>
                 <div>
                   <dt className="text-slate-500">Family members</dt>
                   <dd className="font-semibold text-slate-900">
-                    {pricing.familyCount === 0
+                    {pricing.isLocal
+                      ? "N/A"
+                      : pricing.familyCount === 0
                       ? "None"
                       : `${pricing.familyCount} × ${formatUsd(FAMILY_MEMBER_FEE_USD)} = ${formatUsd(pricing.familyFeeUsd)}`}
                   </dd>
@@ -1536,9 +1580,11 @@ export default function RegistrationForm() {
               </dl>
               <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
                 <span className="text-sm font-semibold text-slate-900">Total payable</span>
-                <span className="font-display text-xl font-bold text-primary">{formatUsd(pricing.totalFeeUsd)}</span>
+                <span className="font-display text-xl font-bold text-primary">
+                  {formatCurrency(pricing.totalFee, pricing.currency)}
+                </span>
               </div>
-              {pricing.period.isClosed && (
+              {!pricing.isLocal && pricing.period.isClosed && (
                 <p className="mt-2 text-xs text-amber-700">
                   Registration window has closed. Please contact the organizer.
                 </p>

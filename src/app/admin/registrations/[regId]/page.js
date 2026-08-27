@@ -139,7 +139,9 @@ export default async function RegistrationDetailPage({ params }) {
           <Field label="Country" value={row.country} />
           <Field label="T-shirt size" value={row.tshirt_size} />
           <Field label="Food requirement" value={[row.food_requirement, row.other_food].filter(Boolean).join(" · ")} />
+          <Field label="Local Participant" value={row.is_local_participant} />
           <Field label="IAUP/AUAP/Partner university" value={row.is_member_university} />
+          <Field label="Affiliation" value={row.member_affiliation} />
           <Field label="Needs invitation letter" value={row.needs_invitation_letter} />
           <Field label="Optional post-event tour" value={row.post_event_tour} />
           <Field

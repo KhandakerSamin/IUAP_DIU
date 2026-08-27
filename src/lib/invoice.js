@@ -168,6 +168,7 @@ function InvoiceDoc({ registration, familyMembers }) {
   const tranId = registration.payment_tran_id || "—";
   const reffId = registration.payment_reff_id || "—";
   const familyCount = familyMembers.length;
+  const isLocal = registration.is_local_participant === "Yes";
   const isMember = registration.is_member_university === "Yes";
   // Wire transfers are invoiced before money moves, so the same document doubles
   // as a proforma: amber "payment due" pill, a due date, and bank instructions
@@ -177,16 +178,20 @@ function InvoiceDoc({ registration, familyMembers }) {
   const storedPeriodKey = registration.registration_period;
   const periodMeta = REGISTRATION_PERIODS.find((p) => p.key === storedPeriodKey);
   const pricing = calculatePricing({
+    isLocal,
     isMember,
     familyMembersCount: familyCount,
   });
   const periodLabel = periodMeta?.label || pricing.period.label;
   const periodRange = periodMeta?.range || pricing.period.range;
   const dueISO = periodMeta?.endsISO || pricing.period.endsISO;
-  const baseFee = pricing.baseFeeUsd;
+  const baseFee = pricing.baseFee;
   const familyFee = pricing.familyFeeUsd;
+  const feeCurrency = pricing.currency;
 
-  const baseLabel = `IAUP Semi-Annual Meeting 2026 — Registration (${isMember ? "Member" : "Non-member"} · ${periodLabel})`;
+  const baseLabel = isLocal
+    ? `IAUP Semi-Annual Meeting 2026 — Registration (Local Participant · ${periodLabel})`
+    : `IAUP Semi-Annual Meeting 2026 — Registration (${isMember ? "Member" : "Non-member"} · ${periodLabel})`;
 
   return (
     <Document title={`IAUP ${isWire ? "Proforma " : ""}Invoice ${reffId}`} author="IAUP Secretariat">
@@ -253,7 +258,7 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text>{baseLabel}</Text>
               </View>
               <Text style={styles.cellQty}>1</Text>
-              <Text style={styles.cellAmount}>{formatAmount(baseFee, "USD")}</Text>
+              <Text style={styles.cellAmount}>{formatAmount(baseFee, feeCurrency)}</Text>
             </View>
             {familyCount > 0 ? (
               <View style={styles.tableRowLast}>
@@ -273,7 +278,7 @@ function InvoiceDoc({ registration, familyMembers }) {
             <View style={styles.totalsBox}>
               <View style={styles.totalsRow}>
                 <Text style={styles.totalsLabel}>Subtotal</Text>
-                <Text>{formatAmount(baseFee + familyFee, "USD")}</Text>
+                <Text>{formatAmount(baseFee + (isLocal ? 0 : familyFee), feeCurrency)}</Text>
               </View>
               <View style={styles.totalsDivider} />
               <View style={styles.totalsRow}>

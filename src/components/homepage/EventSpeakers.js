@@ -62,11 +62,6 @@ export default function EventSpeakers() {
               <div className="absolute -bottom-12 -left-12 w-28 h-28 bg-emerald-500/20 rounded-full blur-2xl group-hover:bg-emerald-500/30 transition-all duration-500 pointer-events-none" />
 
               <div className="relative z-10 flex flex-col items-center text-center p-8 w-full h-full justify-center">
-                <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/25 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary shadow-xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-ping" />
-                  Featured Speaker
-                </span>
-
                 <div className="w-32 h-32 rounded-full bg-slate-200 mb-5 flex items-center justify-center border-4 border-white shadow-md overflow-hidden relative ring-4 ring-primary/25 group-hover:ring-primary/60 group-hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
                   <Image
                     src={speakers[0].image}

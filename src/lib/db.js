@@ -28,7 +28,9 @@ CREATE TABLE IF NOT EXISTS registrations (
   tshirt_size TEXT,
   food_requirement TEXT,
   other_food TEXT,
+  is_local_participant TEXT,
   is_member_university TEXT,
+  member_affiliation TEXT,
   has_family_members TEXT,
   family_members_count TEXT,
   family_members_other TEXT,
@@ -113,6 +115,8 @@ const MIGRATIONS = [
   `ALTER TABLE family_members ADD COLUMN tshirt_size TEXT`,
   `ALTER TABLE speaker_proposals ADD COLUMN updated_at TEXT`,
   `ALTER TABLE registrations ADD COLUMN post_event_tour TEXT`,
+  `ALTER TABLE registrations ADD COLUMN is_local_participant TEXT`,
+  `ALTER TABLE registrations ADD COLUMN member_affiliation TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -171,14 +175,16 @@ export function insertRegistration(row) {
       reg_id, title, other_title, given_name, surname, gender, passport_no, nationality,
       date_of_birth, organization, position, department, address, zip_code, city, country,
       phone, whatsapp, email, alternative_email, tshirt_size, food_requirement, other_food,
-      is_member_university, has_family_members, family_members_count, family_members_other,
-      needs_invitation_letter, post_event_tour, payment_method, profile_photo_path, passport_scan_path
+      is_local_participant, is_member_university, member_affiliation, has_family_members,
+      family_members_count, family_members_other, needs_invitation_letter, post_event_tour,
+      payment_method, profile_photo_path, passport_scan_path
     ) VALUES (
       @reg_id, @title, @other_title, @given_name, @surname, @gender, @passport_no, @nationality,
       @date_of_birth, @organization, @position, @department, @address, @zip_code, @city, @country,
       @phone, @whatsapp, @email, @alternative_email, @tshirt_size, @food_requirement, @other_food,
-      @is_member_university, @has_family_members, @family_members_count, @family_members_other,
-      @needs_invitation_letter, @post_event_tour, @payment_method, @profile_photo_path, @passport_scan_path
+      @is_local_participant, @is_member_university, @member_affiliation, @has_family_members,
+      @family_members_count, @family_members_other, @needs_invitation_letter, @post_event_tour,
+      @payment_method, @profile_photo_path, @passport_scan_path
     )
   `);
   const result = stmt.run(row);
@@ -347,7 +353,9 @@ const EDITABLE_FIELDS = new Set([
   "tshirt_size",
   "food_requirement",
   "other_food",
+  "is_local_participant",
   "is_member_university",
+  "member_affiliation",
   "has_family_members",
   "family_members_count",
   "family_members_other",

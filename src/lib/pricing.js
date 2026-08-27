@@ -1,3 +1,5 @@
+export const LOCAL_PARTICIPANT_FEE_BDT = 20000;
+
 export const MEMBER_FEES_USD = {
   early: 400,
   general: 500,
@@ -52,6 +54,12 @@ function coerceIsMember(value) {
   return false;
 }
 
+function coerceIsLocal(value) {
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") return value.trim().toLowerCase() === "yes";
+  return false;
+}
+
 function coerceFamilyCount(value) {
   const n = Number(value);
   if (!Number.isFinite(n) || n < 0) return 0;
@@ -72,19 +80,39 @@ export function isTestMode() {
   return getFlatFeeOverrideUsd() !== null;
 }
 
-export function calculatePricing({ isMember, familyMembersCount = 0, now } = {}) {
+export function calculatePricing({ isLocal, isMember, familyMembersCount = 0, now } = {}) {
   const period = getRegistrationPeriod(now);
+  const local = coerceIsLocal(isLocal);
   const member = coerceIsMember(isMember);
   const familyCount = coerceFamilyCount(familyMembersCount);
+
+  if (local) {
+    return {
+      period,
+      isLocal: true,
+      isMember: member,
+      familyCount,
+      baseFee: LOCAL_PARTICIPANT_FEE_BDT,
+      baseFeeUsd: 0,
+      familyFeeUsd: 0,
+      totalFee: LOCAL_PARTICIPANT_FEE_BDT,
+      totalFeeUsd: 0,
+      currency: "BDT",
+      isTestMode: false,
+    };
+  }
 
   const flatFeeUsd = getFlatFeeOverrideUsd();
   if (flatFeeUsd !== null) {
     return {
       period,
+      isLocal: false,
       isMember: member,
       familyCount,
+      baseFee: flatFeeUsd,
       baseFeeUsd: flatFeeUsd,
       familyFeeUsd: 0,
+      totalFee: flatFeeUsd,
       totalFeeUsd: flatFeeUsd,
       currency: "USD",
       isTestMode: true,
@@ -98,10 +126,13 @@ export function calculatePricing({ isMember, familyMembersCount = 0, now } = {})
 
   return {
     period,
+    isLocal: false,
     isMember: member,
     familyCount,
+    baseFee: baseFeeUsd,
     baseFeeUsd,
     familyFeeUsd,
+    totalFee: totalFeeUsd,
     totalFeeUsd,
     currency: "USD",
     isTestMode: false,
@@ -111,4 +142,13 @@ export function calculatePricing({ isMember, familyMembersCount = 0, now } = {})
 export function formatUsd(value) {
   const n = Number(value) || 0;
   return `USD ${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+}
+
+export function formatBdt(value) {
+  const n = Number(value) || 0;
+  return `BDT ${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+}
+
+export function formatCurrency(value, currency = "USD") {
+  return currency === "BDT" ? formatBdt(value) : formatUsd(value);
 }

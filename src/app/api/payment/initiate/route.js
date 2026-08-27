@@ -23,7 +23,7 @@ function resolveAmount(pricing) {
     const currency = (process.env.IAUP_DEV_FORCE_CURRENCY || "BDT").toUpperCase();
     return { amount: String(forced), currency, source: "dev-override" };
   }
-  return { amount: String(pricing.totalFeeUsd), currency: pricing.currency, source: "pricing" };
+  return { amount: String(pricing.totalFee), currency: pricing.currency, source: "pricing" };
 }
 
 export async function POST(request) {
@@ -62,6 +62,7 @@ export async function POST(request) {
 
   const familyMembers = getFamilyMembersForRegistration(registration.id);
   const pricing = calculatePricing({
+    isLocal: registration.is_local_participant === "Yes",
     isMember: registration.is_member_university === "Yes",
     familyMembersCount: familyMembers.length,
   });

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { calculatePricing, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
+import { calculatePricing, formatCurrency, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
 
@@ -62,6 +62,7 @@ export default function OnlinePaymentConfirmation() {
   const pricing = useMemo(
     () =>
       calculatePricing({
+        isLocal: registration?.isLocalParticipant === "Yes",
         isMember: registration?.isMemberUniversity === "Yes",
         familyMembersCount: parseFamilyCount(registration),
       }),
@@ -175,17 +176,23 @@ export default function OnlinePaymentConfirmation() {
               <div>
                 <dt className="text-slate-500">Category</dt>
                 <dd className="font-semibold text-slate-900">
-                  {pricing.isMember ? "IAUP / AUAP / DIU partner" : "Non-partner"}
+                  {pricing.isLocal
+                    ? "Local Participant"
+                    : pricing.isMember
+                    ? "IAUP / AUAP / EURAS / DIU partner"
+                    : "Non-partner"}
                 </dd>
               </div>
               <div>
                 <dt className="text-slate-500">Base fee</dt>
-                <dd className="font-semibold text-slate-900">{formatUsd(pricing.baseFeeUsd)}</dd>
+                <dd className="font-semibold text-slate-900">{formatCurrency(pricing.baseFee, pricing.currency)}</dd>
               </div>
               <div>
                 <dt className="text-slate-500">Family members</dt>
                 <dd className="font-semibold text-slate-900">
-                  {pricing.familyCount === 0
+                  {pricing.isLocal
+                    ? "N/A"
+                    : pricing.familyCount === 0
                     ? "None"
                     : `${pricing.familyCount} × ${formatUsd(FAMILY_MEMBER_FEE_USD)} = ${formatUsd(pricing.familyFeeUsd)}`}
                 </dd>
@@ -193,7 +200,9 @@ export default function OnlinePaymentConfirmation() {
             </dl>
             <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
               <span className="text-sm font-semibold text-slate-900">Total</span>
-              <span className="font-display text-xl font-bold text-primary">{formatUsd(pricing.totalFeeUsd)}</span>
+              <span className="font-display text-xl font-bold text-primary">
+                {formatCurrency(pricing.totalFee, pricing.currency)}
+              </span>
             </div>
           </div>
 

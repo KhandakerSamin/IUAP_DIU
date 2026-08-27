@@ -52,9 +52,8 @@ function CustomPanelSelect({ value, onChange }) {
           {value || "Select a panel discussion"}
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-200 ${
-            open ? "rotate-180 text-primary" : ""
-          }`}
+          className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-200 ${open ? "rotate-180 text-primary" : ""
+            }`}
         />
       </button>
 
@@ -62,7 +61,7 @@ function CustomPanelSelect({ value, onChange }) {
         type="text"
         required
         value={value}
-        onChange={() => {}}
+        onChange={() => { }}
         tabIndex={-1}
         className="sr-only"
         onInvalid={(e) => {
@@ -91,11 +90,10 @@ function CustomPanelSelect({ value, onChange }) {
                     onChange(panel);
                     setOpen(false);
                   }}
-                  className={`w-full text-start p-3 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-between gap-3 ${
-                    isSelected
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
+                  className={`w-full text-start p-3 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-between gap-3 ${isSelected
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    }`}
                 >
                   <span className="leading-snug break-words">{panel}</span>
                   {isSelected && (
@@ -369,9 +367,8 @@ function SpeakerFormModal({ open, onClose }) {
                     <UploadCloud className="w-5 h-5 text-slate-400 shrink-0" />
                   )}
                   <span
-                    className={`text-sm truncate ${
-                      fileName ? "text-slate-900 font-medium" : "text-slate-500"
-                    }`}
+                    className={`text-sm truncate ${fileName ? "text-slate-900 font-medium" : "text-slate-500"
+                      }`}
                   >
                     {fileName || "Click to upload PDF or Word document"}
                   </span>
@@ -450,10 +447,11 @@ export default function SpeakersSection() {
   const [formOpen, setFormOpen] = useState(false);
 
   const themes = [
-    "AI-Enhanced Pedagogies and Learning Innovation",
-    "Leadership, Governance, and Institutional Transformation in Higher Education",
-    "Higher Education Contributions to Sustainability and SDG Implementation",
-    "Entrepreneurial Universities, Innovation Hubs, and Industry Partnerships",
+    "Global Leaders Dialogue: The Future of Universities - From Traditional Institutions to AI-Native Ecosystems",
+    "Panel 1: Building Entrepreneurial Universities for Sustainable Economic Growth",
+    "Panel 2: Transforming Higher Education to Empower Women in an AI-Driven World",
+    "Panel 3: Sustainable Universities for a Sustainable Planet",
+    "Panel 4: Open Science, AI, and the Future of Academic Research",
   ];
 
   return (
@@ -486,7 +484,7 @@ export default function SpeakersSection() {
             {/* Left Column: Themes */}
             <div className="bg-white rounded-3xl p-7 sm:p-9 border border-slate-200 shadow-sm h-full">
               <h3 className="font-display text-2xl font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4">
-                Thematic Areas
+                Panel Discussion
               </h3>
               <p className="text-slate-600 leading-relaxed mb-8">
                 We welcome expressions of interest from individuals with
