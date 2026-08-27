@@ -334,6 +334,14 @@ export default function RegistrationsTable({ rows }) {
                   <td className="px-4 py-3 text-slate-500">{formatDate(r.created_at)}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
+                      <a
+                        href={`/api/admin/registrations/${encodeURIComponent(r.reg_id)}/invoice`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 transition"
+                      >
+                        Invoice
+                      </a>
                       <Link
                         href={detailHref}
                         className="rounded-lg border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"

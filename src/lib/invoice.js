@@ -18,7 +18,7 @@ const LINE = "#e2e8f0";
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 40,
+    paddingTop: 36,
     paddingBottom: 40,
     paddingHorizontal: 40,
     fontSize: 10,
@@ -31,16 +31,16 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     borderBottomWidth: 2,
     borderBottomColor: PRIMARY,
-    paddingBottom: 18,
+    paddingBottom: 16,
   },
   eventTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: PRIMARY },
   eventSubtitle: { fontSize: 10, color: MUTED, marginTop: 3 },
-  headerLogo: { height: 48, width: "auto", objectFit: "contain" },
-  invoiceTitle: { fontSize: 28, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
+  headerLogo: { height: 64, width: "auto", objectFit: "contain" },
+  invoiceTitle: { fontSize: 26, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
   invoiceMetaValue: { fontSize: 9, fontFamily: "Helvetica-Bold" },
-  section: { marginTop: 22 },
+  section: { marginTop: 18 },
   sectionTitle: {
     fontSize: 9,
     textTransform: "uppercase",
@@ -69,14 +69,14 @@ const styles = StyleSheet.create({
   tableHeaderCell: { fontSize: 9, fontFamily: "Helvetica-Bold", color: MUTED },
   tableRow: {
     flexDirection: "row",
-    paddingVertical: 10,
+    paddingVertical: 9,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: LINE,
   },
   tableRowLast: {
     flexDirection: "row",
-    paddingVertical: 10,
+    paddingVertical: 9,
     paddingHorizontal: 10,
   },
   cellDesc: { flex: 3 },
@@ -84,12 +84,12 @@ const styles = StyleSheet.create({
   cellAmount: { flex: 1.2, textAlign: "right" },
   muted: { color: MUTED, fontSize: 9, marginTop: 3 },
 
-  totalsWrap: { flexDirection: "row", justifyContent: "flex-end", marginTop: 14 },
+  totalsWrap: { flexDirection: "row", justifyContent: "flex-end", marginTop: 12 },
   totalsBox: { width: 220 },
   totalsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 4,
+    paddingVertical: 3,
   },
   totalsLabel: { color: MUTED },
   totalsDivider: { borderTopWidth: 1, borderTopColor: LINE, marginVertical: 4 },
@@ -101,23 +101,31 @@ const styles = StyleSheet.create({
   paymentLabel: { fontSize: 9, color: MUTED },
   paymentValue: { fontSize: 10 },
 
+  autoGenNote: {
+    fontSize: 8.5,
+    color: MUTED,
+    fontStyle: "italic",
+    marginTop: 12,
+  },
+
   footer: {
     position: "absolute",
     left: 40,
     right: 40,
-    bottom: 24,
-    fontSize: 9,
+    bottom: 20,
+    fontSize: 8.5,
     color: MUTED,
     borderTopWidth: 1,
     borderTopColor: LINE,
-    paddingTop: 8,
+    paddingTop: 6,
     textAlign: "center",
+    lineHeight: 1.3,
   },
 
   paidPill: {
     alignSelf: "flex-start",
-    marginTop: 8,
-    paddingVertical: 3,
+    marginTop: 6,
+    paddingVertical: 2.5,
     paddingHorizontal: 8,
     backgroundColor: "#dcfce7",
     color: "#166534",
@@ -125,20 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     borderRadius: 10,
   },
-
-  duePill: {
-    alignSelf: "flex-start",
-    marginTop: 8,
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    backgroundColor: "#fef3c7",
-    color: "#92400e",
-    fontFamily: "Helvetica-Bold",
-    fontSize: 9,
-    borderRadius: 10,
-  },
-  wireTitleSize: { fontSize: 18 },
-  wireNote: { fontSize: 9, color: MUTED, marginTop: 8, lineHeight: 1.4 },
+  wireNote: { fontSize: 9, color: MUTED, marginTop: 6, lineHeight: 1.35 },
 });
 
 function formatAmount(n, currency = "BDT") {
@@ -154,11 +149,11 @@ function formatDate(value) {
   return d.toLocaleString("en-GB", { dateStyle: "long", timeStyle: "short" });
 }
 
-function formatDay(value) {
-  if (!value) return "\u2014";
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return String(value);
-  return d.toLocaleDateString("en-GB", { dateStyle: "long" });
+function getInvoiceNumber(registration) {
+  if (registration?.id) {
+    return `IAUP-DIU-2026/${100 + Number(registration.id)}`;
+  }
+  return "IAUP-DIU-2026/101";
 }
 
 function InvoiceDoc({ registration, familyMembers }) {
@@ -167,12 +162,11 @@ function InvoiceDoc({ registration, familyMembers }) {
   const currency = (registration.payment_currency || "USD").toUpperCase();
   const tranId = registration.payment_tran_id || "—";
   const reffId = registration.payment_reff_id || "—";
+  const invoiceNo = getInvoiceNumber(registration);
+  const isPaid = registration.payment_status === "paid";
   const familyCount = familyMembers.length;
   const isLocal = registration.is_local_participant === "Yes";
   const isMember = registration.is_member_university === "Yes";
-  // Wire transfers are invoiced before money moves, so the same document doubles
-  // as a proforma: amber "payment due" pill, a due date, and bank instructions
-  // instead of the gateway transaction block.
   const isWire = registration.payment_method === "wire-transfer";
 
   const storedPeriodKey = registration.registration_period;
@@ -184,7 +178,6 @@ function InvoiceDoc({ registration, familyMembers }) {
   });
   const periodLabel = periodMeta?.label || pricing.period.label;
   const periodRange = periodMeta?.range || pricing.period.range;
-  const dueISO = periodMeta?.endsISO || pricing.period.endsISO;
   const baseFee = pricing.baseFee;
   const familyFee = pricing.familyFeeUsd;
   const feeCurrency = pricing.currency;
@@ -194,7 +187,7 @@ function InvoiceDoc({ registration, familyMembers }) {
     : `IAUP Semi-Annual Meeting 2026 — Registration (${isMember ? "Member" : "Non-member"} · ${periodLabel})`;
 
   return (
-    <Document title={`IAUP ${isWire ? "Proforma " : ""}Invoice ${reffId}`} author="IAUP Secretariat">
+    <Document title={`IAUP Invoice ${invoiceNo}`} author="IAUP Secretariat">
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
@@ -206,26 +199,22 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
               </>
             )}
-            <Text style={isWire ? styles.duePill : styles.paidPill}>{isWire ? "PAYMENT DUE" : "PAID"}</Text>
+            {isPaid ? <Text style={styles.paidPill}>PAID</Text> : null}
           </View>
           <View>
-            <Text style={isWire ? [styles.invoiceTitle, styles.wireTitleSize] : styles.invoiceTitle}>
-              {isWire ? "PROFORMA INVOICE" : "INVOICE"}
-            </Text>
+            <Text style={styles.invoiceTitle}>INVOICE</Text>
             <View style={styles.invoiceMetaRow}>
               <Text style={styles.invoiceMetaLabel}>Invoice #</Text>
-              <Text style={styles.invoiceMetaValue}>{reffId}</Text>
+              <Text style={styles.invoiceMetaValue}>{invoiceNo}</Text>
             </View>
             <View style={styles.invoiceMetaRow}>
               <Text style={styles.invoiceMetaLabel}>Date</Text>
               <Text style={styles.invoiceMetaValue}>{formatDate(registration.updated_at || new Date().toISOString())}</Text>
             </View>
-            {isWire ? (
-              <View style={styles.invoiceMetaRow}>
-                <Text style={styles.invoiceMetaLabel}>Payment due by</Text>
-                <Text style={styles.invoiceMetaValue}>{formatDay(dueISO)}</Text>
-              </View>
-            ) : null}
+            <View style={styles.invoiceMetaRow}>
+              <Text style={styles.invoiceMetaLabel}>Reg ID</Text>
+              <Text style={styles.invoiceMetaValue}>{registration.reg_id || reffId}</Text>
+            </View>
           </View>
         </View>
 
@@ -282,7 +271,7 @@ function InvoiceDoc({ registration, familyMembers }) {
               </View>
               <View style={styles.totalsDivider} />
               <View style={styles.totalsRow}>
-                <Text style={styles.totalsTotalLabel}>{isWire ? "Total due" : "Total"}</Text>
+                <Text style={styles.totalsTotalLabel}>Total</Text>
                 <Text style={styles.totalsTotalValue}>{formatAmount(amount, currency)}</Text>
               </View>
             </View>
@@ -298,8 +287,8 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.paymentValue}>Wire Transfer</Text>
               </View>
               <View style={styles.paymentItem}>
-                <Text style={styles.paymentLabel}>Invoice reference</Text>
-                <Text style={styles.paymentValue}>{reffId}</Text>
+                <Text style={styles.paymentLabel}>Invoice Number</Text>
+                <Text style={styles.paymentValue}>{invoiceNo}</Text>
               </View>
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Currency</Text>
@@ -307,7 +296,7 @@ function InvoiceDoc({ registration, familyMembers }) {
               </View>
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Status</Text>
-                <Text style={styles.paymentValue}>Awaiting transfer</Text>
+                <Text style={styles.paymentValue}>{isPaid ? "Paid" : "Awaiting transfer"}</Text>
               </View>
             </View>
             <Text style={styles.wireNote}>{WIRE_NOTE}</Text>
@@ -321,8 +310,8 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.paymentValue}>{tranId}</Text>
               </View>
               <View style={styles.paymentItem}>
-                <Text style={styles.paymentLabel}>Gateway reference</Text>
-                <Text style={styles.paymentValue}>{reffId}</Text>
+                <Text style={styles.paymentLabel}>Invoice Number</Text>
+                <Text style={styles.paymentValue}>{invoiceNo}</Text>
               </View>
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Method</Text>
@@ -336,8 +325,12 @@ function InvoiceDoc({ registration, familyMembers }) {
           </View>
         )}
 
+        <Text style={styles.autoGenNote}>
+          * This invoice is auto-generated and does not require a physical signature.
+        </Text>
+
         <Text style={styles.footer}>
-          {isWire ? "Registration recorded. " : ""}Thank you for registering. For any queries contact iaup-bd2026@daffodilvarsity.edu.bd · IAUP Secretariat,
+          This invoice is auto-generated. Thank you for registering. For any queries contact iaup-bd2026@daffodilvarsity.edu.bd · IAUP Secretariat,
           Daffodil International University, Bangladesh
         </Text>
       </Page>

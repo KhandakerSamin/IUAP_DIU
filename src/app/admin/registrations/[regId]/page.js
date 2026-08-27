@@ -98,9 +98,19 @@ export default async function RegistrationDetailPage({ params }) {
           <h1 className="font-display mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">{fullName}</h1>
           <p className="mt-1 font-mono text-xs text-slate-500">{row.reg_id}</p>
         </div>
-        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${badge}`}>
-          {row.payment_status}
-        </span>
+        <div className="flex items-center gap-2">
+          <a
+            href={`/api/admin/registrations/${encodeURIComponent(row.reg_id)}/invoice`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition"
+          >
+            View Invoice
+          </a>
+          <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${badge}`}>
+            {row.payment_status}
+          </span>
+        </div>
       </div>
 
       <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">

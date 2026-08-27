@@ -46,7 +46,7 @@ export async function GET(_request, ctx) {
   return new Response(buffer, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="IAUP-2026-${isWire ? "Proforma-" : ""}Invoice-${safeReff}.pdf"`,
+      "Content-Disposition": `attachment; filename="IAUP-DIU-2026-Invoice-${safeReff}.pdf"`,
       "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
     },

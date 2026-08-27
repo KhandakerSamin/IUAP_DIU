@@ -93,13 +93,14 @@ async function runWireFinalize(regId) {
   // rest of the pipeline (invoice route, lookups) works unchanged.
   if (!existing.payment_reff_id) {
     const pricing = calculatePricing({
+      isLocal: existing.is_local_participant === "Yes",
       isMember: existing.is_member_university === "Yes",
       familyMembersCount: familyMembers.length,
     });
     attachReffIdToRegistration(
       regId,
       regId,
-      String(pricing.totalFeeUsd),
+      String(pricing.totalFee),
       pricing.currency,
       pricing.period.key
     );
