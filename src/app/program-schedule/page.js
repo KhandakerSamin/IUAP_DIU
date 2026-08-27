@@ -51,7 +51,7 @@ function Item({ time, type, title, children, dressCode }) {
             <h3 className="font-serif text-[18px] font-medium leading-snug text-[#16241C] sm:text-[20px]">
               {title}
             </h3>
-            
+
             {dressCode && (
               <span className="rounded-full border border-[#E3E0D6] px-2.5 py-0.5 font-sans text-[11px] font-medium text-[#5B6660]">
                 Dress code: {dressCode}
@@ -103,9 +103,9 @@ export default function ProgramSchedulePage() {
   const [activeTab, setActiveTab] = useState("day-1");
 
   const tabs = [
-    { id: "day-1", label: "Day 1", sub: "19 Nov · Arrival" },
-    { id: "day-2", label: "Day 2", sub: "20 Nov · Global Vision" },
-    { id: "day-3", label: "Day 3", sub: "21 Nov · DIU Campus" },
+    { id: "day-1", label: "Day 1", sub: "19 November" },
+    { id: "day-2", label: "Day 2", sub: "20 November" },
+    { id: "day-3", label: "Day 3", sub: "21 November" },
   ];
 
   return (
@@ -118,10 +118,10 @@ export default function ProgramSchedulePage() {
         <section className="border-b border-[#E3E0D6]">
           <div className="mx-auto max-w-340 px-4 py-12 sm:px-6 lg:px-8">
             <p className="font-sans text-[12px] font-bold uppercase tracking-[0.28em] text-[#0F6E4F]">
-              Program Schedule &middot; Draft
+              Program Schedule &middot; Tentative
             </p>
             <h1 className="mt-4 font-serif text-[38px] font-semibold leading-[1.08] text-[#16241C] sm:text-[56px]">
-              IAUP Semi-Annual Conference 2026
+              IAUP Semi-Annual Meeting 2026, Dhaka, Bangladesh
             </h1>
             <p className="mt-5 max-w-5xl font-serif text-[20px] italic leading-relaxed text-[#454F49] sm:text-[23px]">
               Transforming higher education for a sustainable, innovative, and
@@ -154,17 +154,15 @@ export default function ProgramSchedulePage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex shrink-0 cursor-pointer items-baseline gap-2 rounded-full border px-5 py-2.5 font-sans text-[14px] font-semibold transition-all duration-200 ${
-                    isActive
-                      ? "border-primaryDark bg-primary text-white shadow-sm"
-                      : "border-[#E3E0D6] bg-white text-[#16241C] hover:border-primaryDark hover:text-primaryDark"
-                  }`}
+                  className={`flex shrink-0 cursor-pointer items-baseline gap-2 rounded-full border px-5 py-2.5 font-sans text-[14px] font-semibold transition-all duration-200 ${isActive
+                    ? "border-primaryDark bg-primary text-white shadow-sm"
+                    : "border-[#E3E0D6] bg-white text-[#16241C] hover:border-primaryDark hover:text-primaryDark"
+                    }`}
                 >
                   {tab.label}
                   <span
-                    className={`font-normal ${
-                      isActive ? "text-white/80" : "text-[#8A8577]"
-                    }`}
+                    className={`font-normal ${isActive ? "text-white/80" : "text-[#8A8577]"
+                      }`}
                   >
                     {tab.sub}
                   </span>
@@ -185,31 +183,31 @@ export default function ProgramSchedulePage() {
               venue="Daffodil Tower & Dhaka"
               accent="#8A8577"
             >
-              <Item time="All Day" type="logistics" title="Early & regular check-in">
+              <Item time="Day Long" type="logistics" title="Early and Regular Check-In">
                 Airport pick-up from Hazrat Shahjalal International Airport with
                 transfer to designated hotels. Conference help desk open in the
                 hotel lobby for visa, transport, local SIM, and city information.
               </Item>
-              <Item time="9:00 AM – 5:00 PM" type="logistics" title="Registration & kit distribution">
+              <Item time="09:00am – 05:00pm" type="logistics" title="Registration and Kit Distribution">
                 Delegate badge and conference kit distribution.
               </Item>
-              <Item time="9:30 – 11:00 AM" type="social" title="Complimentary golf">
-                Kurmitola Golf Club, for early-arrival guests, on request.
+              <Item time="09:30am – 11:00am" type="social" title="Complementary Golf play at Kurmitola Golf Club">
+                Kurmitola Golf Club for early-arriving guests (on request).
               </Item>
-              <Item time="11:30 AM – 12:30 PM" type="meeting" title="IAUP Executive Committee Meeting">
-                Venue: Hotel Sheraton Dhaka.
+              <Item time="11:30am – 12:30pm" type="meeting" title="IAUP Executive Committee Meeting">
+                Venue: Hotel Sheraton Dhaka
               </Item>
-              <Item time="12:30 – 1:30 PM" type="meeting" title="IAUP Board of Directors Meeting & lunch">
-                Venue: Hotel Sheraton Dhaka.
+              <Item time="12:30pm – 01:30pm" type="meeting" title="IAUP Board of Directors Meeting followed by Lunch">
+                Venue: Hotel Sheraton Dhaka
               </Item>
-              <Item time="2:30 – 3:00 PM" type="logistics" title="Transfer to Bangladesh National Parliament" />
-              <Item time="3:00 – 5:00 PM" type="campus" title="Explore Bangladesh National Parliament" />
-              <Item time="5:00 – 5:30 PM" type="logistics" title="Transfer to Daffodil Tower" />
-              <Item time="6:00 – 8:30 PM" type="social" title="Welcome reception">
+              <Item time="02:30pm – 03:00pm" type="logistics" title="Transfer to Bangladesh National Parliament" />
+              <Item time="03:00pm – 05:00pm" type="campus" title="Explore Bangladesh National Parliament" />
+              <Item time="05:00pm – 05:30pm" type="logistics" title="Transfer from Bangladesh National Parliament to Daffodil Tower" />
+              <Item time="06:00pm – 08:30pm" type="social" title="Welcome Reception">
                 Informal welcome by DIU leadership and IAUP representatives, with
                 a light cultural performance and networking dinner.
               </Item>
-              <Item time="8:30 – 9:00 PM" type="logistics" title="Transfer to hotels" />
+              <Item time="08:30pm – 09:00pm" type="logistics" title="Transfer to Hotel Sheraton and other program partner hotels." />
             </DaySection>
           )}
 
@@ -219,15 +217,15 @@ export default function ProgramSchedulePage() {
               eyebrow="Day 2 · Friday"
               title="Global Vision"
               dateLabel="20 November 2026"
-              venue="Sheraton Hotel Ballroom, Dhaka"
+              venue="Conference Sheraton Hotel Ballroom, Dhaka"
               accent="#0F6E4F"
             >
-              <Item time="8:30 – 10:00 AM" type="logistics" title="Registration, kit distribution & networking breakfast">
+              <Item time="08:30am – 10:00am" type="logistics" title="Registration, Kit Distribution and Networking Breakfast">
                 Final registration for local and international delegates, and
                 opening networking for presidents, rectors, vice chancellors,
                 senior leaders, partners, and speakers.
               </Item>
-              <Item time="10:00 – 11:00 AM" type="ceremony" title="Opening ceremony" dressCode="Formal">
+              <Item time="10:00am – 11:00am" type="ceremony" title="Opening Ceremony of the IAUP Semi-Annual Conference 2026" dressCode="Formal">
                 National anthem of Bangladesh; welcome video on transforming
                 higher education; Bangladeshi cultural performance; welcome
                 remarks by DIU leadership; address by the IAUP President;
@@ -236,20 +234,20 @@ export default function ProgramSchedulePage() {
                 media interaction.
               </Item>
               <Item
-                time="11:00 – 11:30 AM"
+                time="11:00am – 11:30am"
                 type="keynote"
-                title="Keynote — Universities After AI: Reimagining Higher Education for the Next Decade"
+                title="Keynote: Universities After AI — Reimagining Higher Education for the Next Decade"
               >
                 Flagship keynote framing the transition from digital
                 universities to AI-native universities, covering leadership,
                 governance, ethics, quality, employability, innovation, and
                 global partnerships.
               </Item>
-              <Item time="11:30 – 11:45 AM" type="logistics" title="Tea break" />
+              <Item time="11:30am – 11:45am" type="logistics" title="Tea Break" />
               <Item
-                time="11:45 AM – 12:30 PM"
+                time="11:45am – 12:30pm"
                 type="dialogue"
-                title="Global Leaders Dialogue — From Traditional Institutions to AI-Native Ecosystems"
+                title="Global Leaders Dialogue: The Future of Universities — From Traditional Institutions to AI-Native Ecosystems"
               >
                 University presidents and senior leaders from the USA, UK,
                 Canada, Australia, China, Japan, Europe, the Middle East,
@@ -257,11 +255,11 @@ export default function ProgramSchedulePage() {
                 entrepreneurship, rankings, equity, and institutional
                 transformation.
               </Item>
-              <Item time="12:30 – 1:50 PM" type="logistics" title="Lunch & Jumma prayer break" />
+              <Item time="12:30pm – 01:50pm" type="logistics" title="Lunch & Jumma Prayer Break" />
               <Item
-                time="2:00 – 2:45 PM"
+                time="02:00pm – 02:45pm"
                 type="panel"
-                title="Panel 1 — Building Entrepreneurial Universities for Sustainable Economic Growth"
+                title="Panel 1: Building Entrepreneurial Universities for Sustainable Economic Growth"
               >
                 Startup universities, incubators, technology transfer, venture
                 capital, commercialization, spin-offs, and student startups;
@@ -273,18 +271,18 @@ export default function ProgramSchedulePage() {
                   commercialization action checklist.
                 </span>
               </Item>
-              <Item time="2:45 – 3:00 PM" type="logistics" title="Tea break" />
+              <Item time="02:45pm – 03:00pm" type="logistics" title="Tea Break" />
               <Item
-                time="3:00 – 3:45 PM"
+                time="03:00pm – 03:45pm"
                 type="panel"
-                title="Panel 2 — Transforming Higher Education to Empower Women in an AI-Driven World"
+                title="Panel 2: Transforming Higher Education to Empower Women in an AI-Driven World"
               >
                 Women&apos;s leadership in academia; research and innovation for
                 women&apos;s empowerment; climate change, sustainability, and
                 gender; AI, ethics, and social justice.
               </Item>
-              <Item time="3:45 – 4:00 PM" type="logistics" title="Tea break" />
-              <Item time="4:00 – 5:00 PM" type="panel" title="Panel 3 — Sustainable Universities for a Sustainable Planet">
+              <Item time="03:45pm – 04:00pm" type="logistics" title="Tea Break" />
+              <Item time="04:00pm – 05:00pm" type="panel" title="Panel 3: Sustainable Universities for a Sustainable Planet">
                 Solar campuses, green buildings, ESG, SDGs, circular economy,
                 energy, waste, and biodiversity; case studies on carbon-neutral
                 campuses and carbon credits.
@@ -294,11 +292,11 @@ export default function ProgramSchedulePage() {
                   commitments and indicators.
                 </span>
               </Item>
-              <Item time="5:00 – 6:30 PM" type="logistics" title="Break & rest time" />
+              <Item time="05:00pm – 06:30pm" type="logistics" title="Break and Rest Time" />
               <Item
-                time="6:30 – 9:00 PM"
+                time="06:30pm – 09:00pm"
                 type="social"
-                title="Book launch, Bangladesh Cultural Night & networking dinner"
+                title="Book Launching, Bangladesh Cultural Night, and Networking Dinner"
                 dressCode="Smart Casual / Traditional"
               >
                 Launch of the conference book; cultural performances
@@ -314,16 +312,16 @@ export default function ProgramSchedulePage() {
               eyebrow="Day 3 · Saturday"
               title="DIU & the Road Ahead"
               dateLabel="21 November 2026"
-              venue="Daffodil International University, Daffodil Smart City"
+              venue="Daffodil International University at Daffodil Smart City"
               accent="#C6892E"
             >
-              <Item time="8:30 – 9:15 AM" type="logistics" title="Transfer from hotels to Daffodil Smart City" />
+              <Item time="08:30am – 09:15am" type="logistics" title="Transfer from Hotels to Daffodil Smart City" />
               <Item
-                time="9:15 – 10:30 AM"
+                time="09:15am – 10:30am"
                 type="campus"
-                title="Morning tea, parade & campus tour — DIU's 25th anniversary celebration"
+                title="Morning Tea, Parade, Campus Tour and Celebration of the 25th Year Anniversary of DIU"
               />
-              <Item time="10:30 – 11:15 AM" type="panel" title="Panel 4 — Open Science, AI, and the Future of Academic Research">
+              <Item time="10:30am – 11:15am" type="panel" title="Panel 4: Open Science, AI, and the Future of Academic Research">
                 Open science policies and global best practices; generative AI
                 for scientific discovery; human and artificial intelligence in
                 research.
@@ -335,28 +333,27 @@ export default function ProgramSchedulePage() {
                 </span>
               </Item>
               <Item
-                time="11:15 AM – 12:00 PM"
+                time="11:15am – 12:00pm"
                 type="panel"
-                title="Panel 5 — One Student, One AI: Preparing Every Learner for an AI-Powered World"
+                title="Parallel Sessions"
               >
-                A global discussion initiated by DIU on graduating with AI
-                skills, a portfolio, a career pathway, entrepreneurship
-                readiness, and global readiness — with a focus on inclusive AI
-                literacy, employability, and learner agency.
+                <div className="space-y-1">
+                  <p><strong className="font-semibold text-[#16241C]">Parallel Session 1:</strong> (Title will be confirmed)</p>
+                  <p><strong className="font-semibold text-[#16241C]">Parallel Session 2:</strong> (Title will be confirmed)</p>
+                </div>
               </Item>
-              <Item time="12:00 – 12:30 PM" type="ceremony" title="Closing ceremony">
+              <Item time="12:00pm – 12:30pm" type="ceremony" title="Closing Ceremony">
                 Conference recap documentary and experience sharing by student
                 volunteers; closing remarks by IAUP leadership, host university
                 leadership, invited guests, and partners; token of appreciation,
                 group photo, and vote of thanks.
               </Item>
-              <Item time="12:30 – 1:20 PM" type="ceremony" title="MoU signing ceremony" />
-              <Item time="1:30 – 2:30 PM" type="social" title="Farewell lunch" />
-              <Item time="2:30 – 3:30 PM" type="logistics" title="Transfer to hotels/airport or optional city tour" />
-              <Item time="3:30 – 6:30 PM" type="social" title="Optional city tour">
+              <Item time="12:30pm – 01:20pm" type="ceremony" title="MoU signing Ceremony / Closed- Door Women’s Tea Session" />
+              <Item time="01:30pm – 02:30pm" type="social" title="Farewell Lunch" />
+              <Item time="02:30pm – 06:30pm" type="social" title="Optional City Tour">
                 Visit to the Red Fort and shopping at Aarong.
               </Item>
-              <Item time="7:00 PM" type="logistics" title="Drop to program hotels" />
+              <Item time="07:00pm" type="logistics" title="Drop to Program Hotels" />
             </DaySection>
           )}
         </div>
