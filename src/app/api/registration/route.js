@@ -1,6 +1,9 @@
 import { insertFamilyMember, insertRegistration, runInTransaction } from "@/lib/db";
 import { saveUpload } from "@/lib/fileStorage";
+import { generateInvoiceBuffer } from "@/lib/invoice";
+import { sendRegistrationAdminNotification } from "@/lib/mailer";
 import { finalizeWireRegistration } from "@/lib/paymentFinalize";
+import { calculatePricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -179,12 +182,13 @@ export async function POST(request) {
     passport_scan_path: passportScanPath,
   };
 
+  let insertedId = null;
   try {
     runInTransaction(() => {
-      const registrationId = insertRegistration(registrationRow);
+      insertedId = insertRegistration(registrationRow);
       for (const fm of familyUploads) {
         insertFamilyMember({
-          registration_id: registrationId,
+          registration_id: insertedId,
           full_name: fm.fullName,
           // The form dropped the relationship field; the column and the admin
           // detail view still support it, so pass null rather than omit it.
@@ -203,8 +207,45 @@ export async function POST(request) {
     return Response.json({ error: "Could not save registration. Please try again." }, { status: 500 });
   }
 
-  // Wire transfer has no gateway step, so the proforma invoice + payment
-  // instructions go out here. A failure must not lose the registration.
+  const pricing = calculatePricing({
+    isLocal: registrationRow.is_local_participant === "Yes",
+    isMember: registrationRow.is_member_university === "Yes",
+    familyMembersCount: familyUploads.length,
+  });
+
+  // Pre-generate invoice buffer for notifications
+  let pdfBuffer = null;
+  try {
+    pdfBuffer = await generateInvoiceBuffer({
+      registration: {
+        ...registrationRow,
+        id: insertedId,
+        payment_amount: String(pricing.totalFee),
+        payment_currency: pricing.currency,
+        registration_period: pricing.period.key,
+      },
+      familyMembers: familyUploads,
+    });
+  } catch (err) {
+    console.error("[registration] could not generate invoice buffer for notification", err);
+  }
+
+  // Send admin notification to iaup-bd2026@daffodilvarsity.edu.bd with all submitted details
+  sendRegistrationAdminNotification({
+    registration: {
+      ...registrationRow,
+      id: insertedId,
+      payment_amount: String(pricing.totalFee),
+      payment_currency: pricing.currency,
+    },
+    familyMembers: familyUploads,
+    pricing,
+    pdfBuffer,
+  }).catch((err) => {
+    console.error("[registration] admin notification error", err);
+  });
+
+  // Wire transfer has no gateway step, so invoice + payment instructions go out here.
   if (registrationRow.payment_method === "wire-transfer") {
     const result = await finalizeWireRegistration(regId).catch((err) => {
       console.error("[registration] wire finalize failed", regId, err);
