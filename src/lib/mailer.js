@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { SECRETARIAT_EMAIL } from "@/lib/wire";
+import { BANK_DETAILS, SECRETARIAT_EMAIL } from "@/lib/wire";
 
 let cachedTransporter = null;
 
@@ -110,18 +110,27 @@ export async function sendWireConfirmationEmail({
   }
 
   const displayAmount = `${Number(amount || 0).toFixed(2)} ${currency || "USD"}`;
-  const dueLine = dueDate ? `The registration fee is due on or before ${dueDate}.` : "";
 
   const text = `Dear ${participantName || "Participant"},
 
 Thank you for registering for the IAUP Semi-Annual Meeting 2026 hosted by Daffodil International University.
 
-Your registration has been confirmed and recorded. You have chosen to pay by wire transfer; the invoice attached to this email shows the amount due: ${displayAmount}.
+Your registration has been recorded. You have chosen to pay by wire transfer; the invoice attached to this email shows the registration amount: ${displayAmount}.
 
 Invoice number: ${reffId}
-${dueLine}
 
-Our Secretariat will contact you at this email address with the wire transfer instructions. Please quote the invoice number in all correspondence.
+Account Information for Bank Transfer:
+----------------------------------------
+Account Name   : ${BANK_DETAILS.accountName}
+Account Number : ${BANK_DETAILS.accountNumber}
+Swift Code     : ${BANK_DETAILS.swiftCode}
+Bank Name      : ${BANK_DETAILS.bankName}
+Branch         : ${BANK_DETAILS.branch}
+Zip Code       : ${BANK_DETAILS.zipCode}
+
+** Note: ${BANK_DETAILS.note}
+
+Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to ${SECRETARIAT_EMAIL} for payment verification. Please quote your invoice number (${reffId}) in all correspondence.
 
 Should you have any queries in the meantime, feel free to contact us at ${SECRETARIAT_EMAIL}.
 
@@ -130,15 +139,62 @@ DIU Secretariat, IAUP Semi-Annual Meeting 2026
 Daffodil International University, Bangladesh`;
 
   const html = `<!DOCTYPE html>
-<html><body style="font-family: -apple-system, Segoe UI, sans-serif; color: #0f172a; line-height: 1.5;">
-<p>Dear ${participantName || "Participant"},</p>
-<p>Thank you for registering for the <strong>IAUP Semi-Annual Meeting 2026</strong> hosted by Daffodil International University.</p>
-<p>Your registration has been <strong>confirmed</strong> and recorded. You have chosen to pay by <strong>wire transfer</strong>; the invoice attached to this email shows the amount due: <strong>${displayAmount}</strong>.</p>
-<p>Invoice number: <code>${reffId}</code>${dueLine ? `<br/>${dueLine}` : ""}</p>
-<p>Our Secretariat will contact you at this email address with the wire transfer instructions. Please quote the invoice number in all correspondence.</p>
-<p>Should you have any queries in the meantime, feel free to contact us at <a href="mailto:${SECRETARIAT_EMAIL}">${SECRETARIAT_EMAIL}</a>.</p>
-<p>Best regards,<br/>DIU Secretariat, IAUP Semi-Annual Meeting 2026<br/>Daffodil International University, Bangladesh</p>
-</body></html>`;
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; line-height: 1.5; background-color: #f8fafc; padding: 20px; }
+    .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+    .header { background: #0b3d91; color: #ffffff; padding: 20px 24px; }
+    .header h2 { margin: 0; font-size: 20px; }
+    .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
+    .content { padding: 24px; font-size: 14px; line-height: 1.6; color: #1e293b; }
+    .bank-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin: 18px 0; }
+    .bank-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .bank-table td { padding: 5px 8px; vertical-align: top; }
+    .bank-table td.label { width: 35%; color: #64748b; font-weight: 600; }
+    .bank-table td.val { color: #0f172a; font-weight: 700; font-family: monospace, sans-serif; }
+    .note { color: #b45309; font-size: 12px; font-weight: 600; margin-top: 10px; }
+    .alert-box { background: #eff6ff; border-left: 4px solid #0b3d91; padding: 12px; margin: 16px 0; font-size: 13px; color: #1e40af; }
+    .footer { font-size: 12px; color: #94a3b8; text-align: center; padding: 16px 24px; border-top: 1px solid #f1f5f9; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h2>Registration Confirmed — IAUP 2026</h2>
+      <p>Daffodil International University, Bangladesh</p>
+    </div>
+    <div class="content">
+      <p>Dear ${participantName || "Participant"},</p>
+      <p>Thank you for registering for the <strong>IAUP Semi-Annual Meeting 2026</strong>. Your registration has been recorded. You have chosen to pay by <strong>wire transfer</strong>; the invoice attached to this email shows the registration amount: <strong>${displayAmount}</strong>.</p>
+      <p>Invoice number: <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-weight:bold;">${reffId}</code></p>
+      
+      <div class="bank-box">
+        <h4 style="margin:0 0 8px; color:#0b3d91; font-size:14px;">Account Information for Bank Transfer:</h4>
+        <table class="bank-table">
+          <tr><td class="label">Account Name:</td><td class="val">${BANK_DETAILS.accountName}</td></tr>
+          <tr><td class="label">Account Number:</td><td class="val">${BANK_DETAILS.accountNumber}</td></tr>
+          <tr><td class="label">Swift Code:</td><td class="val">${BANK_DETAILS.swiftCode}</td></tr>
+          <tr><td class="label">Bank Name:</td><td class="val">${BANK_DETAILS.bankName}</td></tr>
+          <tr><td class="label">Branch:</td><td class="val">${BANK_DETAILS.branch}</td></tr>
+          <tr><td class="label">Zip Code:</td><td class="val">${BANK_DETAILS.zipCode}</td></tr>
+        </table>
+        <p class="note">** Note: ${BANK_DETAILS.note}</p>
+      </div>
+
+      <div class="alert-box">
+        <strong>Next Step:</strong> Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to <a href="mailto:${SECRETARIAT_EMAIL}" style="color:#0b3d91; font-weight:bold;">${SECRETARIAT_EMAIL}</a> for payment verification. Please quote your invoice number (<code>${reffId}</code>) in all correspondence.
+      </div>
+
+      <p style="margin-top:20px;">Best regards,<br/><strong>DIU Secretariat, IAUP Semi-Annual Meeting 2026</strong><br/>Daffodil International University, Bangladesh</p>
+    </div>
+    <div class="footer">
+      Auto-generated invoice & notification &middot; IAUP Secretariat, Daffodil International University
+    </div>
+  </div>
+</body>
+</html>`;
 
   try {
     const info = await transporter.sendMail({

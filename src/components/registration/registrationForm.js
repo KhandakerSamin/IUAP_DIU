@@ -1683,12 +1683,28 @@ export default function RegistrationForm() {
                     Thank you for registering for the IAUP Semi-Annual Meeting 2026.
                   </p>
                   <p>
-                    Your registration has been successfully received. An invoice will be sent to your registered email
-                    address shortly. The invoice will include the bank details for payment. After completing the
-                    payment, please send the payment receipt to iaup-bd2026@daffodilvarsity.edu.bd for confirmation.
+                    Your registration has been successfully received. The invoice with full bank transfer details has been sent to your email and is ready for download below.
                   </p>
-                  <p>
-                    Thank you for your interest in joining the IAUP Semi-Annual Meeting 2026.
+
+                  <div className="rounded-lg bg-white p-3 border border-emerald-200/80 text-xs space-y-1.5 shadow-xs">
+                    <p className="font-bold text-primary">Account Information for Bank Transfer:</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 text-slate-700">
+                      <div><span className="text-slate-500 font-medium">Account Name:</span> Daffodil International University (International Affairs)</div>
+                      <div><span className="text-slate-500 font-medium">Account Number:</span> <span className="font-mono font-bold text-slate-900">110.110.25618</span></div>
+                      <div><span className="text-slate-500 font-medium">Swift Code:</span> <span className="font-mono font-bold text-slate-900">DBBLBDDHCTS</span></div>
+                      <div><span className="text-slate-500 font-medium">Bank Name:</span> Dutch Bangla Bank Ltd</div>
+                      <div><span className="text-slate-500 font-medium">Branch:</span> Dhanmondi Branch</div>
+                      <div><span className="text-slate-500 font-medium">Zip Code:</span> 1205</div>
+                    </div>
+                    <p className="text-[11px] text-amber-800 font-semibold pt-1 border-t border-slate-100">** Note: Transaction/Bank transfer charges are to be borne by the sender.</p>
+                  </div>
+
+                  <p className="text-xs">
+                    After completing the transfer, please reply or send your payment receipt to{" "}
+                    <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd" className="font-semibold text-primary hover:underline">
+                      iaup-bd2026@daffodilvarsity.edu.bd
+                    </a>{" "}
+                    for payment verification.
                   </p>
                   <div className="pt-2 border-t border-emerald-200/60 text-xs text-slate-600">
                     <span className="font-semibold text-slate-800">Queries? </span>

@@ -5,7 +5,7 @@ import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { dataDir } from "@/lib/db";
 import { calculatePricing, FAMILY_MEMBER_FEE_USD, REGISTRATION_PERIODS } from "@/lib/pricing";
-import { WIRE_NOTE } from "@/lib/wire";
+import { BANK_DETAILS, WIRE_NOTE } from "@/lib/wire";
 
 const LOGO_PATH = path.join(process.cwd(), "public", "iuap_invoice.jpg");
 const LOGO_DATA_URI = existsSync(LOGO_PATH)
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
   invoiceMetaValue: { fontSize: 9, fontFamily: "Helvetica-Bold" },
-  section: { marginTop: 18 },
+  section: { marginTop: 14 },
   sectionTitle: {
     fontSize: 9,
     textTransform: "uppercase",
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   cellAmount: { flex: 1.2, textAlign: "right" },
   muted: { color: MUTED, fontSize: 9, marginTop: 3 },
 
-  totalsWrap: { flexDirection: "row", justifyContent: "flex-end", marginTop: 12 },
+  totalsWrap: { flexDirection: "row", justifyContent: "flex-end", marginTop: 10 },
   totalsBox: { width: 220 },
   totalsRow: {
     flexDirection: "row",
@@ -96,24 +96,62 @@ const styles = StyleSheet.create({
   totalsTotalLabel: { fontFamily: "Helvetica-Bold", fontSize: 12 },
   totalsTotalValue: { fontFamily: "Helvetica-Bold", fontSize: 12, color: PRIMARY },
 
-  paymentGrid: { flexDirection: "row", flexWrap: "wrap", marginTop: 6 },
-  paymentItem: { width: "50%", marginBottom: 6 },
-  paymentLabel: { fontSize: 9, color: MUTED },
-  paymentValue: { fontSize: 10 },
+  paymentGrid: { flexDirection: "row", flexWrap: "wrap", marginTop: 4 },
+  paymentItem: { width: "50%", marginBottom: 4 },
+  paymentLabel: { fontSize: 8.5, color: MUTED },
+  paymentValue: { fontSize: 9.5 },
+
+  bankBox: {
+    marginTop: 6,
+    padding: 8,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: LINE,
+    borderRadius: 4,
+  },
+  bankTitle: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: PRIMARY,
+    marginBottom: 4,
+  },
+  bankGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  bankItem: {
+    width: "50%",
+    marginBottom: 3,
+  },
+  bankLabel: {
+    fontSize: 8,
+    color: MUTED,
+  },
+  bankValue: {
+    fontSize: 8.5,
+    fontFamily: "Helvetica-Bold",
+    color: "#0f172a",
+  },
+  bankNote: {
+    fontSize: 8,
+    color: "#b45309",
+    fontFamily: "Helvetica-Bold",
+    marginTop: 3,
+  },
 
   autoGenNote: {
-    fontSize: 8.5,
+    fontSize: 8,
     color: MUTED,
     fontStyle: "italic",
-    marginTop: 12,
+    marginTop: 10,
   },
 
   footer: {
     position: "absolute",
     left: 40,
     right: 40,
-    bottom: 20,
-    fontSize: 8.5,
+    bottom: 16,
+    fontSize: 8,
     color: MUTED,
     borderTopWidth: 1,
     borderTopColor: LINE,
@@ -133,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     borderRadius: 10,
   },
-  wireNote: { fontSize: 9, color: MUTED, marginTop: 6, lineHeight: 1.35 },
+  wireNote: { fontSize: 8.5, color: MUTED, marginTop: 4, lineHeight: 1.35 },
 });
 
 function formatAmount(n, currency = "BDT") {
@@ -150,8 +188,9 @@ function formatDate(value) {
 }
 
 function getInvoiceNumber(registration) {
-  if (registration?.id) {
-    return `IAUP-DIU-2026/${100 + Number(registration.id)}`;
+  const idNum = Number(registration?.id);
+  if (Number.isFinite(idNum) && idNum > 0) {
+    return `IAUP-DIU-2026/${100 + idNum}`;
   }
   return "IAUP-DIU-2026/101";
 }
@@ -299,6 +338,38 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.paymentValue}>{isPaid ? "Paid" : "Awaiting transfer"}</Text>
               </View>
             </View>
+
+            <View style={styles.bankBox}>
+              <Text style={styles.bankTitle}>Account Information (Bank Transfer)</Text>
+              <View style={styles.bankGrid}>
+                <View style={styles.bankItem}>
+                  <Text style={styles.bankLabel}>Account Name</Text>
+                  <Text style={styles.bankValue}>{BANK_DETAILS.accountName}</Text>
+                </View>
+                <View style={styles.bankItem}>
+                  <Text style={styles.bankLabel}>Account Number</Text>
+                  <Text style={styles.bankValue}>{BANK_DETAILS.accountNumber}</Text>
+                </View>
+                <View style={styles.bankItem}>
+                  <Text style={styles.bankLabel}>Swift Code</Text>
+                  <Text style={styles.bankValue}>{BANK_DETAILS.swiftCode}</Text>
+                </View>
+                <View style={styles.bankItem}>
+                  <Text style={styles.bankLabel}>Bank Name</Text>
+                  <Text style={styles.bankValue}>{BANK_DETAILS.bankName}</Text>
+                </View>
+                <View style={styles.bankItem}>
+                  <Text style={styles.bankLabel}>Branch</Text>
+                  <Text style={styles.bankValue}>{BANK_DETAILS.branch}</Text>
+                </View>
+                <View style={styles.bankItem}>
+                  <Text style={styles.bankLabel}>Zip Code</Text>
+                  <Text style={styles.bankValue}>{BANK_DETAILS.zipCode}</Text>
+                </View>
+              </View>
+              <Text style={styles.bankNote}>** Note: {BANK_DETAILS.note}</Text>
+            </View>
+
             <Text style={styles.wireNote}>{WIRE_NOTE}</Text>
           </View>
         ) : (
