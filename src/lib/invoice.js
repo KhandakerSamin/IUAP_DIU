@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: PRIMARY },
   eventSubtitle: { fontSize: 10, color: MUTED, marginTop: 3 },
-  headerLogo: { height: 64, width: "auto", objectFit: "contain" },
+  headerLogo: { width: 230, height: 82, objectFit: "contain" },
   invoiceTitle: { fontSize: 26, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
