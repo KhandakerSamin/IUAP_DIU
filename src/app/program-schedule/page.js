@@ -3,33 +3,19 @@
 import { useState } from "react";
 import Footer from "@/components/global/footer";
 import Nev from "@/components/global/nev";
-import { Fraunces, Inter } from "next/font/google";
-
-const display = Fraunces({
-  subsets: ["latin"],
-  weight: ["500", "600", "900"],
-  style: ["normal", "italic"],
-  variable: "--font-display",
-});
-
-const body = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
-});
 
 // ---------------------------------------------------------------------------
 // Design Tokens & Badges
 // ---------------------------------------------------------------------------
 const TYPE_STYLES = {
-  ceremony: { label: "Ceremony", dot: "bg-[#16241C]" },
-  keynote: { label: "Keynote", dot: "bg-[#0F6E4F]" },
-  panel: { label: "Panel", dot: "bg-[#0F6E4F]" },
-  dialogue: { label: "Dialogue", dot: "bg-[#0F6E4F]" },
-  social: { label: "Social", dot: "bg-[#C6892E]" },
-  campus: { label: "Campus", dot: "bg-[#C6892E]" },
-  logistics: { label: "Logistics", dot: "bg-[#B9B4A4]" },
-  meeting: { label: "Meeting", dot: "bg-[#16241C]" },
+  ceremony: { label: "Ceremony", dot: "bg-primaryDark" },
+  keynote: { label: "Keynote", dot: "bg-secondary" },
+  panel: { label: "Panel", dot: "bg-primary" },
+  dialogue: { label: "Dialogue", dot: "bg-secondaryDark" },
+  social: { label: "Social", dot: "bg-amber-500" },
+  campus: { label: "Campus", dot: "bg-amber-600" },
+  logistics: { label: "Logistics", dot: "bg-slate-400" },
+  meeting: { label: "Meeting", dot: "bg-slate-700" },
 };
 
 function Item({ time, type, title, children, dressCode }) {
@@ -37,29 +23,29 @@ function Item({ time, type, title, children, dressCode }) {
   return (
     <li className="relative pl-8 sm:pl-10">
       <span
-        className={`absolute left-[3px] top-2 h-2.5 w-2.5 rounded-full ring-4 ring-[#F6F5F1] ${t.dot}`}
+        className={`absolute left-[3px] top-2 h-2.5 w-2.5 rounded-full ring-4 ring-slate-100 ${t.dot}`}
         aria-hidden="true"
       />
       <div className="flex flex-col gap-2 pb-8 sm:flex-row sm:gap-8">
         <div className="shrink-0 sm:w-40">
-          <span className="inline-block whitespace-nowrap rounded-lg border border-[#E3E0D6] bg-white px-3 py-1 font-sans text-[14.5px] font-bold tracking-tight text-[#16241C] sm:text-[15px]">
+          <span className="inline-block whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-1 text-[14px] font-bold tracking-tight text-slate-800 shadow-xs sm:text-[15px]">
             {time}
           </span>
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h3 className="font-serif text-[18px] font-medium leading-snug text-[#16241C] sm:text-[20px]">
+            <h3 className="text-[18px] font-bold leading-snug text-slate-900 sm:text-[20px]">
               {title}
             </h3>
 
             {dressCode && (
-              <span className="rounded-full border border-[#E3E0D6] px-2.5 py-0.5 font-sans text-[11px] font-medium text-[#5B6660]">
+              <span className="rounded-full border border-slate-200 px-2.5 py-0.5 text-[11px] font-medium text-slate-600 bg-slate-50">
                 Dress code: {dressCode}
               </span>
             )}
           </div>
           {children && (
-            <div className="mt-2 font-sans text-[15px] leading-relaxed text-[#454F49]">
+            <div className="mt-2 text-[15px] leading-relaxed text-slate-600">
               {children}
             </div>
           )}
@@ -75,24 +61,24 @@ function DaySection({ eyebrow, dateLabel, title, venue, accent, children }) {
       <div className="mb-9 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p
-            className="font-sans text-[12px] font-bold uppercase tracking-[0.2em]"
+            className="text-[12px] font-bold uppercase tracking-[0.2em]"
             style={{ color: accent }}
           >
             {eyebrow}
           </p>
-          <h2 className="mt-2 font-serif text-[32px] font-semibold leading-none text-[#16241C] sm:text-[42px]">
+          <h2 className="mt-2 text-[28px] font-bold leading-none text-slate-900 sm:text-[38px]">
             {title}
           </h2>
-          <p className="mt-2 font-sans text-[15px] text-[#5B6660]">{dateLabel}</p>
+          <p className="mt-2 text-[15px] text-slate-600">{dateLabel}</p>
         </div>
-        <div className="rounded-2xl border border-[#E3E0D6] bg-white px-5 py-3 font-sans text-[14px] text-[#454F49] shadow-sm sm:text-right">
-          <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-[#8A8577]">
+        <div className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-[14px] text-slate-700 shadow-xs sm:text-right">
+          <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
             Venue
           </span>
           {venue}
         </div>
       </div>
-      <ol className="relative before:absolute before:left-0.75 before:top-1 before:h-[calc(100%-1rem)] before:w-px before:bg-[#E3E0D6]">
+      <ol className="relative before:absolute before:left-0.75 before:top-1 before:h-[calc(100%-1rem)] before:w-px before:bg-slate-200">
         {children}
       </ol>
     </section>
@@ -111,33 +97,31 @@ export default function ProgramSchedulePage() {
   return (
     <>
       <Nev />
-      <main
-        className={`${display.variable} ${body.variable} min-h-screen bg-slate-150 pb-24 pt-20 font-sans`}
-      >
+      <main className="min-h-screen bg-slate-50/60 pb-24 pt-20">
         {/* Header Hero */}
-        <section className="border-b border-[#E3E0D6]">
+        <section className="border-b border-slate-200 bg-white">
           <div className="mx-auto max-w-340 px-4 py-12 sm:px-6 lg:px-8">
-            <p className="font-sans text-[12px] font-bold uppercase tracking-[0.28em] text-[#0F6E4F]">
+            <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-primary">
               Program Schedule &middot; Tentative
             </p>
-            <h1 className="mt-4 font-serif text-[38px] font-semibold leading-[1.08] text-[#16241C] sm:text-[56px]">
+            <h1 className="mt-4 text-[32px] font-bold leading-[1.12] text-slate-900 sm:text-[48px]">
               IAUP Semi-Annual Meeting 2026, Dhaka, Bangladesh
             </h1>
-            <p className="mt-5 max-w-5xl font-serif text-[20px] italic leading-relaxed text-[#454F49] sm:text-[23px]">
+            <p className="mt-4 max-w-5xl text-[18px] leading-relaxed text-slate-600 sm:text-[20px]">
               Transforming higher education for a sustainable, innovative, and
               AI-enabled future.
             </p>
-            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-sans text-[15px] text-[#454F49]">
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#16241C]" />
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-[14px] text-slate-600">
+              <span className="flex items-center gap-2 font-medium">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 19–21 November 2026
               </span>
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#16241C]" />
+              <span className="flex items-center gap-2 font-medium">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 Dhaka, Bangladesh
               </span>
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#16241C]" />
+              <span className="flex items-center gap-2 font-medium">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 All times shown in GMT+6
               </span>
             </div>
@@ -146,7 +130,7 @@ export default function ProgramSchedulePage() {
 
         {/* Sticky Day Navigation Tabs — sits just below the fixed site header (Nev),
            so it needs its own top offset instead of top-0, or it hides underneath it. */}
-        <nav className="sticky top-20 z-30 border-b border-[#E3E0D6] bg-[#F6F5F1]/95 shadow-sm backdrop-blur-sm">
+        <nav className="sticky top-20 z-30 border-b border-slate-200 bg-white/95 shadow-xs backdrop-blur-sm">
           <div className="mx-auto flex max-w-340 gap-3 overflow-x-auto px-4 py-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-6 lg:px-8">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -154,14 +138,14 @@ export default function ProgramSchedulePage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex shrink-0 cursor-pointer items-baseline gap-2 rounded-full border px-5 py-2.5 font-sans text-[14px] font-semibold transition-all duration-200 ${isActive
+                  className={`flex shrink-0 cursor-pointer items-baseline gap-2 rounded-full border px-5 py-2.5 text-[14px] font-semibold transition-all duration-200 ${isActive
                     ? "border-primaryDark bg-primary text-white shadow-sm"
-                    : "border-[#E3E0D6] bg-white text-[#16241C] hover:border-primaryDark hover:text-primaryDark"
+                    : "border-slate-200 bg-white text-slate-800 hover:border-primaryDark hover:text-primaryDark"
                     }`}
                 >
                   {tab.label}
                   <span
-                    className={`font-normal ${isActive ? "text-white/80" : "text-[#8A8577]"
+                    className={`font-normal ${isActive ? "text-white/80" : "text-slate-500"
                       }`}
                   >
                     {tab.sub}
@@ -180,7 +164,7 @@ export default function ProgramSchedulePage() {
               eyebrow="Day 1 · Thursday"
               title="Arrival & Welcome"
               dateLabel="19 November 2026"
-              venue="Daffodil Tower & Dhaka"
+              venue="Daffodil Tower and Dhaka"
               accent="#8A8577"
             >
               <Item time="Day Long" type="logistics" title="Early and Regular Check-In">
@@ -360,17 +344,17 @@ export default function ProgramSchedulePage() {
 
         {/* Legend Footer */}
         <div className="mx-auto mt-4 max-w-340 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-[#E3E0D6] pt-6 font-sans text-[13px] text-[#5B6660]">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-slate-200 pt-6 text-[13px] text-slate-600">
             {Object.values(TYPE_STYLES)
               .filter((v, i, arr) => arr.findIndex((x) => x.label === v.label) === i)
               .map((t) => (
-                <span key={t.label} className="flex items-center gap-2">
+                <span key={t.label} className="flex items-center gap-2 font-medium">
                   <span className={`h-2 w-2 rounded-full ${t.dot}`} />
                   {t.label}
                 </span>
               ))}
           </div>
-          <p className="mt-6 font-sans text-[13px] text-[#8A8577]">
+          <p className="mt-6 text-[13px] text-slate-400">
             Schedule is tentative and subject to change. Last updated ahead of
             the conference — please check this page for the latest version.
           </p>

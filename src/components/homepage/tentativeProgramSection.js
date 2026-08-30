@@ -3,7 +3,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 const schedule = [
   {
     day: "19 Nov 2026 (Thursday)",
-    venue: "Daffodil Tower & Dhaka",
+    venue: "Daffodil Tower and Dhaka",
     title: "Arrival, Meetings & Welcome Reception",
     events: [
       "Early & Regular Check-In & Kit Distribution",
@@ -27,7 +27,7 @@ const schedule = [
   },
   {
     day: "21 Nov 2026 (Saturday)",
-    venue: "Daffodil Smart City, Birulia",
+    venue: "Daffodil International University at Daffodil Smart City",
     title: "25th Anniversary Celebration & Closing",
     events: [
       "Morning Tea, Parade & Campus Tour (Celebrating 25th Anniversary of DIU)",
