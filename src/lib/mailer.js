@@ -30,7 +30,7 @@ function fromAddress() {
   return `${name} <${email}>`;
 }
 
-export async function sendInvoiceEmail({ to, participantName, reffId, amount, currency, pdfBuffer }) {
+export async function sendInvoiceEmail({ to, participantName, reffId, invoiceNumber, amount, currency, pdfBuffer }) {
   const transporter = getTransporter();
   if (!transporter) {
     console.log("[mailer] SMTP not configured; skipping email to", to);
@@ -41,6 +41,8 @@ export async function sendInvoiceEmail({ to, participantName, reffId, amount, cu
   }
 
   const displayAmount = `${Number(amount || 0).toFixed(2)} ${currency || "BDT"}`;
+  const invNo = invoiceNumber || (reffId?.startsWith?.("reg-") ? "IAUP-DIU-2026/101" : reffId);
+  const safeInvNo = String(invNo).replace(/[^a-zA-Z0-9-_]/g, "");
 
   const text = `Dear ${participantName || "Participant"},
 
@@ -48,7 +50,8 @@ Thank you for registering for the IAUP Semi-Annual Meeting 2026 hosted by Daffod
 
 We have received your payment of ${displayAmount}. Your invoice is attached to this email.
 
-Reference: ${reffId}
+Invoice Number: ${invNo}
+Registration Reference: ${reffId}
 
 Should you have any queries, feel free to contact us at iaup-bd2026@daffodilvarsity.edu.bd.
 
@@ -61,7 +64,8 @@ Daffodil International University, Bangladesh`;
 <p>Dear ${participantName || "Participant"},</p>
 <p>Thank you for registering for the <strong>IAUP Semi-Annual Meeting 2026</strong> hosted by Daffodil International University.</p>
 <p>We have received your payment of <strong>${displayAmount}</strong>. Your invoice is attached to this email.</p>
-<p>Reference: <code>${reffId}</code></p>
+<p><strong>Invoice Number:</strong> <code style="background:#e0e7ff; color:#1e1b4b; padding:3px 8px; border-radius:4px; font-weight:bold;">${invNo}</code></p>
+<p style="font-size:12px; color:#64748b;">Registration Reference: <code>${reffId}</code></p>
 <p>Should you have any queries, feel free to contact us at <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd">iaup-bd2026@daffodilvarsity.edu.bd</a>.</p>
 <p>Best regards,<br/>DIU Secretariat, IAUP Semi-Annual Meeting 2026<br/>Daffodil International University, Bangladesh</p>
 </body></html>`;
@@ -70,13 +74,13 @@ Daffodil International University, Bangladesh`;
     const info = await transporter.sendMail({
       from: fromAddress(),
       to,
-      subject: `IAUP 2026 Registration — Payment Received (${reffId})`,
+      subject: `IAUP 2026 Registration — Payment Received (${invNo})`,
       text,
       html,
       attachments: pdfBuffer
         ? [
             {
-              filename: `IAUP-DIU-2026-Invoice-${reffId}.pdf`,
+              filename: `IAUP-DIU-2026-Invoice-${safeInvNo}.pdf`,
               content: pdfBuffer,
               contentType: "application/pdf",
             },
@@ -95,6 +99,7 @@ export async function sendWireConfirmationEmail({
   to,
   participantName,
   reffId,
+  invoiceNumber,
   amount,
   currency,
   dueDate,
@@ -110,6 +115,8 @@ export async function sendWireConfirmationEmail({
   }
 
   const displayAmount = `${Number(amount || 0).toFixed(2)} ${currency || "USD"}`;
+  const invNo = invoiceNumber || (reffId?.startsWith?.("reg-") ? "IAUP-DIU-2026/101" : reffId);
+  const safeInvNo = String(invNo).replace(/[^a-zA-Z0-9-_]/g, "");
 
   const text = `Dear ${participantName || "Participant"},
 
@@ -117,7 +124,8 @@ Thank you for registering for the IAUP Semi-Annual Meeting 2026 hosted by Daffod
 
 Your registration has been recorded. You have chosen to pay by wire transfer; the invoice attached to this email shows the registration amount: ${displayAmount}.
 
-Invoice number: ${reffId}
+Invoice Number: ${invNo}
+Registration Reference: ${reffId}
 
 Account Information for Bank Transfer:
 ----------------------------------------
@@ -130,7 +138,7 @@ Zip Code       : ${BANK_DETAILS.zipCode}
 
 ** Note: ${BANK_DETAILS.note}
 
-Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to ${SECRETARIAT_EMAIL} for payment verification. Please quote your invoice number (${reffId}) in all correspondence.
+Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to ${SECRETARIAT_EMAIL} for payment verification. Please quote your Invoice Number (${invNo}) in all correspondence.
 
 Should you have any queries in the meantime, feel free to contact us at ${SECRETARIAT_EMAIL}.
 
@@ -168,7 +176,8 @@ Daffodil International University, Bangladesh`;
     <div class="content">
       <p>Dear ${participantName || "Participant"},</p>
       <p>Thank you for registering for the <strong>IAUP Semi-Annual Meeting 2026</strong>. Your registration has been recorded. You have chosen to pay by <strong>wire transfer</strong>; the invoice attached to this email shows the registration amount: <strong>${displayAmount}</strong>.</p>
-      <p>Invoice number: <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-weight:bold;">${reffId}</code></p>
+      <p><strong>Invoice Number:</strong> <code style="background:#e0e7ff; color:#1e1b4b; padding:3px 8px; border-radius:4px; font-weight:bold; font-size:15px;">${invNo}</code></p>
+      <p style="font-size:12px; color:#64748b;">Registration Reference: <code>${reffId}</code></p>
       
       <div class="bank-box">
         <h4 style="margin:0 0 8px; color:#0b3d91; font-size:14px;">Account Information for Bank Transfer:</h4>
@@ -184,13 +193,13 @@ Daffodil International University, Bangladesh`;
       </div>
 
       <div class="alert-box">
-        <strong>Next Step:</strong> Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to <a href="mailto:${SECRETARIAT_EMAIL}" style="color:#0b3d91; font-weight:bold;">${SECRETARIAT_EMAIL}</a> for payment verification. Please quote your invoice number (<code>${reffId}</code>) in all correspondence.
+        <strong>Next Step:</strong> Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to <a href="mailto:${SECRETARIAT_EMAIL}" style="color:#0b3d91; font-weight:bold;">${SECRETARIAT_EMAIL}</a> for payment verification. Please quote your Invoice Number (<code>${invNo}</code>) in all correspondence.
       </div>
 
       <p style="margin-top:20px;">Best regards,<br/><strong>DIU Secretariat, IAUP Semi-Annual Meeting 2026</strong><br/>Daffodil International University, Bangladesh</p>
     </div>
     <div class="footer">
-      Auto-generated invoice & notification &middot; IAUP Secretariat, Daffodil International University
+      Auto-generated invoice &middot; IAUP Secretariat, Daffodil International University
     </div>
   </div>
 </body>
@@ -200,13 +209,13 @@ Daffodil International University, Bangladesh`;
     const info = await transporter.sendMail({
       from: fromAddress(),
       to,
-      subject: `IAUP 2026 Registration Confirmed — Invoice ${reffId}`,
+      subject: `IAUP 2026 Registration Confirmed — Invoice ${invNo}`,
       text,
       html,
       attachments: pdfBuffer
         ? [
             {
-              filename: `IAUP-DIU-2026-Invoice-${reffId}.pdf`,
+              filename: `IAUP-DIU-2026-Invoice-${safeInvNo}.pdf`,
               content: pdfBuffer,
               contentType: "application/pdf",
             },

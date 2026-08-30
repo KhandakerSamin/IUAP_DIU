@@ -6,7 +6,7 @@ import {
   markInvoiceSent,
   setInvoicePath,
 } from "@/lib/db";
-import { writeInvoiceToDisk } from "@/lib/invoice";
+import { writeInvoiceToDisk, getInvoiceNumber } from "@/lib/invoice";
 import { sendInvoiceEmail, sendWireConfirmationEmail } from "@/lib/mailer";
 import { calculatePricing } from "@/lib/pricing";
 
@@ -46,10 +46,12 @@ async function runFinalize(reffId) {
         const { readInvoiceFromDisk } = await import("@/lib/invoice");
         pdfBuffer = await readInvoiceFromDisk(invoicePath).catch(() => null);
       }
+      const invoiceNumber = getInvoiceNumber(registration);
       const result = await sendInvoiceEmail({
         to: registration.email,
         participantName: `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant",
         reffId,
+        invoiceNumber,
         amount: registration.payment_amount,
         currency: registration.payment_currency,
         pdfBuffer,
@@ -89,8 +91,7 @@ async function runWireFinalize(regId) {
   const familyMembers = getFamilyMembersForRegistration(existing.id);
 
   // A wire transfer has no gateway reference, so the registration id doubles as
-  // the invoice number. reg-… and the gateway's iaup-… ids can't collide, so the
-  // rest of the pipeline (invoice route, lookups) works unchanged.
+  // the invoice lookup reference.
   if (!existing.payment_reff_id) {
     const pricing = calculatePricing({
       isLocal: existing.is_local_participant === "Yes",
@@ -136,11 +137,13 @@ async function runWireFinalize(regId) {
         isMember: registration.is_member_university === "Yes",
         familyMembersCount: familyMembers.length,
       });
+      const invoiceNumber = getInvoiceNumber(registration);
       const result = await sendWireConfirmationEmail({
         to: registration.email,
         participantName:
           `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant",
         reffId: registration.payment_reff_id,
+        invoiceNumber,
         amount: registration.payment_amount,
         currency: registration.payment_currency,
         dueDate: new Date(pricing.period.endsISO).toLocaleDateString("en-GB", { dateStyle: "long" }),

@@ -42,11 +42,11 @@ export async function GET(_request, ctx) {
     return new Response("Invoice unavailable.", { status: 500 });
   }
 
-  const safeReff = String(reffId).replace(/[^a-zA-Z0-9-_]/g, "");
+  const invNo = row?.id ? `IAUP-DIU-2026-${100 + Number(row.id)}` : String(reffId).replace(/[^a-zA-Z0-9-_]/g, "");
   return new Response(buffer, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="IAUP-DIU-2026-Invoice-${safeReff}.pdf"`,
+      "Content-Disposition": `attachment; filename="Invoice-${invNo}.pdf"`,
       "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
     },

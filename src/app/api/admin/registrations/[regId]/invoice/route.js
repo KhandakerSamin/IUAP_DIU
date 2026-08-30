@@ -56,12 +56,12 @@ export async function GET(_request, ctx) {
     }
   }
 
-  const safeRegId = String(registration.reg_id).replace(/[^a-zA-Z0-9-_]/g, "");
+  const invNo = registration?.id ? `IAUP-DIU-2026-${100 + Number(registration.id)}` : String(registration.reg_id).replace(/[^a-zA-Z0-9-_]/g, "");
 
   return new Response(buffer, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename="IAUP-DIU-2026-Invoice-${safeRegId}.pdf"`,
+      "Content-Disposition": `inline; filename="Invoice-${invNo}.pdf"`,
       "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
     },

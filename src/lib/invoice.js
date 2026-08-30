@@ -187,7 +187,7 @@ function formatDate(value) {
   return d.toLocaleString("en-GB", { dateStyle: "long", timeStyle: "short" });
 }
 
-function getInvoiceNumber(registration) {
+export function getInvoiceNumber(registration) {
   const idNum = Number(registration?.id);
   if (Number.isFinite(idNum) && idNum > 0) {
     return `IAUP-DIU-2026/${100 + idNum}`;
