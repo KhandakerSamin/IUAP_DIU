@@ -56,9 +56,8 @@ function ConfirmModal({ open, title, message, confirmLabel = "Confirm", onConfir
             type="button"
             onClick={onConfirm}
             disabled={busy}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-60 ${
-              danger ? "bg-red-600 hover:bg-red-700" : "bg-slate-900 hover:bg-slate-800"
-            }`}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-60 ${danger ? "bg-red-600 hover:bg-red-700" : "bg-slate-900 hover:bg-slate-800"
+              }`}
           >
             {busy ? "Working…" : confirmLabel}
           </button>

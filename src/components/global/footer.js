@@ -2,8 +2,8 @@ import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 // Inline SVGs for social icons to replace deprecated Lucide brand icons
-const Facebook = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>;
-const Instagram = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>;
+const Facebook = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>;
+const Instagram = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>;
 const Linkedin = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>;
 const Youtube = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" /><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" /></svg>;
 
@@ -16,7 +16,7 @@ export default function Footer() {
   ];
 
   const resources = [
-    { href: "/registration", label: "Registration" },
+    { href: "/#registration", label: "Registration" },
     { href: "/#venues", label: "Venues" },
     { href: "/#important-dates", label: "Important Dates" },
     { href: "/pre-departure-guidelines", label: "Pre-Departure Guidelines" },
@@ -28,7 +28,7 @@ export default function Footer() {
     <footer className="bg-dark text-slate-300 pt-20 pb-10 border-t-4 border-primary">
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
-          
+
           {/* Brand Column */}
           <div className="lg:col-span-4 flex flex-col items-start">
             <div className="bg-slate-50 p-4 rounded-xl shadow-sm mb-6 inline-block">
@@ -41,8 +41,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-slate-400 text-sm leading-relaxed mb-8 max-w-sm">
-              Daffodil International University (DIU) is a leading private university in Bangladesh, recognized for its commitment to digital transformation and global academic leadership.
-            </p>
+              The International Association of University Presidents (IAUP) is a prestigious global network of university leaders dedicated to promoting international understanding, academic collaboration, and responsible leadership in higher education.</p>
             <div className="flex gap-4">
               <a href="https://www.facebook.com/profile.php?id=61591646473173" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-slate-400">
                 <Facebook className="w-5 h-5" />

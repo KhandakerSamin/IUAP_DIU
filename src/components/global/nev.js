@@ -104,7 +104,7 @@ export default function Nev() {
           </div>
 
           <div className="hidden xl:flex items-center justify-end w-48 shrink-0">
-            <Link href="/registration" className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-sm hover:bg-primary-dark hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
+            <Link href="/#registration" className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-sm hover:bg-primary-dark hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
               <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-linear-to-b from-transparent via-transparent to-black"></span>
               <span className="relative">Register Now</span>
             </Link>
@@ -137,7 +137,7 @@ export default function Nev() {
           <Link href="/call-for-contributions" onClick={closeMenu} className="py-2 text-slate-800 font-medium hover:text-secondary transition-colors">
             Call for Contributions
           </Link>
-          <Link href="/registration" onClick={closeMenu} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-all text-center mt-2 shadow-sm">
+          <Link href="/#registration" onClick={closeMenu} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-all text-center mt-2 shadow-sm">
             Register Now
           </Link>
         </div>

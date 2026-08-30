@@ -23,7 +23,7 @@ export default function CtaSection() {
               Secure your place at the IAUP Semi-Annual Meeting 2026 hosted by Daffodil International University. Early bird registration ends <span className="font-semibold text-white">September 20, 2026</span>.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-5 reveal reveal-delay-2">
-              <Link href="/registration" className="group flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-semibold sm:text-lg hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 w-full sm:w-auto justify-center">
+              <Link href="/#registration" className="group flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-semibold sm:text-lg hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 w-full sm:w-auto justify-center">
                 Register Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
