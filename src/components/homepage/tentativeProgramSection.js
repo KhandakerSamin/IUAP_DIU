@@ -2,39 +2,56 @@ import { CalendarDays, MapPin } from "lucide-react";
 
 const schedule = [
   {
-    day: "19 Nov 2026 (Thursday)",
+    day: "19 November 2026 (Thursday)",
     venue: "Daffodil Tower and Dhaka",
-    title: "Arrival, Meetings & Welcome Reception",
+    title: "Day 1 Program",
     events: [
-      "Early & Regular Check-In & Kit Distribution",
-      "Complementary Golf at Kurmitola Golf Club",
-      "IAUP Executive Committee & Board of Directors Meetings (Hotel Sheraton)",
-      "Explore Bangladesh National Parliament",
-      "Welcome Reception hosted by Daffodil International University",
+      "Day Long — Early and Regular Check-In",
+      "09:00am-05:00pm — Registration and Kit Distribution",
+      "09:30am-11:00 am — Complementary Golf play at Kurmitola Golf Club for early-arriving guests (on request)",
+      "11:30am-12:30pm — IAUP Executive Committee Meeting Venue: Hotel Sheraton Dhaka",
+      "12:30pm-01:30pm — IAUP Board of Directors Meeting followed by Lunch Venue: Hotel Sheraton Dhaka",
+      "02:30pm-03:00pm — Transfer to Bangladesh National Parliament",
+      "03:00pm – 5:00pm — Explore Bangladesh National Parliament",
+      "05:00pm-05:30pm — Transfer from Bangladesh National Parliament to Daffodil Tower",
+      "06:00pm-08:30pm — Welcome Reception",
+      "08:30pm-09:00pm — Transfer to Hotel Sheraton and other program partner hotels.",
     ],
   },
   {
-    day: "20 Nov 2026 (Friday)",
+    day: "20 November 2026 (Friday)",
     venue: "Conference Sheraton Hotel Ballroom, Dhaka",
-    title: "Main Conference, Dialogue & Cultural Night",
+    title: "Day 2 Program",
     events: [
-      "Registration, Kit Distribution & Networking Breakfast",
-      "Opening Ceremony & Keynote: Universities After AI",
-      "Global Leaders Dialogue: Traditional Institutions to AI-Native Ecosystems",
-      "Panel Sessions: Entrepreneurial Universities, Women Empowerment, & Sustainability",
-      "Book Launching, Bangladesh Cultural Night & Networking Dinner",
+      "08:30am-10:00am — Registration, Kit Distribution and Networking Breakfast",
+      "10:00am-11:00am — Opening Ceremony of the IAUP Semi-Annual Conference 2026",
+      "11:00am-11:30am — Keynote: Universities After AI - Reimagining Higher Education for the Next Decade",
+      "11:30am-11:45am — Tea Break",
+      "11:45am-12:30pm — Global Leaders Dialogue: The Future of Universities - From Traditional Institutions to AI-Native Ecosystems",
+      "12:30pm-01:50pm — Lunch & Jumma Prayer Break",
+      "02:00pm-02:45pm — Panel 1: Building Entrepreneurial Universities for Sustainable Economic Growth",
+      "02:45pm-03:00pm — Tea Break",
+      "03:00pm-03:45pm — Panel 2: Transforming Higher Education to Empower Women in an AI-Driven World",
+      "03:45pm-04:00pm — Tea Break",
+      "04:00pm-05:00pm — Panel 3: Sustainable Universities for a Sustainable Planet",
+      "05:00pm-6:30pm — Break and Rest Time",
+      "06:30pm-09:00pm — Book Launching, Bangladesh Cultural Night, and Networking Dinner",
     ],
   },
   {
-    day: "21 Nov 2026 (Saturday)",
+    day: "21 November 2026 (Saturday)",
     venue: "Daffodil International University at Daffodil Smart City",
-    title: "25th Anniversary Celebration & Closing",
+    title: "Day 3 Program",
     events: [
-      "Morning Tea, Parade & Campus Tour (Celebrating 25th Anniversary of DIU)",
-      "Panel 4: Open Science, AI, and the Future of Academic Research",
-      "Parallel Sessions 1 & 2",
-      "Closing Ceremony & MoU Signing / Closed-Door Women’s Tea Session",
-      "Farewell Lunch & Optional City Tour",
+      "08:30am-09:15am — Transfer from Hotels to Daffodil Smart City",
+      "09:15am - 10:30am — Morning Tea, Parade, Campus Tour and Celebration of the 25th Year Anniversary of DIU",
+      "10:30am-11:15am — Panel 4: Open Science, AI, and the Future of Academic Research",
+      "11:15am-12:00pm — Parallel Session 1: (Title will be confirmed) Parallel Session 2: (Title will be confirmed)",
+      "12:00pm-12:30pm — Closing Ceremony",
+      "12:30pm-1:20pm — MoU signing Ceremony / Closed- Door Women’s Tea Session",
+      "1:30pm-02:30pm — Farewell Lunch",
+      "02:30pm-06:30pm — Optional City Tour",
+      "07:00pm — Drop to Program Hotels",
     ],
   },
 ];
@@ -48,15 +65,15 @@ export default function TentativeProgramSection() {
             Program Schedule
           </span>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6">
-            Tentative <span className="gradient-text">Schedule</span>
+            Program <span className="gradient-text">Schedule</span>
           </h2>
-          <p className="text-lg text-muted leading-relaxed">
-            Join us for an exciting 3-day event packed with high-level dialogs, governance meetings, cultural immersions, and the grand celebration of DIU&apos;s 25th anniversary.
+          <p className="text-lg text-slate-700 font-medium leading-relaxed">
+            Transforming Higher Education for a Sustainable, Innovative, and AI-Enabled Future
           </p>
         </div>
 
-        {/* Premium Row-wise Schedule */}
-        <div className="max-w-4xl mx-auto mb-24 border-t border-slate-200">
+        {/* Schedule */}
+        <div className="max-w-5xl mx-auto mb-24 border-t border-slate-200">
           {schedule.map((item, idx) => (
             <div
               key={idx}
@@ -68,29 +85,26 @@ export default function TentativeProgramSection() {
                 <div className="flex items-center gap-3 mb-3 text-primary">
                   <CalendarDays className="w-5 h-5" />
                   <span className="font-semibold tracking-wider uppercase text-sm">
-                    {`Day ${idx + 1}`}
+                    {`DAY ${idx + 1}`}
                   </span>
                 </div>
-                <h4 className="font-display font-bold text-2xl text-dark mb-4 leading-snug">
+                <h4 className="font-display font-bold text-xl sm:text-2xl text-dark mb-4 leading-snug">
                   {item.day}
                 </h4>
                 {item.venue && (
-                  <div className="inline-flex items-center gap-2 bg-white 0 rounded-full px-4 py-2 text-sm text-muted w-fit mt-auto group-hover:border-primary/30 transition-colors">
+                  <div className="inline-flex items-center gap-2 bg-slate-100 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-slate-800 w-fit mt-auto border border-slate-200">
                     <MapPin className="w-4 h-4 text-primary shrink-0" />
-                    <span className="font-medium">{item.venue}</span>
+                    <span className="font-semibold">{item.venue}</span>
                   </div>
                 )}
               </div>
 
               {/* Right: Details */}
               <div className="md:w-2/3 flex flex-col justify-center">
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-dark mb-6 group-hover:text-primary transition-colors">
-                  {item.title}
-                </h3>
-                <ul className="space-y-4">
+                <ul className="space-y-3">
                   {item.events.map((event, i) => (
-                    <li key={i} className="flex items-start gap-4 text-muted group-hover:text-dark transition-colors duration-300">
-                      <div className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2.5 shrink-0 group-hover:bg-primary transition-colors duration-300" />
+                    <li key={i} className="flex items-start gap-3 text-slate-800 font-medium text-sm sm:text-base">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
                       <span className="leading-relaxed">{event}</span>
                     </li>
                   ))}
@@ -99,9 +113,6 @@ export default function TentativeProgramSection() {
             </div>
           ))}
         </div>
-
-        
-
       </div>
     </section>
   );
