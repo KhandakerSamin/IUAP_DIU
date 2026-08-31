@@ -46,7 +46,7 @@ function Item({ time, type, title, children }) {
   );
 }
 
-function DaySection({ eyebrow, dateLabel, venue, children }) {
+function DaySection({ eyebrow, title, dateLabel, venue, children }) {
   return (
     <section className="py-8 sm:py-10">
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between border-b border-slate-200 pb-6">
@@ -54,9 +54,10 @@ function DaySection({ eyebrow, dateLabel, venue, children }) {
           <p className="text-[13px] font-bold uppercase tracking-[0.2em] text-primary">
             {eyebrow}
           </p>
-          <h2 className="mt-2 text-[26px] font-bold leading-tight text-slate-950 sm:text-[34px]">
-            {dateLabel}
+          <h2 className="mt-2 text-[24px] font-bold leading-tight text-slate-950 sm:text-[32px]">
+            {title}
           </h2>
+          <p className="mt-1 text-[15px] font-semibold text-slate-600">{dateLabel}</p>
         </div>
         <div className="rounded-2xl border border-slate-300 bg-white px-5 py-3.5 text-[14px] text-slate-900 shadow-xs sm:text-right">
           <span className="block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-600 mb-0.5">
@@ -141,8 +142,9 @@ export default function ProgramSchedulePage() {
           {/* DAY 1 */}
           {activeTab === "day-1" && (
             <DaySection
-              eyebrow="DAY 1: 19 November 2026 (Thursday)"
-              dateLabel="19 November 2026 (Thursday)"
+              eyebrow="DAY 1 · THURSDAY"
+              title="Arrival, Meetings & Welcome Reception"
+              dateLabel="19 November 2026"
               venue="Program at Daffodil Tower and Dhaka"
             >
               <Item time="Day Long" type="logistics" title="Early and Regular Check-In" />
@@ -185,8 +187,9 @@ export default function ProgramSchedulePage() {
           {/* DAY 2 */}
           {activeTab === "day-2" && (
             <DaySection
-              eyebrow="DAY 2: 20 November 2026 (Friday)"
-              dateLabel="20 November 2026 (Friday)"
+              eyebrow="DAY 2 · FRIDAY"
+              title="Main Conference, Dialogue & Cultural Night"
+              dateLabel="20 November 2026"
               venue="Program at Conference Sheraton Hotel Ballroom, Dhaka"
             >
               <Item
@@ -240,8 +243,9 @@ export default function ProgramSchedulePage() {
           {/* DAY 3 */}
           {activeTab === "day-3" && (
             <DaySection
-              eyebrow="DAY 3: 21 November 2026 (Saturday)"
-              dateLabel="21 November 2026 (Saturday)"
+              eyebrow="DAY 3 · SATURDAY"
+              title="DIU 25th Anniversary Celebration & Closing"
+              dateLabel="21 November 2026"
               venue="Program at Daffodil International University at Daffodil Smart City"
             >
               <Item

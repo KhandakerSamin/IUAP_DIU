@@ -729,7 +729,7 @@ export default function RegistrationForm() {
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-primary">IAUP Semi Annual Meeting 2026, Dhaka, Bangladesh</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-primary">IAUP Semi-Annual Meeting 2026, Dhaka, Bangladesh</p>
             <h1 className="font-display mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">Registration Form</h1>
             <p className="mt-3 text-sm text-slate-600 sm:text-base">Daffodil International University | Event Date: 19-21 November 2026</p>
           </div>
