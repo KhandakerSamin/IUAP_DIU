@@ -30,6 +30,17 @@ export default function CouponsTable({ rows, baseUrl }) {
   const [form, setForm] = useState({ code: "", note: "", max_uses: "", expires_at: "" });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+
+  const copyLink = async (id, link) => {
+    try {
+      await navigator.clipboard.writeText(link);
+    } catch {
+      return; // clipboard permission denied or unavailable; input is still click-to-select
+    }
+    setCopiedId(id);
+    setTimeout(() => setCopiedId((prev) => (prev === id ? null : prev)), 1500);
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -180,13 +191,22 @@ export default function CouponsTable({ rows, baseUrl }) {
                   </td>
                   <td className={`${TD} whitespace-nowrap`}>{formatDate(row.created_at)}</td>
                   <td className={TD}>
-                    <input
-                      type="text"
-                      readOnly
-                      value={link}
-                      onClick={(e) => e.target.select()}
-                      className="w-64 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-600"
-                    />
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        type="text"
+                        readOnly
+                        value={link}
+                        onClick={(e) => e.target.select()}
+                        className="w-56 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-600"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => copyLink(row.id, link)}
+                        className="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                      >
+                        {copiedId === row.id ? "Copied!" : "Copy"}
+                      </button>
+                    </div>
                   </td>
                   <td className={TD}>
                     <div className="flex flex-wrap gap-2">
