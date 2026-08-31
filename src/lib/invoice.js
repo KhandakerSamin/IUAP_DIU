@@ -207,6 +207,7 @@ function InvoiceDoc({ registration, familyMembers }) {
   const isLocal = registration.is_local_participant === "Yes";
   const isMember = registration.is_member_university === "Yes";
   const isWire = registration.payment_method === "wire-transfer";
+  const couponCode = registration.coupon_code;
 
   const storedPeriodKey = registration.registration_period;
   const periodMeta = REGISTRATION_PERIODS.find((p) => p.key === storedPeriodKey);
@@ -308,6 +309,12 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.totalsLabel}>Subtotal</Text>
                 <Text>{formatAmount(baseFee + (isLocal ? 0 : familyFee), feeCurrency)}</Text>
               </View>
+              {couponCode ? (
+                <View style={styles.totalsRow}>
+                  <Text style={styles.totalsLabel}>Discount (Coupon: {couponCode})</Text>
+                  <Text>-{formatAmount(baseFee + (isLocal ? 0 : familyFee), feeCurrency)}</Text>
+                </View>
+              ) : null}
               <View style={styles.totalsDivider} />
               <View style={styles.totalsRow}>
                 <Text style={styles.totalsTotalLabel}>Total</Text>
@@ -376,17 +383,21 @@ function InvoiceDoc({ registration, familyMembers }) {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Payment details</Text>
             <View style={styles.paymentGrid}>
-              <View style={styles.paymentItem}>
-                <Text style={styles.paymentLabel}>Transaction ID</Text>
-                <Text style={styles.paymentValue}>{tranId}</Text>
-              </View>
+              {couponCode ? null : (
+                <View style={styles.paymentItem}>
+                  <Text style={styles.paymentLabel}>Transaction ID</Text>
+                  <Text style={styles.paymentValue}>{tranId}</Text>
+                </View>
+              )}
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Invoice Number</Text>
                 <Text style={styles.paymentValue}>{invoiceNo}</Text>
               </View>
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Method</Text>
-                <Text style={styles.paymentValue}>Online Payment · 1Card</Text>
+                <Text style={styles.paymentValue}>
+                  {couponCode ? `Complimentary (Coupon: ${couponCode})` : "Online Payment · 1Card"}
+                </Text>
               </View>
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Currency</Text>

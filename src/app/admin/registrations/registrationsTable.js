@@ -326,9 +326,16 @@ export default function RegistrationsTable({ rows }) {
                   <td className="px-4 py-3 text-slate-700">{r.phone || "—"}</td>
                   <td className="px-4 py-3 text-slate-700">{r.country || "—"}</td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${badge}`}>
-                      {r.payment_status}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${badge}`}>
+                        {r.payment_status}
+                      </span>
+                      {r.coupon_code && (
+                        <span className="inline-flex rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-800">
+                          Free · {r.coupon_code}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-slate-500">{formatDate(r.created_at)}</td>
                   <td className="px-4 py-3">

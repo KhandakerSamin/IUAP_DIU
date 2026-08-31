@@ -121,6 +121,7 @@ export default async function RegistrationDetailPage({ params }) {
           <Field label="Reff ID" value={row.payment_reff_id} />
           <Field label="Transaction ID" value={row.payment_tran_id} />
           <Field label="Method" value={row.payment_method} />
+          <Field label="Coupon Code" value={row.coupon_code} />
           <Field label="Submitted" value={formatDate(row.created_at)} />
           <Field label="Updated" value={formatDate(row.updated_at)} />
         </dl>

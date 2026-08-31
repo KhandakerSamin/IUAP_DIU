@@ -1,8 +1,8 @@
-import { insertFamilyMember, insertRegistration, runInTransaction } from "@/lib/db";
+import { attachReffIdToRegistration, consumeCoupon, insertFamilyMember, insertRegistration, markPaymentStatus, runInTransaction } from "@/lib/db";
 import { saveUpload } from "@/lib/fileStorage";
 import { generateInvoiceBuffer } from "@/lib/invoice";
 import { sendRegistrationAdminNotification } from "@/lib/mailer";
-import { finalizeWireRegistration } from "@/lib/paymentFinalize";
+import { finalizePaidPayment, finalizeWireRegistration } from "@/lib/paymentFinalize";
 import { calculatePricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +42,8 @@ export async function POST(request) {
       return Response.json({ error: `${field} is required.` }, { status: 400 });
     }
   }
+
+  const couponCode = pickText(form, "couponCode").trim().toUpperCase();
 
   const profilePhotoFile = pickFile(form, "profilePhoto");
   const passportScanFile = pickFile(form, "passportScan");
@@ -177,14 +179,22 @@ export async function POST(request) {
     family_members_other: familyMembersOther || null,
     needs_invitation_letter: pickText(form, "needsInvitationLetter") || null,
     post_event_tour: pickText(form, "postEventTour") || null,
-    payment_method: pickText(form, "paymentMethod") || null,
+    payment_method: couponCode ? "coupon" : pickText(form, "paymentMethod") || null,
     profile_photo_path: profilePhotoPath,
     passport_scan_path: passportScanPath,
+    coupon_code: couponCode || null,
   };
 
   let insertedId = null;
   try {
     runInTransaction(() => {
+      // Consumed here, inside the same transaction as the insert, so a
+      // coupon use is only ever spent on a registration that actually
+      // lands — anything that fails validation above never reaches this
+      // point, and a DB failure below rolls the use back too.
+      if (couponCode && !consumeCoupon(couponCode)) {
+        throw new Error("COUPON_INVALID");
+      }
       insertedId = insertRegistration(registrationRow);
       for (const fm of familyUploads) {
         insertFamilyMember({
@@ -203,6 +213,12 @@ export async function POST(request) {
       }
     });
   } catch (err) {
+    if (err?.message === "COUPON_INVALID") {
+      return Response.json(
+        { error: "Invalid, expired, or fully-used coupon code." },
+        { status: 400 }
+      );
+    }
     console.error("[registration] DB insert failed", err);
     return Response.json({ error: "Could not save registration. Please try again." }, { status: 500 });
   }
@@ -244,6 +260,24 @@ export async function POST(request) {
   }).catch((err) => {
     console.error("[registration] admin notification error", err);
   });
+
+  // A valid coupon skips the gateway entirely: mark paid immediately and
+  // reuse the same finalize path the online-payment flow uses once 1Card
+  // confirms a charge, keyed by reg_id doubling as the payment reff_id
+  // (same trick the wire-transfer path below uses).
+  if (registrationRow.coupon_code) {
+    attachReffIdToRegistration(regId, regId, "0", pricing.currency, pricing.period.key);
+    markPaymentStatus(regId, "paid");
+    const result = await finalizePaidPayment(regId).catch((err) => {
+      console.error("[registration] coupon finalize failed", regId, err);
+      return { state: "failed" };
+    });
+    return Response.json({
+      reg_id: regId,
+      free: true,
+      invoice_emailed: result?.state === "ok",
+    });
+  }
 
   // Wire transfer has no gateway step, so invoice + payment instructions go out here.
   if (registrationRow.payment_method === "wire-transfer") {

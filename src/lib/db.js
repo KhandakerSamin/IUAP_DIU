@@ -104,6 +104,17 @@ CREATE TABLE IF NOT EXISTS partner_proposals (
 );
 
 CREATE INDEX IF NOT EXISTS idx_partner_proposals_email ON partner_proposals(email);
+
+CREATE TABLE IF NOT EXISTS coupons (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code TEXT UNIQUE NOT NULL,
+  note TEXT,
+  max_uses INTEGER,
+  uses_count INTEGER NOT NULL DEFAULT 0,
+  expires_at TEXT,
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 `;
 
 const MIGRATIONS = [
@@ -117,6 +128,7 @@ const MIGRATIONS = [
   `ALTER TABLE registrations ADD COLUMN post_event_tour TEXT`,
   `ALTER TABLE registrations ADD COLUMN is_local_participant TEXT`,
   `ALTER TABLE registrations ADD COLUMN member_affiliation TEXT`,
+  `ALTER TABLE registrations ADD COLUMN coupon_code TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -177,14 +189,14 @@ export function insertRegistration(row) {
       phone, whatsapp, email, alternative_email, tshirt_size, food_requirement, other_food,
       is_local_participant, is_member_university, member_affiliation, has_family_members,
       family_members_count, family_members_other, needs_invitation_letter, post_event_tour,
-      payment_method, profile_photo_path, passport_scan_path
+      payment_method, profile_photo_path, passport_scan_path, coupon_code
     ) VALUES (
       @reg_id, @title, @other_title, @given_name, @surname, @gender, @passport_no, @nationality,
       @date_of_birth, @organization, @position, @department, @address, @zip_code, @city, @country,
       @phone, @whatsapp, @email, @alternative_email, @tshirt_size, @food_requirement, @other_food,
       @is_local_participant, @is_member_university, @member_affiliation, @has_family_members,
       @family_members_count, @family_members_other, @needs_invitation_letter, @post_event_tour,
-      @payment_method, @profile_photo_path, @passport_scan_path
+      @payment_method, @profile_photo_path, @passport_scan_path, @coupon_code
     )
   `);
   const result = stmt.run(row);
@@ -299,10 +311,10 @@ export function listRegistrations({ limit = 200, offset = 0, status, search } = 
   const q = typeof search === "string" ? search.trim() : "";
   if (q) {
     where.push(
-      "(given_name LIKE ? OR surname LIKE ? OR email LIKE ? OR phone LIKE ? OR reg_id LIKE ?)"
+      "(given_name LIKE ? OR surname LIKE ? OR email LIKE ? OR phone LIKE ? OR reg_id LIKE ? OR coupon_code LIKE ?)"
     );
     const like = `%${q}%`;
-    params.push(like, like, like, like, like);
+    params.push(like, like, like, like, like, like);
   }
 
   const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
@@ -541,4 +553,59 @@ export function listPartnerProposals({ limit = 500, offset = 0, search } = {}) {
 export function countPartnerProposals() {
   const db = getDatabase();
   return db.prepare("SELECT COUNT(*) AS n FROM partner_proposals").get()?.n || 0;
+}
+
+export function getCouponByCode(code) {
+  const db = getDatabase();
+  return db.prepare("SELECT * FROM coupons WHERE code = ?").get(code);
+}
+
+// Atomically validates and consumes one use in a single statement, so two
+// concurrent registrations can't both slip through the last use of a
+// limited-use coupon.
+export function consumeCoupon(code) {
+  const db = getDatabase();
+  const result = db
+    .prepare(
+      `UPDATE coupons
+          SET uses_count = uses_count + 1
+        WHERE code = ?
+          AND active = 1
+          AND (expires_at IS NULL OR expires_at > datetime('now'))
+          AND (max_uses IS NULL OR uses_count < max_uses)`
+    )
+    .run(code);
+  return result.changes === 1;
+}
+
+export function listCoupons() {
+  const db = getDatabase();
+  return db.prepare("SELECT * FROM coupons ORDER BY id DESC").all();
+}
+
+export function insertCoupon({ code, note, max_uses, expires_at }) {
+  const db = getDatabase();
+  const result = db
+    .prepare(
+      `INSERT INTO coupons (code, note, max_uses, expires_at) VALUES (@code, @note, @max_uses, @expires_at)`
+    )
+    .run({
+      code,
+      note: note || null,
+      max_uses: max_uses ?? null,
+      expires_at: expires_at || null,
+    });
+  return result.lastInsertRowid;
+}
+
+export function setCouponActive(id, active) {
+  const db = getDatabase();
+  return db
+    .prepare("UPDATE coupons SET active = ? WHERE id = ?")
+    .run(active ? 1 : 0, id);
+}
+
+export function deleteCoupon(id) {
+  const db = getDatabase();
+  return db.prepare("DELETE FROM coupons WHERE id = ?").run(id);
 }

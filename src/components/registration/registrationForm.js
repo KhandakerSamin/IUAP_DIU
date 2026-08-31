@@ -116,6 +116,7 @@ const INITIAL_FORM = {
   needsInvitationLetter: "",
   postEventTour: "",
   paymentMethod: "",
+  couponCode: "",
   agreeToPolicy: false,
   website: "",
 };
@@ -287,7 +288,10 @@ function validateForm(values) {
     errors.needsInvitationLetter = "Please select Yes or No.";
   }
 
-  if (!values.paymentMethod || !PAYMENT_OPTIONS.some((option) => option.value === values.paymentMethod)) {
+  if (
+    values.paymentMethod !== "coupon" &&
+    (!values.paymentMethod || !PAYMENT_OPTIONS.some((option) => option.value === values.paymentMethod))
+  ) {
     errors.paymentMethod = "Please select a payment method.";
   }
 
@@ -332,9 +336,12 @@ function OptionGroup({ legend, name, options, value, onChange, error, required =
   );
 }
 
-export default function RegistrationForm() {
+export default function RegistrationForm({ initialCouponCode = "" }) {
   const router = useRouter();
-  const [formValues, setFormValues] = useState(INITIAL_FORM);
+  const [formValues, setFormValues] = useState(() => ({
+    ...INITIAL_FORM,
+    couponCode: initialCouponCode || "",
+  }));
   const [fileValues, setFileValues] = useState({ profilePhoto: null, passportScan: null });
   const [familyMembers, setFamilyMembers] = useState([]);
   const [errors, setErrors] = useState({});
@@ -342,6 +349,46 @@ export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
   const [wireModalData, setWireModalData] = useState(null);
+  const [couponStatus, setCouponStatus] = useState("idle"); // idle | checking | valid | invalid
+  const [couponMessage, setCouponMessage] = useState("");
+
+  const checkCoupon = async (rawCode) => {
+    const code = String(rawCode || "").trim().toUpperCase();
+    if (!code) {
+      setCouponStatus("idle");
+      setCouponMessage("");
+      setFormValues((prev) => (prev.paymentMethod === "coupon" ? { ...prev, paymentMethod: "" } : prev));
+      return;
+    }
+    setCouponStatus("checking");
+    try {
+      const res = await fetch("/api/coupon/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (payload?.valid) {
+        setCouponStatus("valid");
+        setCouponMessage("Coupon applied — registration fee waived.");
+        setFormValues((prev) => ({ ...prev, couponCode: code, paymentMethod: "coupon" }));
+      } else {
+        setCouponStatus("invalid");
+        setCouponMessage(payload?.reason || "Invalid coupon code.");
+        setFormValues((prev) => (prev.paymentMethod === "coupon" ? { ...prev, paymentMethod: "" } : prev));
+      }
+    } catch {
+      setCouponStatus("invalid");
+      setCouponMessage("Could not verify coupon. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    if (initialCouponCode) {
+      checkCoupon(initialCouponCode);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     try {
@@ -691,8 +738,20 @@ export default function RegistrationForm() {
         return;
       }
 
+      if (payload.free) {
+        setWireModalData({
+          mode: "free",
+          name: `${normalized.givenName} ${normalized.surname}`.trim(),
+          regId: payload.reg_id,
+          email: normalized.email,
+          emailed: payload.invoice_emailed === true,
+        });
+        return;
+      }
+
       if (normalized.paymentMethod === "wire-transfer") {
         setWireModalData({
+          mode: "wire",
           name: `${normalized.givenName} ${normalized.surname}`.trim(),
           regId: payload.reg_id,
           email: normalized.email,
@@ -1517,79 +1576,123 @@ export default function RegistrationForm() {
             />
 
             <fieldset className="sm:col-span-2">
-              <legend className="mb-2 block text-sm font-semibold text-slate-700">
-                Which payment method do you want to choose for registration payment?
-                <RequiredMark />
-              </legend>
-              <div className="flex flex-wrap gap-3">
-                {PAYMENT_OPTIONS.map((option) => (
-                  <label
-                    key={option.value}
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700"
-                  >
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value={option.value}
-                      checked={formValues.paymentMethod === option.value}
-                      onChange={handleChange}
-                      className="h-4 w-4 border-slate-300 text-primary focus:ring-primary"
-                    />
-                    <span>{option.label}</span>
-                  </label>
-                ))}
+              <legend className="mb-2 block text-sm font-semibold text-slate-700">Have a coupon code?</legend>
+              <div className="flex flex-wrap items-center gap-3">
+                <input
+                  type="text"
+                  name="couponCode"
+                  value={formValues.couponCode}
+                  onChange={(e) =>
+                    setFormValues((prev) => ({ ...prev, couponCode: e.target.value.toUpperCase() }))
+                  }
+                  placeholder="e.g. IAUP-VIP"
+                  className="w-full max-w-xs rounded-xl border border-slate-300 px-3 py-2 text-sm uppercase tracking-wide focus:border-primary focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => checkCoupon(formValues.couponCode)}
+                  disabled={couponStatus === "checking" || !formValues.couponCode.trim()}
+                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                >
+                  {couponStatus === "checking" ? "Checking…" : "Apply"}
+                </button>
               </div>
-              {errors.paymentMethod && <p className="mt-2 text-sm text-red-600">{errors.paymentMethod}</p>}
-            </fieldset>
-
-            <div className="sm:col-span-2 rounded-xl border border-primary/30 bg-primary/5 p-5 text-sm text-slate-700">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-primary">Registration fee</p>
-              <dl className="grid gap-2 sm:grid-cols-2">
-                <div>
-                  <dt className="text-slate-500">Period</dt>
-                  <dd className="font-semibold text-slate-900">
-                    {pricing.period.label} <span className="font-normal text-slate-500">({pricing.period.range})</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-slate-500">Category</dt>
-                  <dd className="font-semibold text-slate-900">
-                    {formValues.isLocalParticipant === "Yes"
-                      ? "Local Participant"
-                      : formValues.isMemberUniversity === "Yes"
-                        ? `Member / Partner Institution${formValues.memberAffiliation ? ` (${formValues.memberAffiliation})` : ""}`
-                        : formValues.isMemberUniversity === "No"
-                          ? "Non-partner"
-                          : "Select options above to see category"}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-slate-500">Base fee</dt>
-                  <dd className="font-semibold text-slate-900">{formatCurrency(pricing.baseFee, pricing.currency)}</dd>
-                </div>
-                <div>
-                  <dt className="text-slate-500">Family members</dt>
-                  <dd className="font-semibold text-slate-900">
-                    {pricing.isLocal
-                      ? "N/A"
-                      : pricing.familyCount === 0
-                        ? "None"
-                        : `${pricing.familyCount} × ${formatUsd(FAMILY_MEMBER_FEE_USD)} = ${formatUsd(pricing.familyFeeUsd)}`}
-                  </dd>
-                </div>
-              </dl>
-              <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
-                <span className="text-sm font-semibold text-slate-900">Total payable</span>
-                <span className="font-display text-xl font-bold text-primary">
-                  {formatCurrency(pricing.totalFee, pricing.currency)}
-                </span>
-              </div>
-              {!pricing.isLocal && pricing.period.isClosed && (
-                <p className="mt-2 text-xs text-amber-700">
-                  Registration window has closed. Please contact the organizer.
+              {couponMessage && (
+                <p className={`mt-2 text-sm ${couponStatus === "valid" ? "text-emerald-700" : "text-red-600"}`}>
+                  {couponMessage}
                 </p>
               )}
-            </div>
+            </fieldset>
+
+            {couponStatus === "valid" ? (
+              <div className="sm:col-span-2 rounded-xl border border-emerald-300 bg-emerald-50 p-5 text-sm text-emerald-900">
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Registration fee</p>
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-sm font-semibold">Total payable — Coupon Applied</span>
+                  <span className="font-display text-xl font-bold text-emerald-700">$0.00</span>
+                </div>
+                <p className="mt-1 text-xs text-emerald-700">
+                  Registration fee waived via coupon {formValues.couponCode}. No payment is required.
+                </p>
+              </div>
+            ) : (
+              <>
+                <fieldset className="sm:col-span-2">
+                  <legend className="mb-2 block text-sm font-semibold text-slate-700">
+                    Which payment method do you want to choose for registration payment?
+                    <RequiredMark />
+                  </legend>
+                  <div className="flex flex-wrap gap-3">
+                    {PAYMENT_OPTIONS.map((option) => (
+                      <label
+                        key={option.value}
+                        className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700"
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value={option.value}
+                          checked={formValues.paymentMethod === option.value}
+                          onChange={handleChange}
+                          className="h-4 w-4 border-slate-300 text-primary focus:ring-primary"
+                        />
+                        <span>{option.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.paymentMethod && <p className="mt-2 text-sm text-red-600">{errors.paymentMethod}</p>}
+                </fieldset>
+
+                <div className="sm:col-span-2 rounded-xl border border-primary/30 bg-primary/5 p-5 text-sm text-slate-700">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-primary">Registration fee</p>
+                  <dl className="grid gap-2 sm:grid-cols-2">
+                    <div>
+                      <dt className="text-slate-500">Period</dt>
+                      <dd className="font-semibold text-slate-900">
+                        {pricing.period.label} <span className="font-normal text-slate-500">({pricing.period.range})</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Category</dt>
+                      <dd className="font-semibold text-slate-900">
+                        {formValues.isLocalParticipant === "Yes"
+                          ? "Local Participant"
+                          : formValues.isMemberUniversity === "Yes"
+                            ? `Member / Partner Institution${formValues.memberAffiliation ? ` (${formValues.memberAffiliation})` : ""}`
+                            : formValues.isMemberUniversity === "No"
+                              ? "Non-partner"
+                              : "Select options above to see category"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Base fee</dt>
+                      <dd className="font-semibold text-slate-900">{formatCurrency(pricing.baseFee, pricing.currency)}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Family members</dt>
+                      <dd className="font-semibold text-slate-900">
+                        {pricing.isLocal
+                          ? "N/A"
+                          : pricing.familyCount === 0
+                            ? "None"
+                            : `${pricing.familyCount} × ${formatUsd(FAMILY_MEMBER_FEE_USD)} = ${formatUsd(pricing.familyFeeUsd)}`}
+                      </dd>
+                    </div>
+                  </dl>
+                  <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
+                    <span className="text-sm font-semibold text-slate-900">Total payable</span>
+                    <span className="font-display text-xl font-bold text-primary">
+                      {formatCurrency(pricing.totalFee, pricing.currency)}
+                    </span>
+                  </div>
+                  {!pricing.isLocal && pricing.period.isClosed && (
+                    <p className="mt-2 text-xs text-amber-700">
+                      Registration window has closed. Please contact the organizer.
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
 
             <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
               <h2 className="mb-3 font-semibold text-slate-900">Data Protection Statement & Personality/Image Rights</h2>
@@ -1682,30 +1785,39 @@ export default function RegistrationForm() {
                   <p className="font-semibold text-slate-900">
                     Thank you for registering for the IAUP Semi-Annual Meeting 2026.
                   </p>
-                  <p>
-                    Your registration has been successfully received. The invoice with full bank transfer details has been sent to your email and is ready for download below.
-                  </p>
+                  {wireModalData.mode === "free" ? (
+                    <p>
+                      Your registration has been confirmed with a coupon — no payment is required. The invoice
+                      (showing the fee waived) has been sent to your email and is ready for download below.
+                    </p>
+                  ) : (
+                    <>
+                      <p>
+                        Your registration has been successfully received. The invoice with full bank transfer details has been sent to your email and is ready for download below.
+                      </p>
 
-                  <div className="rounded-lg bg-white p-3 border border-emerald-200/80 text-xs space-y-1.5 shadow-xs">
-                    <p className="font-bold text-primary">Account Information for Bank Transfer:</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 text-slate-700">
-                      <div><span className="text-slate-500 font-medium">Account Name:</span> Daffodil International University (International Affairs)</div>
-                      <div><span className="text-slate-500 font-medium">Account Number:</span> <span className="font-mono font-bold text-slate-900">110.110.25618</span></div>
-                      <div><span className="text-slate-500 font-medium">Swift Code:</span> <span className="font-mono font-bold text-slate-900">DBBLBDDHCTS</span></div>
-                      <div><span className="text-slate-500 font-medium">Bank Name:</span> Dutch Bangla Bank Ltd</div>
-                      <div><span className="text-slate-500 font-medium">Branch:</span> Dhanmondi Branch</div>
-                      <div><span className="text-slate-500 font-medium">Zip Code:</span> 1205</div>
-                    </div>
-                    <p className="text-[11px] text-amber-800 font-semibold pt-1 border-t border-slate-100">** Note: Transaction/Bank transfer charges are to be borne by the sender.</p>
-                  </div>
+                      <div className="rounded-lg bg-white p-3 border border-emerald-200/80 text-xs space-y-1.5 shadow-xs">
+                        <p className="font-bold text-primary">Account Information for Bank Transfer:</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 text-slate-700">
+                          <div><span className="text-slate-500 font-medium">Account Name:</span> Daffodil International University (International Affairs)</div>
+                          <div><span className="text-slate-500 font-medium">Account Number:</span> <span className="font-mono font-bold text-slate-900">110.110.25618</span></div>
+                          <div><span className="text-slate-500 font-medium">Swift Code:</span> <span className="font-mono font-bold text-slate-900">DBBLBDDHCTS</span></div>
+                          <div><span className="text-slate-500 font-medium">Bank Name:</span> Dutch Bangla Bank Ltd</div>
+                          <div><span className="text-slate-500 font-medium">Branch:</span> Dhanmondi Branch</div>
+                          <div><span className="text-slate-500 font-medium">Zip Code:</span> 1205</div>
+                        </div>
+                        <p className="text-[11px] text-amber-800 font-semibold pt-1 border-t border-slate-100">** Note: Transaction/Bank transfer charges are to be borne by the sender.</p>
+                      </div>
 
-                  <p className="text-xs">
-                    After completing the transfer, please reply or send your payment receipt to{" "}
-                    <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd" className="font-semibold text-primary hover:underline">
-                      iaup-bd2026@daffodilvarsity.edu.bd
-                    </a>{" "}
-                    for payment verification.
-                  </p>
+                      <p className="text-xs">
+                        After completing the transfer, please reply or send your payment receipt to{" "}
+                        <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd" className="font-semibold text-primary hover:underline">
+                          iaup-bd2026@daffodilvarsity.edu.bd
+                        </a>{" "}
+                        for payment verification.
+                      </p>
+                    </>
+                  )}
                   <div className="pt-2 border-t border-emerald-200/60 text-xs text-slate-600">
                     <span className="font-semibold text-slate-800">Queries? </span>
                     Contact us at{" "}

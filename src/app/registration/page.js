@@ -11,12 +11,17 @@ export default async function RegistrationPage({ searchParams }) {
   const resolvedSearchParams = await searchParams;
   const rawAttendee = resolvedSearchParams?.attendee;
   const attendeeId = Array.isArray(rawAttendee) ? rawAttendee[0] : rawAttendee;
+  const rawCoupon = resolvedSearchParams?.coupon;
+  const couponCode = Array.isArray(rawCoupon) ? rawCoupon[0] : rawCoupon;
 
   return (
     <>
       <Nev />
       <main className="min-h-screen pt-20 sm:pt-24">
-        <RegistrationForm initialAttendeeId={typeof attendeeId === "string" ? attendeeId : ""} />
+        <RegistrationForm
+          initialAttendeeId={typeof attendeeId === "string" ? attendeeId : ""}
+          initialCouponCode={typeof couponCode === "string" ? couponCode : ""}
+        />
       </main>
       <Footer />
     </>

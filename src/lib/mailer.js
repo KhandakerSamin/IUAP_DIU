@@ -43,12 +43,16 @@ export async function sendInvoiceEmail({ to, participantName, reffId, invoiceNum
   const displayAmount = `${Number(amount || 0).toFixed(2)} ${currency || "BDT"}`;
   const invNo = invoiceNumber || (reffId?.startsWith?.("reg-") ? "IAUP-DIU-2026/101" : reffId);
   const safeInvNo = String(invNo).replace(/[^a-zA-Z0-9-_]/g, "");
+  const isFree = Number(amount) === 0;
+  const paymentLine = isFree
+    ? "Your registration has been confirmed at no charge (coupon applied). Your invoice is attached to this email."
+    : `We have received your payment of ${displayAmount}. Your invoice is attached to this email.`;
 
   const text = `Dear ${participantName || "Participant"},
 
 Thank you for registering for the IAUP Semi-Annual Meeting 2026 hosted by Daffodil International University.
 
-We have received your payment of ${displayAmount}. Your invoice is attached to this email.
+${paymentLine}
 
 Invoice Number: ${invNo}
 Registration Reference: ${reffId}
@@ -63,7 +67,7 @@ Daffodil International University, Bangladesh`;
 <html><body style="font-family: -apple-system, Segoe UI, sans-serif; color: #0f172a; line-height: 1.5;">
 <p>Dear ${participantName || "Participant"},</p>
 <p>Thank you for registering for the <strong>IAUP Semi-Annual Meeting 2026</strong> hosted by Daffodil International University.</p>
-<p>We have received your payment of <strong>${displayAmount}</strong>. Your invoice is attached to this email.</p>
+<p>${isFree ? "Your registration has been confirmed at <strong>no charge</strong> (coupon applied). Your invoice is attached to this email." : `We have received your payment of <strong>${displayAmount}</strong>. Your invoice is attached to this email.`}</p>
 <p><strong>Invoice Number:</strong> <code style="background:#e0e7ff; color:#1e1b4b; padding:3px 8px; border-radius:4px; font-weight:bold;">${invNo}</code></p>
 <p style="font-size:12px; color:#64748b;">Registration Reference: <code>${reffId}</code></p>
 <p>Should you have any queries, feel free to contact us at <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd">iaup-bd2026@daffodilvarsity.edu.bd</a>.</p>
@@ -74,7 +78,9 @@ Daffodil International University, Bangladesh`;
     const info = await transporter.sendMail({
       from: fromAddress(),
       to,
-      subject: `IAUP 2026 Registration — Payment Received (${invNo})`,
+      subject: isFree
+        ? `IAUP 2026 Registration Confirmed — Complimentary (${invNo})`
+        : `IAUP 2026 Registration — Payment Received (${invNo})`,
       text,
       html,
       attachments: pdfBuffer
