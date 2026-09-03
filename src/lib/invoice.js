@@ -166,17 +166,6 @@ const styles = StyleSheet.create({
     lineHeight: 1.3,
   },
 
-  paidPill: {
-    alignSelf: "flex-start",
-    marginTop: 6,
-    paddingVertical: 2.5,
-    paddingHorizontal: 8,
-    backgroundColor: "#dcfce7",
-    color: "#166534",
-    fontFamily: "Helvetica-Bold",
-    fontSize: 9,
-    borderRadius: 10,
-  },
   wireNote: { fontSize: 8.5, color: MUTED, marginTop: 4, lineHeight: 1.35 },
 });
 
@@ -246,7 +235,6 @@ function InvoiceDoc({ registration, familyMembers }) {
               </>
             )}
             {DIU_LOGO_DATA_URI ? <Image src={DIU_LOGO_DATA_URI} style={styles.diuHeaderLogo} /> : null}
-            {isPaid ? <Text style={styles.paidPill}>PAID</Text> : null}
           </View>
           <View>
             <Text style={styles.invoiceTitle}>INVOICE</Text>
