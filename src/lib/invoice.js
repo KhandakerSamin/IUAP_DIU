@@ -12,6 +12,11 @@ const LOGO_DATA_URI = existsSync(LOGO_PATH)
   ? `data:image/jpeg;base64,${readFileSync(LOGO_PATH).toString("base64")}`
   : null;
 
+const DIU_LOGO_PATH = path.join(process.cwd(), "public", "diu-logo-transparent.png");
+const DIU_LOGO_DATA_URI = existsSync(DIU_LOGO_PATH)
+  ? `data:image/png;base64,${readFileSync(DIU_LOGO_PATH).toString("base64")}`
+  : null;
+
 const PRIMARY = "#0b3d91";
 const MUTED = "#64748b";
 const LINE = "#e2e8f0";
@@ -36,6 +41,7 @@ const styles = StyleSheet.create({
   eventTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: PRIMARY },
   eventSubtitle: { fontSize: 10, color: MUTED, marginTop: 3 },
   headerLogo: { width: 230, height: 82, objectFit: "contain" },
+  diuHeaderLogo: { width: 140, height: 37, objectFit: "contain", marginTop: 8 },
   invoiceTitle: { fontSize: 26, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
@@ -239,6 +245,7 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
               </>
             )}
+            {DIU_LOGO_DATA_URI ? <Image src={DIU_LOGO_DATA_URI} style={styles.diuHeaderLogo} /> : null}
             {isPaid ? <Text style={styles.paidPill}>PAID</Text> : null}
           </View>
           <View>

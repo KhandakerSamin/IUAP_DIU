@@ -801,7 +801,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
               className="h-10 md:h-14 w-auto object-contain"
               priority
             />
-            <Image src="/diuLogo.png" alt="DIU Logo" width={90} height={64} className="h-9 md:h-12 w-auto object-contain" />
+            <Image src="/diu-logo-transparent.png" alt="DIU Logo" width={90} height={64} className="h-9 md:h-12 w-auto object-contain" />
           </div>
         </div>
 

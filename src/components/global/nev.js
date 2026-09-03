@@ -28,6 +28,7 @@ const callForContributionLinks = [
 ];
 
 const logoUrl = "/navLogo.png";
+const diuLogoUrl = "/diu-logo-transparent.png";
 
 export default function Nev() {
   const pathname = usePathname();
@@ -57,9 +58,10 @@ export default function Nev() {
     >
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 transition-colors duration-300">
-          <div className="w-48 shrink-0 flex items-center">
-            <Link href={pathname === "/" ? "#hero" : "/#hero"} className="flex items-center gap-3" aria-label="Daffodil International University Home">
-              <Image src={logoUrl} alt="DIU Logo" width={180} height={48} className={`h-8 sm:h-10 md:h-12 w-auto object-contain transition-all duration-300 ${!navIsScrolled ? "brightness-0 invert" : ""}`} />
+          <div className="shrink-0 flex items-center">
+            <Link href={pathname === "/" ? "#hero" : "/#hero"} className="flex items-center gap-2 sm:gap-3" aria-label="Daffodil International University Home">
+              <Image src={logoUrl} alt="IAUP Logo" width={180} height={48} className={`h-7 sm:h-9 md:h-11 w-auto object-contain transition-all duration-300 ${!navIsScrolled ? "brightness-0 invert" : ""}`} />
+              <Image src={diuLogoUrl} alt="DIU Logo" width={100} height={26} className="h-5 sm:h-6 md:h-7 w-auto object-contain" />
             </Link>
           </div>
 
