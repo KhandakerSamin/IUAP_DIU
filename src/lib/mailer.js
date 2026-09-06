@@ -1,5 +1,48 @@
 import nodemailer from "nodemailer";
+import path from "node:path";
+import { existsSync } from "node:fs";
 import { BANK_DETAILS, SECRETARIAT_EMAIL } from "@/lib/wire";
+
+const SIGNATURE_LOGO_PATH = path.join(process.cwd(), "public", "iauplogo.jpg");
+
+function getSignatureAttachment() {
+  if (existsSync(SIGNATURE_LOGO_PATH)) {
+    return [
+      {
+        filename: "iauplogo.jpg",
+        path: SIGNATURE_LOGO_PATH,
+        cid: "iaup-signature-logo",
+      },
+    ];
+  }
+  return [];
+}
+
+function getEmailSignatureHtml() {
+  return `<div style="margin-top: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; color: #1e293b; line-height: 1.6;">
+  <p style="font-style: italic; margin: 0 0 16px 0; color: #1e293b; font-size: 14px;">Regards,</p>
+  <p style="margin: 0 0 3px 0; font-weight: bold; font-size: 14px; color: #0f172a;">Event Secretariat</p>
+  <p style="margin: 0 0 3px 0; color: #1e293b;">IAUP Semi Annual Meeting 2026</p>
+  <p style="margin: 0 0 3px 0; color: #1e293b;">Hosted by <a href="https://daffodilvarsity.edu.bd" target="_blank" style="color: #0b3d91; text-decoration: underline;">Daffodil International University</a></p>
+  <p style="margin: 0 0 3px 0; color: #1e293b;">Daffodil Smart City, Birulia, Savar, Dhaka &ndash; 1216, Bangladesh</p>
+  <p style="margin: 0 0 3px 0; color: #1e293b;">Mobile: <a href="tel:+8801920012744" style="color: #0b3d91; text-decoration: underline;">+8801920012744</a>, <a href="tel:+8801847334763" style="color: #0b3d91; text-decoration: underline;">+8801847334763</a></p>
+  <p style="margin: 0 0 16px 0; color: #1e293b;">Whatsapp: <a href="https://wa.me/8801920012744" style="color: #0b3d91; text-decoration: underline;">+8801920012744</a></p>
+  <div style="margin-top: 14px;">
+    <img src="cid:iaup-signature-logo" alt="IAUP Semi-Annual Meeting 2026" width="260" style="width: 260px; max-width: 100%; height: auto; display: block;" />
+  </div>
+</div>`;
+}
+
+function getEmailSignatureText() {
+  return `Regards,
+
+Event Secretariat
+IAUP Semi Annual Meeting 2026
+Hosted by Daffodil International University
+Daffodil Smart City, Birulia, Savar, Dhaka – 1216, Bangladesh
+Mobile: +8801920012744, +8801847334763
+Whatsapp: +8801920012744`;
+}
 
 let cachedTransporter = null;
 
@@ -59,19 +102,19 @@ Registration Reference: ${reffId}
 
 Should you have any queries, feel free to contact us at iaup-bd2026@daffodilvarsity.edu.bd.
 
-Best regards,
-DIU Secretariat, IAUP Semi-Annual Meeting 2026
-Daffodil International University, Bangladesh`;
+${getEmailSignatureText()}`;
 
   const html = `<!DOCTYPE html>
-<html><body style="font-family: -apple-system, Segoe UI, sans-serif; color: #0f172a; line-height: 1.5;">
+<html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; line-height: 1.5; background-color: #f8fafc; padding: 20px;">
+<div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 28px;">
 <p>Dear ${participantName || "Participant"},</p>
 <p>Thank you for registering for the <strong>IAUP Semi-Annual Meeting 2026</strong> hosted by Daffodil International University.</p>
 <p>${isFree ? "Your registration has been confirmed at <strong>no charge</strong> (coupon applied). Your invoice is attached to this email." : `We have received your payment of <strong>${displayAmount}</strong>. Your invoice is attached to this email.`}</p>
 <p><strong>Invoice Number:</strong> <code style="background:#e0e7ff; color:#1e1b4b; padding:3px 8px; border-radius:4px; font-weight:bold;">${invNo}</code></p>
 <p style="font-size:12px; color:#64748b;">Registration Reference: <code>${reffId}</code></p>
-<p>Should you have any queries, feel free to contact us at <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd">iaup-bd2026@daffodilvarsity.edu.bd</a>.</p>
-<p>Best regards,<br/>DIU Secretariat, IAUP Semi-Annual Meeting 2026<br/>Daffodil International University, Bangladesh</p>
+<p>Should you have any queries, feel free to contact us at <a href="mailto:iaup-bd2026@daffodilvarsity.edu.bd" style="color: #0b3d91;">iaup-bd2026@daffodilvarsity.edu.bd</a>.</p>
+${getEmailSignatureHtml()}
+</div>
 </body></html>`;
 
   try {
@@ -83,15 +126,18 @@ Daffodil International University, Bangladesh`;
         : `IAUP 2026 Registration — Payment Received (${invNo})`,
       text,
       html,
-      attachments: pdfBuffer
-        ? [
-            {
-              filename: `IAUP-DIU-2026-Invoice-${safeInvNo}.pdf`,
-              content: pdfBuffer,
-              contentType: "application/pdf",
-            },
-          ]
-        : [],
+      attachments: [
+        ...(pdfBuffer
+          ? [
+              {
+                filename: `IAUP-DIU-2026-Invoice-${safeInvNo}.pdf`,
+                content: pdfBuffer,
+                contentType: "application/pdf",
+              },
+            ]
+          : []),
+        ...getSignatureAttachment(),
+      ],
     });
     console.log("[mailer] invoice emailed to", to, "messageId=", info?.messageId);
     return { sent: true, messageId: info?.messageId };
@@ -148,9 +194,7 @@ Once you complete the bank transfer, please reply or send a copy of your transac
 
 Should you have any queries in the meantime, feel free to contact us at ${SECRETARIAT_EMAIL}.
 
-Best regards,
-DIU Secretariat, IAUP Semi-Annual Meeting 2026
-Daffodil International University, Bangladesh`;
+${getEmailSignatureText()}`;
 
   const html = `<!DOCTYPE html>
 <html>
@@ -202,7 +246,7 @@ Daffodil International University, Bangladesh`;
         <strong>Next Step:</strong> Once you complete the bank transfer, please reply or send a copy of your transaction/payment receipt to <a href="mailto:${SECRETARIAT_EMAIL}" style="color:#0b3d91; font-weight:bold;">${SECRETARIAT_EMAIL}</a> for payment verification. Please quote your Invoice Number (<code>${invNo}</code>) in all correspondence.
       </div>
 
-      <p style="margin-top:20px;">Best regards,<br/><strong>DIU Secretariat, IAUP Semi-Annual Meeting 2026</strong><br/>Daffodil International University, Bangladesh</p>
+      ${getEmailSignatureHtml()}
     </div>
     <div class="footer">
       Auto-generated invoice &middot; IAUP Secretariat, Daffodil International University
@@ -218,15 +262,18 @@ Daffodil International University, Bangladesh`;
       subject: `IAUP 2026 Registration Confirmed — Invoice ${invNo}`,
       text,
       html,
-      attachments: pdfBuffer
-        ? [
-            {
-              filename: `IAUP-DIU-2026-Invoice-${safeInvNo}.pdf`,
-              content: pdfBuffer,
-              contentType: "application/pdf",
-            },
-          ]
-        : [],
+      attachments: [
+        ...(pdfBuffer
+          ? [
+              {
+                filename: `IAUP-DIU-2026-Invoice-${safeInvNo}.pdf`,
+                content: pdfBuffer,
+                contentType: "application/pdf",
+              },
+            ]
+          : []),
+        ...getSignatureAttachment(),
+      ],
     });
     console.log("[mailer] wire confirmation emailed to", to, "messageId=", info?.messageId);
     return { sent: true, messageId: info?.messageId };
@@ -304,8 +351,7 @@ ${familyListText}
 Submitted at: ${new Date().toISOString()}
 
 ---
-IAUP Semi-Annual Meeting 2026 System Notification
-Daffodil International University`;
+${getEmailSignatureText()}`;
 
   const html = `<!DOCTYPE html>
 <html>
@@ -378,6 +424,8 @@ Daffodil International University`;
              </div>`
           : ""
       }
+
+      ${getEmailSignatureHtml()}
     </div>
     <div class="footer">
       Auto-generated notification &middot; IAUP Secretariat, Daffodil International University, Bangladesh
@@ -393,15 +441,18 @@ Daffodil International University`;
       subject: `New Registration: ${fullName} (${registration.reg_id})`,
       text,
       html,
-      attachments: pdfBuffer
-        ? [
-            {
-              filename: `IAUP-DIU-2026-Invoice-${registration.reg_id}.pdf`,
-              content: pdfBuffer,
-              contentType: "application/pdf",
-            },
-          ]
-        : [],
+      attachments: [
+        ...(pdfBuffer
+          ? [
+              {
+                filename: `IAUP-DIU-2026-Invoice-${registration.reg_id}.pdf`,
+                content: pdfBuffer,
+                contentType: "application/pdf",
+              },
+            ]
+          : []),
+        ...getSignatureAttachment(),
+      ],
     });
     console.log("[mailer] admin notification sent to", adminEmail, "messageId=", info?.messageId);
     return { sent: true, messageId: info?.messageId };

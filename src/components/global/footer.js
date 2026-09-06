@@ -23,6 +23,7 @@ export default function Footer() {
   ];
 
   const logoUrl = "/navLogo.png";
+  const diuLogoUrl = "/diuLogo.png";
 
   return (
     <footer className="bg-dark text-slate-300 pt-20 pb-10 border-t-4 border-primary">
@@ -31,13 +32,21 @@ export default function Footer() {
 
           {/* Brand Column */}
           <div className="lg:col-span-4 flex flex-col items-start">
-            <div className="bg-slate-50 p-4 rounded-xl shadow-sm mb-6 inline-block">
+            <div className="bg-slate-50 p-3 sm:p-4 rounded-xl shadow-sm mb-6 inline-flex items-center gap-3 sm:gap-4">
+              <Image
+                src={diuLogoUrl}
+                alt="Daffodil International University Logo"
+                width={120}
+                height={42}
+                className="h-8 sm:h-10 w-auto object-contain"
+              />
+              <div className="h-7 w-px bg-slate-200" />
               <Image
                 src={logoUrl}
-                alt="DIU Logo"
-                width={200}
-                height={54}
-                className="h-10 sm:h-12 w-auto object-contain"
+                alt="IAUP Logo"
+                width={150}
+                height={44}
+                className="h-8 sm:h-10 w-auto object-contain"
               />
             </div>
             <p className="text-slate-400 text-sm leading-relaxed mb-8 max-w-sm">

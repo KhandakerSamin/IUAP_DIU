@@ -7,12 +7,16 @@ import { dataDir } from "@/lib/db";
 import { calculatePricing, FAMILY_MEMBER_FEE_USD, REGISTRATION_PERIODS } from "@/lib/pricing";
 import { BANK_DETAILS, WIRE_NOTE } from "@/lib/wire";
 
-const LOGO_PATH = path.join(process.cwd(), "public", "iuap_invoice.jpg");
+const LOGO_PATH = existsSync(path.join(process.cwd(), "public", "iauplogo.jpg"))
+  ? path.join(process.cwd(), "public", "iauplogo.jpg")
+  : path.join(process.cwd(), "public", "iuap_invoice.jpg");
 const LOGO_DATA_URI = existsSync(LOGO_PATH)
   ? `data:image/jpeg;base64,${readFileSync(LOGO_PATH).toString("base64")}`
   : null;
 
-const DIU_LOGO_PATH = path.join(process.cwd(), "public", "diu-logo-transparent.png");
+const DIU_LOGO_PATH = existsSync(path.join(process.cwd(), "public", "diuLogo.png"))
+  ? path.join(process.cwd(), "public", "diuLogo.png")
+  : path.join(process.cwd(), "public", "diu-logo-transparent.png");
 const DIU_LOGO_DATA_URI = existsSync(DIU_LOGO_PATH)
   ? `data:image/png;base64,${readFileSync(DIU_LOGO_PATH).toString("base64")}`
   : null;
@@ -40,8 +44,8 @@ const styles = StyleSheet.create({
   },
   eventTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: PRIMARY },
   eventSubtitle: { fontSize: 10, color: MUTED, marginTop: 3 },
-  headerLogo: { width: 230, height: 82, objectFit: "contain" },
-  diuHeaderLogo: { width: 140, height: 37, objectFit: "contain", marginTop: 8 },
+  headerLogo: { width: 220, height: 78, objectFit: "contain" },
+  diuHeaderLogo: { width: 140, height: 50, objectFit: "contain", marginBottom: 8 },
   invoiceTitle: { fontSize: 26, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
@@ -226,6 +230,7 @@ function InvoiceDoc({ registration, familyMembers }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
+            {DIU_LOGO_DATA_URI ? <Image src={DIU_LOGO_DATA_URI} style={styles.diuHeaderLogo} /> : null}
             {LOGO_DATA_URI ? (
               <Image src={LOGO_DATA_URI} style={styles.headerLogo} />
             ) : (
@@ -234,7 +239,6 @@ function InvoiceDoc({ registration, familyMembers }) {
                 <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
               </>
             )}
-            {DIU_LOGO_DATA_URI ? <Image src={DIU_LOGO_DATA_URI} style={styles.diuHeaderLogo} /> : null}
           </View>
           <View>
             <Text style={styles.invoiceTitle}>INVOICE</Text>

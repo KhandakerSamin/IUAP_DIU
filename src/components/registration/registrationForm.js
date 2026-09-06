@@ -792,16 +792,22 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
             <h1 className="font-display mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">Registration Form</h1>
             <p className="mt-3 text-sm text-slate-600 sm:text-base">Daffodil International University | Event Date: 19-21 November 2026</p>
           </div>
-          <div className="flex shrink-0 items-center gap-8 self-center">
+          <div className="flex shrink-0 items-center gap-6 sm:gap-8 self-center">
+            <Image
+              src="/diuLogo.png"
+              alt="Daffodil International University Logo"
+              width={140}
+              height={50}
+              className="h-9 md:h-12 w-auto object-contain"
+              priority
+            />
             <Image
               src="/navLogo.png"
-              alt="DIU Navigation Logo"
+              alt="IAUP Logo"
               width={160}
               height={44}
               className="h-10 md:h-14 w-auto object-contain"
-              priority
             />
-            <Image src="/diu-logo-transparent.png" alt="DIU Logo" width={90} height={64} className="h-9 md:h-12 w-auto object-contain" />
           </div>
         </div>
 
