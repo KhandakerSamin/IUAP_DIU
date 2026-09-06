@@ -14,9 +14,7 @@ const LOGO_DATA_URI = existsSync(LOGO_PATH)
   ? `data:image/jpeg;base64,${readFileSync(LOGO_PATH).toString("base64")}`
   : null;
 
-const DIU_LOGO_PATH = existsSync(path.join(process.cwd(), "public", "diuLogo.png"))
-  ? path.join(process.cwd(), "public", "diuLogo.png")
-  : path.join(process.cwd(), "public", "diu-logo-transparent.png");
+const DIU_LOGO_PATH = path.join(process.cwd(), "public", "diuLogo.png");
 const DIU_LOGO_DATA_URI = existsSync(DIU_LOGO_PATH)
   ? `data:image/png;base64,${readFileSync(DIU_LOGO_PATH).toString("base64")}`
   : null;
