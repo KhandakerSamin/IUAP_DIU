@@ -7,6 +7,9 @@ const Instagram = ({ className }) => <svg className={className} fill="none" stro
 const Linkedin = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>;
 const Youtube = ({ className }) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" /><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" /></svg>;
 
+import logoImg from "../../../public/navLogo.png";
+import diuLogoImg from "../../../public/diuLogo.png";
+
 export default function Footer() {
   const quickLinks = [
     { href: "/#about", label: "About IAUP" },
@@ -22,9 +25,6 @@ export default function Footer() {
     { href: "/pre-departure-guidelines", label: "Pre-Departure Guidelines" },
   ];
 
-  const logoUrl = "/navLogo.png";
-  const diuLogoUrl = "/diuLogo.png";
-
   return (
     <footer className="bg-dark text-slate-300 pt-20 pb-10 border-t-4 border-primary">
       <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +34,7 @@ export default function Footer() {
           <div className="lg:col-span-4 flex flex-col items-start">
             <div className="bg-slate-50 p-3 sm:p-4 rounded-xl shadow-sm mb-6 inline-flex items-center gap-3 sm:gap-4">
               <Image
-                src={diuLogoUrl}
+                src={diuLogoImg}
                 alt="Daffodil International University Logo"
                 width={120}
                 height={42}
@@ -42,7 +42,7 @@ export default function Footer() {
               />
               <div className="h-7 w-px bg-slate-200" />
               <Image
-                src={logoUrl}
+                src={logoImg}
                 alt="IAUP Logo"
                 width={150}
                 height={44}

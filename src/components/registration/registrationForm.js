@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import logoImg from "../../../public/navLogo.png";
+import diuLogoImg from "../../../public/diuLogo.png";
 import { useEffect, useMemo, useState } from "react";
 import PhoneInputField from "@/components/registration/phoneInputField";
 import { calculatePricing, formatCurrency, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
@@ -794,7 +796,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
           </div>
           <div className="flex shrink-0 items-center gap-6 sm:gap-8 self-center">
             <Image
-              src="/diuLogo.png"
+              src={diuLogoImg}
               alt="Daffodil International University Logo"
               width={140}
               height={50}
@@ -802,7 +804,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
               priority
             />
             <Image
-              src="/navLogo.png"
+              src={logoImg}
               alt="IAUP Logo"
               width={160}
               height={44}
