@@ -16,13 +16,14 @@ const speakerCategories = [
     showDownload: false,
     speakers: [
       {
-        name: "Speaker Name TBA",
-        designation: "Designation",
-        organization: "University / Organization",
-        country: "Country",
-        sessionTitle: "Session title to be announced",
-        bio: "Short biography placeholder. Replace with the keynote speaker's background, achievements, and relevance to the meeting's theme.",
-        photoUrl: "",
+        name: "Alexander A. Mejia",
+        designation: "Director",
+        organization:
+          "Division for People and Social Development at United Nations Institute for Training and Research (UNITAR)",
+        country: "",
+        sessionTitle: "Keynote Address",
+        bio: "Director of the Division for People and Social Development at the United Nations Institute for Training and Research (UNITAR).",
+        photoUrl: "/Alexander.jpeg",
         profileUrl: "#",
         cardUrl: "",
       },
