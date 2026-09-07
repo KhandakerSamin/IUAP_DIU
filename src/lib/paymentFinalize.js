@@ -1,9 +1,10 @@
 import {
   attachReffIdToRegistration,
+  claimInvoiceSend,
   getFamilyMembersForRegistration,
   getRegistrationByRegId,
   getRegistrationByReffId,
-  markInvoiceSent,
+  releaseInvoiceSendClaim,
   setInvoicePath,
 } from "@/lib/db";
 import { writeInvoiceToDisk, getInvoiceNumber } from "@/lib/invoice";
@@ -40,7 +41,7 @@ async function runFinalize(reffId) {
     }
   }
 
-  if (!registration.invoice_sent_at) {
+  if (!registration.invoice_sent_at && claimInvoiceSend(reffId)) {
     try {
       if (!pdfBuffer && invoicePath) {
         const { readInvoiceFromDisk } = await import("@/lib/invoice");
@@ -56,11 +57,12 @@ async function runFinalize(reffId) {
         currency: registration.payment_currency,
         pdfBuffer,
       });
-      if (result.sent) {
-        markInvoiceSent(reffId);
+      if (!result.sent) {
+        releaseInvoiceSendClaim(reffId);
       }
     } catch (err) {
       console.error("[finalize] email send failed", reffId, err);
+      releaseInvoiceSendClaim(reffId);
     }
   }
 
@@ -127,7 +129,7 @@ async function runWireFinalize(regId) {
   }
 
   let emailSent = Boolean(registration.invoice_sent_at);
-  if (!registration.invoice_sent_at) {
+  if (!registration.invoice_sent_at && claimInvoiceSend(registration.payment_reff_id)) {
     try {
       if (!pdfBuffer && invoicePath) {
         const { readInvoiceFromDisk } = await import("@/lib/invoice");
@@ -150,11 +152,12 @@ async function runWireFinalize(regId) {
         pdfBuffer,
       });
       emailSent = result.sent === true;
-      if (result.sent) {
-        markInvoiceSent(registration.payment_reff_id);
+      if (!result.sent) {
+        releaseInvoiceSendClaim(registration.payment_reff_id);
       }
     } catch (err) {
       console.error("[finalize:wire] email send failed", regId, err);
+      releaseInvoiceSendClaim(registration.payment_reff_id);
     }
   }
 

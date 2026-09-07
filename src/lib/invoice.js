@@ -45,6 +45,18 @@ const styles = StyleSheet.create({
   headerLogo: { width: 220, height: 78, objectFit: "contain" },
   diuHeaderLogo: { width: 140, height: 50, objectFit: "contain", marginBottom: 8 },
   invoiceTitle: { fontSize: 26, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
+  pendingBadge: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: "#b45309",
+    backgroundColor: "#fef3c7",
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 3,
+    letterSpacing: 1,
+    alignSelf: "flex-end",
+    marginTop: 4,
+  },
   invoiceMetaRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 4 },
   invoiceMetaLabel: { fontSize: 9, color: MUTED, marginRight: 6 },
   invoiceMetaValue: { fontSize: 9, fontFamily: "Helvetica-Bold" },
@@ -240,6 +252,11 @@ function InvoiceDoc({ registration, familyMembers }) {
           </View>
           <View>
             <Text style={styles.invoiceTitle}>INVOICE</Text>
+            {!isPaid && !isWire ? (
+              <Text style={styles.pendingBadge}>
+                {registration.payment_status === "failed" ? "PAYMENT FAILED" : "PAYMENT PENDING — NOT YET PAID"}
+              </Text>
+            ) : null}
             <View style={styles.invoiceMetaRow}>
               <Text style={styles.invoiceMetaLabel}>Invoice #</Text>
               <Text style={styles.invoiceMetaValue}>{invoiceNo}</Text>
@@ -399,6 +416,16 @@ function InvoiceDoc({ registration, familyMembers }) {
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Currency</Text>
                 <Text style={styles.paymentValue}>{currency}</Text>
+              </View>
+              <View style={styles.paymentItem}>
+                <Text style={styles.paymentLabel}>Status</Text>
+                <Text style={styles.paymentValue}>
+                  {isPaid
+                    ? "Paid"
+                    : registration.payment_status === "failed"
+                    ? "Payment failed"
+                    : "Payment pending — not yet paid"}
+                </Text>
               </View>
             </View>
           </View>

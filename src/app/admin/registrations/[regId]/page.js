@@ -27,6 +27,12 @@ function isImagePath(relPath) {
   return ext.endsWith(".jpg") || ext.endsWith(".jpeg") || ext.endsWith(".png") || ext.endsWith(".webp");
 }
 
+const PAYMENT_METHOD_LABELS = {
+  "wire-transfer": "Wire Transfer",
+  "online-payment": "Online Payment",
+  coupon: "Complimentary (Coupon)",
+};
+
 function formatDate(iso) {
   if (!iso) return "—";
   return new Date(iso + (iso.endsWith("Z") ? "" : "Z")).toLocaleString("en-GB", {
@@ -120,7 +126,7 @@ export default async function RegistrationDetailPage({ params }) {
           <Field label="Period" value={row.registration_period ? row.registration_period.replace(/^\w/, (c) => c.toUpperCase()) : null} />
           <Field label="Reff ID" value={row.payment_reff_id} />
           <Field label="Transaction ID" value={row.payment_tran_id} />
-          <Field label="Method" value={row.payment_method} />
+          <Field label="Method" value={PAYMENT_METHOD_LABELS[row.payment_method] || row.payment_method} />
           <Field label="Coupon Code" value={row.coupon_code} />
           <Field label="Submitted" value={formatDate(row.created_at)} />
           <Field label="Updated" value={formatDate(row.updated_at)} />

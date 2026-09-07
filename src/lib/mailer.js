@@ -404,7 +404,13 @@ ${getEmailSignatureText()}`;
         ${registration.member_affiliation ? `<tr><th>Affiliation</th><td><span class="badge">${registration.member_affiliation}</span></td></tr>` : ""}
         <tr><th>Needs Invitation Letter</th><td>${registration.needs_invitation_letter || "No"}</td></tr>
         <tr><th>Post-Event Tour</th><td>${registration.post_event_tour || "No"}</td></tr>
-        <tr><th>Payment Method</th><td><strong>${registration.payment_method === "wire-transfer" ? "Wire Transfer" : "Online Payment"}</strong></td></tr>
+        <tr><th>Payment Method</th><td><strong>${
+          registration.payment_method === "wire-transfer"
+            ? "Wire Transfer"
+            : registration.payment_method === "coupon"
+            ? `Complimentary (Coupon: ${registration.coupon_code || "—"})`
+            : "Online Payment"
+        }</strong></td></tr>
         <tr><th>Payment Status</th><td><span class="badge ${registration.payment_status === "paid" ? "badge-paid" : "badge-pending"}">${registration.payment_status || "pending"}</span></td></tr>
         <tr><th>Registration Fee</th><td><strong style="color:#0b3d91; font-size:15px;">${feeDisplay}</strong></td></tr>
       </table>

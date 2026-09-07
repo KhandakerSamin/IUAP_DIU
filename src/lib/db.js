@@ -287,14 +287,31 @@ export function setInvoicePath(reffId, invoicePath) {
     .run(invoicePath, reffId);
 }
 
-export function markInvoiceSent(reffId) {
+// Atomically claims the right to send the invoice email, so two concurrent
+// finalize calls for the same reffId — e.g. the IPN webhook and the browser
+// landing on the payment-result page at nearly the same moment — can't both
+// win the pre-read check and double-send. PM2 runs this app in cluster mode
+// (see ecosystem.config.js), so an in-memory dedup guard alone isn't enough;
+// this must be a single atomic UPDATE.
+export function claimInvoiceSend(reffId) {
   const db = getDatabase();
-  return db
+  const result = db
     .prepare(
       `UPDATE registrations
          SET invoice_sent_at = datetime('now'), updated_at = datetime('now')
-       WHERE payment_reff_id = ?`
+       WHERE payment_reff_id = ? AND invoice_sent_at IS NULL`
     )
+    .run(reffId);
+  return result.changes === 1;
+}
+
+// Releases a claim taken by claimInvoiceSend() when the send itself failed,
+// so a later retry (next IPN redelivery, page reload, admin resend) can
+// still go out instead of being permanently swallowed by the claim.
+export function releaseInvoiceSendClaim(reffId) {
+  const db = getDatabase();
+  return db
+    .prepare(`UPDATE registrations SET invoice_sent_at = NULL WHERE payment_reff_id = ?`)
     .run(reffId);
 }
 
