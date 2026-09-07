@@ -2,7 +2,7 @@ import Image from "next/image";
 import { UserSquare2, Sparkles, Award, Globe } from "lucide-react";
 
 const keynoteSpeaker = {
-  name: "Alexander A. Mejia",
+  name: "Mr. Alexander A. Mejia",
   titles: [
     "Director, Division for People and Social Development",
     "Managing Director, CIFAL Global Network",
