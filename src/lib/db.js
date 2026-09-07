@@ -560,21 +560,24 @@ export function getCouponByCode(code) {
   return db.prepare("SELECT * FROM coupons WHERE code = ?").get(code);
 }
 
-// Atomically validates and consumes one use in a single statement, so two
-// concurrent registrations can't both slip through the last use of a
-// limited-use coupon.
-export function consumeCoupon(code) {
+// Atomically validates and consumes `headCount` uses in a single statement,
+// so two concurrent registrations can't both slip through the last uses of a
+// limited-use coupon. `headCount` is the main registrant plus any family
+// members bundled into the same registration — a coupon meant to cover 2
+// people must not let one registration attach unlimited free family members
+// while only spending a single "use".
+export function consumeCoupon(code, headCount = 1) {
   const db = getDatabase();
   const result = db
     .prepare(
       `UPDATE coupons
-          SET uses_count = uses_count + 1
-        WHERE code = ?
+          SET uses_count = uses_count + @headCount
+        WHERE code = @code
           AND active = 1
           AND (expires_at IS NULL OR expires_at > datetime('now'))
-          AND (max_uses IS NULL OR uses_count < max_uses)`
+          AND (max_uses IS NULL OR uses_count + @headCount <= max_uses)`
     )
-    .run(code);
+    .run({ code, headCount });
   return result.changes === 1;
 }
 

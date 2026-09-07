@@ -123,7 +123,7 @@ export default function CouponsTable({ rows, baseUrl }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-semibold text-slate-500">Max uses</label>
+          <label className="mb-1 block text-xs font-semibold text-slate-500">Max people</label>
           <input
             type="number"
             min="1"
@@ -157,7 +157,7 @@ export default function CouponsTable({ rows, baseUrl }) {
           <thead className="bg-slate-50">
             <tr>
               <th className={TH}>Code</th>
-              <th className={TH}>Uses</th>
+              <th className={TH}>People used</th>
               <th className={TH}>Status</th>
               <th className={TH}>Created</th>
               <th className={TH}>Registration link</th>

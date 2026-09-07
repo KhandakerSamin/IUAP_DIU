@@ -192,7 +192,7 @@ export async function POST(request) {
       // coupon use is only ever spent on a registration that actually
       // lands — anything that fails validation above never reaches this
       // point, and a DB failure below rolls the use back too.
-      if (couponCode && !consumeCoupon(couponCode)) {
+      if (couponCode && !consumeCoupon(couponCode, familyUploads.length + 1)) {
         throw new Error("COUPON_INVALID");
       }
       insertedId = insertRegistration(registrationRow);
