@@ -17,12 +17,14 @@ const speakerCategories = [
     speakers: [
       {
         name: "Alexander A. Mejia",
-        designation: "Director",
-        organization:
-          "Division for People and Social Development at United Nations Institute for Training and Research (UNITAR)",
+        titleLines: [
+          "Director, Division for People and Social Development",
+          "Managing Director, CIFAL Global Network",
+          "United Nations Institute for Training and Research (UNITAR)",
+        ],
         country: "",
         sessionTitle: "Keynote Address",
-        bio: "Director of the Division for People and Social Development at the United Nations Institute for Training and Research (UNITAR).",
+        bio: "Director of the Division for People and Social Development and Managing Director of the CIFAL Global Network at the United Nations Institute for Training and Research (UNITAR).",
         photoUrl: "/Alexander.jpeg",
         profileUrl: "#",
         cardUrl: "",

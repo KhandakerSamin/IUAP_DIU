@@ -78,12 +78,11 @@ export default function PostEventSection() {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none">
-                  <div className="inline-flex items-center rounded-xl bg-black/60 backdrop-blur-md px-4 py-2 border border-white/20 shadow-sm">
-                    <h4 className="font-display text-base sm:text-lg font-bold text-white tracking-wide">
-                      Dhaka City Exploration
-                    </h4>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-6 sm:p-8 w-full">
+                  <h4 className="font-display text-2xl sm:text-3xl font-bold text-white mb-1">
+                    Dhaka City Exploration
+                  </h4>
                 </div>
               </div>
             </div>
@@ -97,12 +96,11 @@ export default function PostEventSection() {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none">
-                  <div className="inline-flex items-center rounded-xl bg-black/60 backdrop-blur-md px-4 py-2 border border-white/20 shadow-sm">
-                    <h4 className="font-display text-base sm:text-lg font-bold text-white tracking-wide">
-                      Bangladesh Parliament Visit
-                    </h4>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-6 sm:p-8 w-full">
+                  <h4 className="font-display text-2xl sm:text-3xl font-bold text-white mb-1">
+                    Bangladesh Parliament Visit
+                  </h4>
                 </div>
               </div>
             </div>

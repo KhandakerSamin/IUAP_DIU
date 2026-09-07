@@ -88,11 +88,21 @@ export default function SpeakerCard({ speaker, showDownload }) {
 
         <div className="min-w-0">
           <h3 className="truncate text-lg font-semibold text-slate-900">{speaker.name}</h3>
-          <p className="text-sm text-slate-600">{speaker.designation}</p>
-          <p className="text-sm text-slate-500">
-            {speaker.organization}
-            {speaker.country ? ` · ${speaker.country}` : ""}
-          </p>
+          {speaker.titleLines?.length ? (
+            speaker.titleLines.map((line) => (
+              <p key={line} className="text-sm text-slate-600">
+                {line}
+              </p>
+            ))
+          ) : (
+            <>
+              <p className="text-sm text-slate-600">{speaker.designation}</p>
+              <p className="text-sm text-slate-500">
+                {speaker.organization}
+                {speaker.country ? ` · ${speaker.country}` : ""}
+              </p>
+            </>
+          )}
         </div>
       </div>
 

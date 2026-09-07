@@ -3,8 +3,11 @@ import { UserSquare2, Sparkles, Award, Globe } from "lucide-react";
 
 const keynoteSpeaker = {
   name: "Alexander A. Mejia",
-  designation: "Director",
-  organization: "Division for People and Social Development at United Nations Institute for Training and Research (UNITAR)",
+  titles: [
+    "Director, Division for People and Social Development",
+    "Managing Director, CIFAL Global Network",
+    "United Nations Institute for Training and Research (UNITAR)",
+  ],
   image: "/Alexander.jpeg",
   badge: "Keynote Speaker",
 };
@@ -84,15 +87,22 @@ export default function EventSpeakers() {
                     {keynoteSpeaker.name}
                   </h3>
 
-                  <p className="text-primary font-semibold text-lg sm:text-xl mb-3">
-                    {keynoteSpeaker.designation}
-                  </p>
+                  <div className="mb-3 space-y-1 max-w-xl">
+                    {keynoteSpeaker.titles.map((title, i) => (
+                      <p
+                        key={title}
+                        className={
+                          i === 0
+                            ? "text-primary font-semibold text-lg sm:text-xl"
+                            : "text-slate-700 text-sm sm:text-base leading-relaxed"
+                        }
+                      >
+                        {title}
+                      </p>
+                    ))}
+                  </div>
 
-                  <div className="w-16 h-1 bg-linear-to-r from-primary to-secondary rounded-full mb-4 group-hover:w-28 transition-all duration-500" />
-
-                  <p className="text-slate-700 text-sm sm:text-base leading-relaxed mb-6 max-w-xl">
-                    {keynoteSpeaker.organization}
-                  </p>
+                  <div className="w-16 h-1 bg-linear-to-r from-primary to-secondary rounded-full mb-6 group-hover:w-28 transition-all duration-500" />
 
                   {/* Badges / Pill Tags */}
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
