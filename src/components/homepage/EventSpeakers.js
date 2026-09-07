@@ -72,18 +72,12 @@ export default function EventSpeakers() {
                       sizes="(max-width: 640px) 208px, (max-width: 1024px) 240px, 272px"
                     />
                   </div>
-
-                  {/* Overlaid Pill Badge */}
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-dark text-white text-xs font-bold uppercase tracking-wider shadow-lg border border-white/20 flex items-center gap-1.5">
-                    <Award className="w-3.5 h-3.5 text-accent" />
-                    <span>Keynote Speaker</span>
-                  </div>
                 </div>
 
                 {/* Details Section */}
                 <div className="flex-1 flex flex-col items-center md:items-start pt-2 md:pt-0">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-wider mb-3">
-                    <Sparkles className="w-3 h-3 text-primary" /> Keynote Address
+                    <Sparkles className="w-3 h-3 text-primary" /> Keynote Speaker
                   </span>
 
                   <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-dark mb-2 tracking-tight group-hover:text-primary transition-colors duration-300">
