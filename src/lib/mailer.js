@@ -313,7 +313,7 @@ export async function sendRegistrationAdminNotification({
       ? familyMembers
           .map(
             (fm, i) =>
-              `  ${i + 1}. ${fm.fullName || fm.full_name || "—"} | Passport: ${fm.passportNo || fm.passport_no || "—"} | Email: ${fm.email || "—"} | Phone: ${fm.phone || "—"} | T-shirt: ${fm.tShirtSize || fm.tshirt_size || "—"}`
+              `  ${i + 1}. ${fm.fullName || fm.full_name || "—"} | Passport/NID: ${fm.passportNo || fm.passport_no || "—"} | Email: ${fm.email || "—"} | Phone: ${fm.phone || "—"} | T-shirt: ${fm.tShirtSize || fm.tshirt_size || "—"}`
           )
           .join("\n")
       : "None";
@@ -331,7 +331,7 @@ Position/Designation: ${registration.position || "N/A"}
 Department: ${registration.department || "N/A"}
 Address: ${[registration.address, registration.city, registration.zip_code, registration.country].filter(Boolean).join(", ") || "N/A"}
 Nationality: ${registration.nationality || "N/A"}
-Passport No: ${registration.passport_no || "N/A"}
+Passport/NID No: ${registration.passport_no || "N/A"}
 Date of Birth: ${registration.date_of_birth || "N/A"}
 Gender: ${registration.gender || "N/A"}
 T-Shirt Size: ${registration.tshirt_size || "N/A"}
@@ -344,7 +344,7 @@ Optional Post-Event Tour: ${registration.post_event_tour || "No"}
 Payment Method: ${registration.payment_method || "N/A"}
 Payment Status: ${registration.payment_status || "pending"}
 Registration Fee: ${feeDisplay}
-
+${registration.coupon_code ? `\n*** COUPON USED: ${registration.coupon_code} — this registration was complimentary ***\n` : ""}
 Accompanying Family Members (${familyMembers.length}):
 ${familyListText}
 
@@ -382,7 +382,14 @@ ${getEmailSignatureText()}`;
       <p>IAUP Semi-Annual Meeting 2026 | Daffodil International University</p>
     </div>
     <div class="content">
-      <p style="margin-top: 0;">A new participant registration has just been submitted:</p>
+      <p style="margin-top: 0;">A new participant registration has just been confirmed:</p>
+      ${
+        registration.coupon_code
+          ? `<div style="background:#f5f3ff; border:1px solid #ddd6fe; border-left:4px solid #7c3aed; border-radius:6px; padding:10px 14px; margin-bottom:14px; font-size:13px; color:#4c1d95;">
+               <strong>Coupon used:</strong> <code style="background:#ede9fe; padding:2px 6px; border-radius:4px;">${registration.coupon_code}</code> — this registration was complimentary (no payment collected).
+             </div>`
+          : ""
+      }
       <table class="table">
         <tr><th>Registration ID</th><td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${registration.reg_id}</code></td></tr>
         <tr><th>Full Name</th><td><strong>${fullName}</strong></td></tr>
@@ -396,7 +403,7 @@ ${getEmailSignatureText()}`;
         <tr><th>Country</th><td>${registration.country || "—"}</td></tr>
         <tr><th>City / Address</th><td>${[registration.address, registration.city, registration.zip_code].filter(Boolean).join(", ") || "—"}</td></tr>
         <tr><th>Nationality</th><td>${registration.nationality || "—"}</td></tr>
-        <tr><th>Passport No</th><td>${registration.passport_no || "—"}</td></tr>
+        <tr><th>Passport/NID No</th><td>${registration.passport_no || "—"}</td></tr>
         <tr><th>T-Shirt Size</th><td>${registration.tshirt_size || "—"}</td></tr>
         <tr><th>Food Requirement</th><td>${[registration.food_requirement, registration.other_food].filter(Boolean).join(" - ") || "—"}</td></tr>
         <tr><th>Local Participant</th><td><strong>${registration.is_local_participant || "No"}</strong></td></tr>
@@ -423,7 +430,7 @@ ${getEmailSignatureText()}`;
                  ${familyMembers
                    .map(
                      (fm) =>
-                       `<li><strong>${fm.fullName || fm.full_name || "—"}</strong> &middot; Passport: ${fm.passportNo || fm.passport_no || "—"} &middot; Email: ${fm.email || "—"} &middot; Phone: ${fm.phone || "—"} &middot; T-Shirt: ${fm.tShirtSize || fm.tshirt_size || "—"}</li>`
+                       `<li><strong>${fm.fullName || fm.full_name || "—"}</strong> &middot; Passport/NID: ${fm.passportNo || fm.passport_no || "—"} &middot; Email: ${fm.email || "—"} &middot; Phone: ${fm.phone || "—"} &middot; T-Shirt: ${fm.tShirtSize || fm.tshirt_size || "—"}</li>`
                    )
                    .join("")}
                </ul>

@@ -169,7 +169,7 @@ function validateForm(values) {
   }
 
   if (!values.passportNo.trim()) {
-    errors.passportNo = "Passport number is required.";
+    errors.passportNo = "Passport or NID number is required.";
   }
 
   if (!values.nationality.trim()) {
@@ -649,7 +649,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
       nextErrors.profilePhoto = "Profile picture is required.";
     }
     if (!fileValues.passportScan) {
-      nextErrors.passportScan = "Passport front page scan is required.";
+      nextErrors.passportScan = "Passport or NID front page scan is required.";
     }
 
     familyMembers.forEach((fm, i) => {
@@ -657,7 +657,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
         nextErrors[`familyMembers[${i}][fullName]`] = "Full name is required.";
       }
       if (!fm.passportNo.trim()) {
-        nextErrors[`familyMembers[${i}][passportNo]`] = "Passport number is required.";
+        nextErrors[`familyMembers[${i}][passportNo]`] = "Passport or NID number is required.";
       }
       if (!fm.email.trim()) {
         nextErrors[`familyMembers[${i}][email]`] = "Email is required.";
@@ -676,7 +676,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
         nextErrors[`familyMembers[${i}][profilePhoto]`] = "Profile picture is required.";
       }
       if (!fm.passportScan) {
-        nextErrors[`familyMembers[${i}][passportScan]`] = "Passport scan is required.";
+        nextErrors[`familyMembers[${i}][passportScan]`] = "Passport or NID scan is required.";
       }
     });
 
@@ -904,7 +904,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
 
             <div>
               <label htmlFor="passportNo" className="mb-2 block text-sm font-semibold text-slate-700">
-                Passport No<RequiredMark />
+                Passport/NID No (NID for local resident only)<RequiredMark />
               </label>
               <input
                 id="passportNo"
@@ -914,7 +914,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                 onChange={handleChange}
                 maxLength={FIELD_LIMITS.passportNo}
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                placeholder="Passport number"
+                placeholder="Passport or NID number"
                 required
               />
               {errors.passportNo && <p className="mt-2 text-sm text-red-600">{errors.passportNo}</p>}
@@ -1213,7 +1213,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                 </div>
                 <div>
                   <label htmlFor="passportScan" className="mb-2 block text-sm font-medium text-slate-700">
-                    Passport Front Page (scan copy)<RequiredMark />
+                    Passport/NID Front Page (scan copy) (NID for local resident only)<RequiredMark />
                   </label>
                   <input
                     id="passportScan"
@@ -1439,7 +1439,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                                 htmlFor={`fm-${index}-passportNo`}
                                 className="mb-2 block text-sm font-medium text-slate-700"
                               >
-                                Passport No<RequiredMark />
+                                Passport/NID No (NID for local resident only)<RequiredMark />
                               </label>
                               <input
                                 id={`fm-${index}-passportNo`}
@@ -1448,7 +1448,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                                 onChange={handleFamilyTextChange(index, "passportNo")}
                                 maxLength={FIELD_LIMITS.familyPassportNo}
                                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-primary"
-                                placeholder="Passport number"
+                                placeholder="Passport or NID number"
                               />
                               {errors[passportErr] && (
                                 <p className="mt-2 text-sm text-red-600">{errors[passportErr]}</p>
@@ -1538,7 +1538,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                                 htmlFor={`fm-${index}-passportScan`}
                                 className="mb-2 block text-sm font-medium text-slate-700"
                               >
-                                Passport Front Page (scan copy)<RequiredMark />
+                                Passport/NID Front Page (scan copy) (NID for local resident only)<RequiredMark />
                               </label>
                               <input
                                 id={`fm-${index}-passportScan`}

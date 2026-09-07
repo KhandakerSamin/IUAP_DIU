@@ -142,7 +142,7 @@ export default async function RegistrationDetailPage({ params }) {
           <Field label="Gender" value={row.gender} />
           <Field label="Date of Birth" value={row.date_of_birth} />
           <Field label="Nationality" value={row.nationality} />
-          <Field label="Passport No" value={row.passport_no} />
+          <Field label="Passport/NID No" value={row.passport_no} />
           <Field label="Email" value={row.email} />
           <Field label="Alternative Email" value={row.alternative_email} />
           <Field label="Phone" value={row.phone} />
@@ -178,7 +178,7 @@ export default async function RegistrationDetailPage({ params }) {
         <h2 className="mb-4 text-sm font-semibold text-slate-900">Documents</h2>
         <dl className="grid gap-6 sm:grid-cols-2">
           <FileBlock label="Profile Picture" relPath={row.profile_photo_path} />
-          <FileBlock label="Passport Front Page" relPath={row.passport_scan_path} />
+          <FileBlock label="Passport/NID Front Page" relPath={row.passport_scan_path} />
         </dl>
       </section>
 
@@ -192,13 +192,13 @@ export default async function RegistrationDetailPage({ params }) {
                   #{idx + 1} · {fm.full_name || "—"}
                 </p>
                 <dl className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Passport No" value={fm.passport_no} />
+                  <Field label="Passport/NID No" value={fm.passport_no} />
                   <Field label="Email" value={fm.email} />
                   <Field label="Phone" value={fm.phone} />
                   <Field label="T-shirt size" value={fm.tshirt_size} />
                   {fm.relationship ? <Field label="Relationship" value={fm.relationship} /> : null}
                   <FileBlock label="Profile Picture" relPath={fm.profile_photo_path} />
-                  <FileBlock label="Passport Front Page" relPath={fm.passport_scan_path} />
+                  <FileBlock label="Passport/NID Front Page" relPath={fm.passport_scan_path} />
                 </dl>
               </div>
             ))}

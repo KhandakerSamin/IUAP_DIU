@@ -1,7 +1,5 @@
 import { attachReffIdToRegistration, consumeCoupon, insertFamilyMember, insertRegistration, markPaymentStatus, runInTransaction } from "@/lib/db";
 import { saveUpload } from "@/lib/fileStorage";
-import { generateInvoiceBuffer } from "@/lib/invoice";
-import { sendRegistrationAdminNotification } from "@/lib/mailer";
 import { finalizePaidPayment, finalizeWireRegistration } from "@/lib/paymentFinalize";
 import { calculatePricing } from "@/lib/pricing";
 
@@ -52,7 +50,7 @@ export async function POST(request) {
     return Response.json({ error: "Profile picture is required." }, { status: 400 });
   }
   if (!passportScanFile || (passportScanFile.size ?? 0) === 0) {
-    return Response.json({ error: "Passport front page scan is required." }, { status: 400 });
+    return Response.json({ error: "Passport or NID front page scan is required." }, { status: 400 });
   }
 
   const hasFamilyMembers = pickText(form, "hasFamilyMembers");
@@ -223,42 +221,14 @@ export async function POST(request) {
     return Response.json({ error: "Could not save registration. Please try again." }, { status: 500 });
   }
 
+  // Admin + participant notifications go out from the finalize paths below,
+  // only once the registration has actually reached a final state (paid via
+  // coupon/gateway, or recorded for wire transfer) — never here at submit
+  // time, so nobody sees a "paid" invoice for a payment that hasn't happened.
   const pricing = calculatePricing({
     isLocal: registrationRow.is_local_participant === "Yes",
     isMember: registrationRow.is_member_university === "Yes",
     familyMembersCount: familyUploads.length,
-  });
-
-  // Pre-generate invoice buffer for notifications
-  let pdfBuffer = null;
-  try {
-    pdfBuffer = await generateInvoiceBuffer({
-      registration: {
-        ...registrationRow,
-        id: insertedId,
-        payment_amount: String(pricing.totalFee),
-        payment_currency: pricing.currency,
-        registration_period: pricing.period.key,
-      },
-      familyMembers: familyUploads,
-    });
-  } catch (err) {
-    console.error("[registration] could not generate invoice buffer for notification", err);
-  }
-
-  // Send admin notification to iaup-bd2026@daffodilvarsity.edu.bd with all submitted details
-  sendRegistrationAdminNotification({
-    registration: {
-      ...registrationRow,
-      id: insertedId,
-      payment_amount: String(pricing.totalFee),
-      payment_currency: pricing.currency,
-    },
-    familyMembers: familyUploads,
-    pricing,
-    pdfBuffer,
-  }).catch((err) => {
-    console.error("[registration] admin notification error", err);
   });
 
   // A valid coupon skips the gateway entirely: mark paid immediately and

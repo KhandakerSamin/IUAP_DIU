@@ -14,11 +14,6 @@ const LOGO_DATA_URI = existsSync(LOGO_PATH)
   ? `data:image/jpeg;base64,${readFileSync(LOGO_PATH).toString("base64")}`
   : null;
 
-const DIU_LOGO_PATH = path.join(process.cwd(), "public", "diuLogo.png");
-const DIU_LOGO_DATA_URI = existsSync(DIU_LOGO_PATH)
-  ? `data:image/png;base64,${readFileSync(DIU_LOGO_PATH).toString("base64")}`
-  : null;
-
 const PRIMARY = "#0b3d91";
 const MUTED = "#64748b";
 const LINE = "#e2e8f0";
@@ -42,8 +37,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: PRIMARY },
   eventSubtitle: { fontSize: 10, color: MUTED, marginTop: 3 },
-  headerLogo: { width: 220, height: 78, objectFit: "contain" },
-  diuHeaderLogo: { width: 140, height: 50, objectFit: "contain", marginBottom: 8 },
+  headerLogo: { width: 140, height: 50, objectFit: "contain" },
   invoiceTitle: { fontSize: 26, fontFamily: "Helvetica-Bold", color: PRIMARY, letterSpacing: 2 },
   pendingBadge: {
     fontSize: 9,
@@ -227,9 +221,20 @@ function InvoiceDoc({ registration, familyMembers }) {
   });
   const periodLabel = periodMeta?.label || pricing.period.label;
   const periodRange = periodMeta?.range || pricing.period.range;
-  const baseFee = pricing.baseFee;
-  const familyFee = pricing.familyFeeUsd;
   const feeCurrency = pricing.currency;
+
+  // The family-member add-on is a fixed per-head amount that never moves, so
+  // it's safe to compute fresh. The base fee, however, must reconcile to
+  // what was actually billed (the Total below) — not to whatever tier
+  // calculatePricing() would quote *today* — otherwise re-downloading an
+  // invoice after the registration window has moved to the next pricing
+  // tier makes the Subtotal silently disagree with the Total. A coupon is
+  // the one case with nothing real to reconcile to (the charge is 0), so it
+  // still shows today's quoted fee purely as the "amount waived" figure —
+  // the Discount line below always cancels it exactly, so the coupon Total
+  // is unaffected either way.
+  const familyFee = isLocal ? 0 : familyCount * FAMILY_MEMBER_FEE_USD;
+  const baseFee = couponCode ? pricing.baseFee : Number(amount) - familyFee;
 
   const baseLabel = isLocal
     ? `IAUP Semi-Annual Meeting 2026 — Registration (Local Participant · ${periodLabel})`
@@ -240,15 +245,11 @@ function InvoiceDoc({ registration, familyMembers }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
-            {DIU_LOGO_DATA_URI ? <Image src={DIU_LOGO_DATA_URI} style={styles.diuHeaderLogo} /> : null}
-            {LOGO_DATA_URI ? (
-              <Image src={LOGO_DATA_URI} style={styles.headerLogo} />
-            ) : (
-              <>
-                <Text style={styles.eventTitle}>IAUP Semi-Annual Meeting 2026</Text>
-                <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
-              </>
-            )}
+            {LOGO_DATA_URI ? <Image src={LOGO_DATA_URI} style={styles.headerLogo} /> : null}
+            <Text style={[styles.eventTitle, LOGO_DATA_URI ? { marginTop: 6, fontSize: 12 } : null]}>
+              IAUP Semi-Annual Meeting 2026
+            </Text>
+            <Text style={styles.eventSubtitle}>Daffodil International University, Dhaka · 19–21 November 2026</Text>
           </View>
           <View>
             <Text style={styles.invoiceTitle}>INVOICE</Text>

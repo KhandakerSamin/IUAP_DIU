@@ -8,7 +8,7 @@ import {
   setInvoicePath,
 } from "@/lib/db";
 import { writeInvoiceToDisk, getInvoiceNumber } from "@/lib/invoice";
-import { sendInvoiceEmail, sendWireConfirmationEmail } from "@/lib/mailer";
+import { sendInvoiceEmail, sendRegistrationAdminNotification, sendWireConfirmationEmail } from "@/lib/mailer";
 import { calculatePricing } from "@/lib/pricing";
 
 // In-flight deduplication so concurrent calls (IPN + payment-result page load)
@@ -59,6 +59,17 @@ async function runFinalize(reffId) {
       });
       if (!result.sent) {
         releaseInvoiceSendClaim(reffId);
+      } else {
+        // Admin only hears about a registration once it has actually gone
+        // through — a coupon redemption or a confirmed gateway charge —
+        // never at submit time, so a pending payment can't be mistaken for
+        // a completed one. The coupon code (if any) rides along on
+        // `registration` so admin sees it was a complimentary entry.
+        sendRegistrationAdminNotification({
+          registration,
+          familyMembers,
+          pdfBuffer,
+        }).catch((err) => console.error("[finalize] admin notification failed", reffId, err));
       }
     } catch (err) {
       console.error("[finalize] email send failed", reffId, err);
@@ -154,6 +165,12 @@ async function runWireFinalize(regId) {
       emailSent = result.sent === true;
       if (!result.sent) {
         releaseInvoiceSendClaim(registration.payment_reff_id);
+      } else {
+        sendRegistrationAdminNotification({
+          registration,
+          familyMembers,
+          pdfBuffer,
+        }).catch((err) => console.error("[finalize:wire] admin notification failed", regId, err));
       }
     } catch (err) {
       console.error("[finalize:wire] email send failed", regId, err);
