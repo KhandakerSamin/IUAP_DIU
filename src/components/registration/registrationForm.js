@@ -1564,7 +1564,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
             )}
 
             <OptionGroup
-              legend="Interested in joining the Optional Post-Event Tour?"
+              legend="Interested in joining the Optional Post-Event Tour? (Extra Charge Applicable)"
               name="postEventTour"
               options={YES_NO_OPTIONS}
               value={formValues.postEventTour}
