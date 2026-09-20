@@ -50,7 +50,6 @@ export default function AboutDiuSection() {
               <div className="relative rounded-3xl w-full aspect-video overflow-hidden bg-slate-100 shadow-md">
                 <Image
                   src="/DaffodilBirdEyeView.png"
-                  alt="About DIU Campus"
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, 50vw"
