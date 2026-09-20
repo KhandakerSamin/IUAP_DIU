@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS registrations (
   family_members_count TEXT,
   family_members_other TEXT,
   needs_invitation_letter TEXT,
+  city_tour TEXT,
   post_event_tour TEXT,
   payment_method TEXT,
   profile_photo_path TEXT,
@@ -129,6 +130,7 @@ const MIGRATIONS = [
   `ALTER TABLE registrations ADD COLUMN is_local_participant TEXT`,
   `ALTER TABLE registrations ADD COLUMN member_affiliation TEXT`,
   `ALTER TABLE registrations ADD COLUMN coupon_code TEXT`,
+  `ALTER TABLE registrations ADD COLUMN city_tour TEXT`,
 ];
 
 function applyMigrations(db) {
@@ -188,14 +190,14 @@ export function insertRegistration(row) {
       date_of_birth, organization, position, department, address, zip_code, city, country,
       phone, whatsapp, email, alternative_email, tshirt_size, food_requirement, other_food,
       is_local_participant, is_member_university, member_affiliation, has_family_members,
-      family_members_count, family_members_other, needs_invitation_letter, post_event_tour,
+      family_members_count, family_members_other, needs_invitation_letter, city_tour, post_event_tour,
       payment_method, profile_photo_path, passport_scan_path, coupon_code
     ) VALUES (
       @reg_id, @title, @other_title, @given_name, @surname, @gender, @passport_no, @nationality,
       @date_of_birth, @organization, @position, @department, @address, @zip_code, @city, @country,
       @phone, @whatsapp, @email, @alternative_email, @tshirt_size, @food_requirement, @other_food,
       @is_local_participant, @is_member_university, @member_affiliation, @has_family_members,
-      @family_members_count, @family_members_other, @needs_invitation_letter, @post_event_tour,
+      @family_members_count, @family_members_other, @needs_invitation_letter, @city_tour, @post_event_tour,
       @payment_method, @profile_photo_path, @passport_scan_path, @coupon_code
     )
   `);
@@ -389,6 +391,7 @@ const EDITABLE_FIELDS = new Set([
   "family_members_count",
   "family_members_other",
   "needs_invitation_letter",
+  "city_tour",
   "post_event_tour",
   "payment_method",
   "payment_status",

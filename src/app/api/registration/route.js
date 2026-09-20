@@ -176,6 +176,7 @@ export async function POST(request) {
     family_members_count: familyMembersCount || null,
     family_members_other: familyMembersOther || null,
     needs_invitation_letter: pickText(form, "needsInvitationLetter") || null,
+    city_tour: pickText(form, "cityTour") || null,
     post_event_tour: pickText(form, "postEventTour") || null,
     payment_method: couponCode ? "coupon" : pickText(form, "paymentMethod") || null,
     profile_photo_path: profilePhotoPath,

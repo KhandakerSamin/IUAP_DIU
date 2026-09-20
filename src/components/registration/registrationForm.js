@@ -116,6 +116,7 @@ const INITIAL_FORM = {
   familyMembersCount: "",
   familyMembersOther: "",
   needsInvitationLetter: "",
+  cityTour: "",
   postEventTour: "",
   paymentMethod: "",
   couponCode: "",
@@ -280,6 +281,10 @@ function validateForm(values) {
         errors.familyMembersOther = "Please enter a valid number.";
       }
     }
+  }
+
+  if (!values.cityTour || !YES_NO_OPTIONS.includes(values.cityTour)) {
+    errors.cityTour = "Please select Yes or No.";
   }
 
   if (!values.postEventTour || !YES_NO_OPTIONS.includes(values.postEventTour)) {
@@ -1562,6 +1567,16 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                 )}
               </fieldset>
             )}
+
+            <OptionGroup
+              legend="Will you join the Optional City Tour?"
+              name="cityTour"
+              options={YES_NO_OPTIONS}
+              value={formValues.cityTour}
+              onChange={handleChange}
+              error={errors.cityTour}
+              required
+            />
 
             <OptionGroup
               legend="Interested in joining the Optional Post-Event Tour? (Extra Charge Applicable)"

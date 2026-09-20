@@ -340,6 +340,7 @@ Local Participant: ${registration.is_local_participant || "No"}
 Member University: ${registration.is_member_university || "No"}
 Affiliation: ${registration.member_affiliation || "N/A"}
 Needs Invitation Letter: ${registration.needs_invitation_letter || "No"}
+Optional City Tour: ${registration.city_tour || "No"}
 Optional Post-Event Tour: ${registration.post_event_tour || "No"}
 Payment Method: ${registration.payment_method || "N/A"}
 Payment Status: ${registration.payment_status || "pending"}
@@ -410,6 +411,7 @@ ${getEmailSignatureText()}`;
         <tr><th>Member University</th><td>${registration.is_member_university || "No"}</td></tr>
         ${registration.member_affiliation ? `<tr><th>Affiliation</th><td><span class="badge">${registration.member_affiliation}</span></td></tr>` : ""}
         <tr><th>Needs Invitation Letter</th><td>${registration.needs_invitation_letter || "No"}</td></tr>
+        <tr><th>City Tour</th><td>${registration.city_tour || "No"}</td></tr>
         <tr><th>Post-Event Tour</th><td>${registration.post_event_tour || "No"}</td></tr>
         <tr><th>Payment Method</th><td><strong>${
           registration.payment_method === "wire-transfer"

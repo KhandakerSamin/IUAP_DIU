@@ -160,6 +160,7 @@ export default async function RegistrationDetailPage({ params }) {
           <Field label="IAUP/AUAP/Partner university" value={row.is_member_university} />
           <Field label="Affiliation" value={row.member_affiliation} />
           <Field label="Needs invitation letter" value={row.needs_invitation_letter} />
+          <Field label="Optional city tour" value={row.city_tour} />
           <Field label="Optional post-event tour" value={row.post_event_tour} />
           <Field
             label="Family members"
