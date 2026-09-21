@@ -61,7 +61,10 @@ export default function HeroSection() {
         preload="auto"
         poster="/heroBG.jpg"
       >
-        <source src="https://res.cloudinary.com/xmcj37va/video/upload/v1787079176/hero_fpk3dj.mp4" type="video/mp4" />
+        <source
+          src="https://res.cloudinary.com/dkdqgprea/video/upload/v1789983308/Copy_of_IAUP_Semi-Annual_Meeting_2026_website_video_without_any_text_logos_1_awpksu.mp4"
+          type="video/mp4"
+        />
       </video>
 
       {/* Dark Overlay to ensure text readability */}
