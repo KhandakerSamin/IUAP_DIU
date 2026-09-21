@@ -118,43 +118,12 @@ function ChiefGuestsSection() {
   );
 }
 
-const QUICK_NAV = [
-  { id: "chief-guests", label: "Chief Guests", dot: "bg-primary" },
-  { id: "iaup-leadership", label: "IAUP Leadership", dot: "bg-secondary" },
-  { id: "keynote-speaker", label: "Keynote Speaker", dot: "bg-amber-500" },
-  { id: "distinguished-speakers", label: "Panel Speakers", dot: "bg-primary" },
-];
-
 export default function SpeakersPage() {
   return (
     <>
       <Nev />
 
-      {/* Fixed Category Quick Nav */}
-      <nav className="fixed inset-x-0 top-16 z-30 h-[62px] border-b border-slate-200 bg-white/95 shadow-xs backdrop-blur-md sm:top-20">
-        <div className="mx-auto flex h-full max-w-340 items-center justify-between gap-2 overflow-x-auto px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2">
-            {QUICK_NAV.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="flex shrink-0 items-center gap-2 rounded-full border border-slate-300/80 bg-white px-4 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs transition-all hover:border-primary hover:text-primary hover:shadow-xs"
-              >
-                <span className={`h-2 w-2 rounded-full ${item.dot}`} aria-hidden="true" />
-                {item.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="hidden md:flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-600">
-              19–21 November 2026 | Dhaka, Bangladesh
-            </span>
-          </div>
-        </div>
-      </nav>
-
-      <main className="min-h-screen pt-[140px]">
+      <main className="min-h-screen pt-20">
         {/* Hero Header Section */}
         <section className="relative overflow-hidden border-b border-slate-200 bg-white">
           <div className="pointer-events-none absolute top-0 left-1/2 h-96 w-full max-w-7xl -translate-x-1/2 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(9,80,158,0.12),transparent_70%)]" />
@@ -225,7 +194,7 @@ export default function SpeakersPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/tentative-program"
+                href="/program-schedule"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
               >
                 <BookOpen className="h-4 w-4" />
