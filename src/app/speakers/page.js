@@ -1,168 +1,129 @@
+import Image from "next/image";
+import Link from "next/link";
 import Footer from "@/components/global/footer";
 import Nev from "@/components/global/nev";
-import Link from "next/link";
-import { Crown, Sparkles, Users, PartyPopper, Calendar, MapPin, ArrowRight, BookOpen } from "lucide-react";
-import SpeakerCard, { SpeakerPlaceholderCard } from "../../components/speakerPage/speaker-card";
+import IaupLeadersSection from "@/components/homepage/iaupLeadersSection";
+import EventSpeakers from "@/components/homepage/EventSpeakers";
+import { UserSquare2, Sparkles, Calendar, MapPin, ArrowRight, BookOpen } from "lucide-react";
 
 export const metadata = {
   title: "Guest & Speakers | IAUP Semi-Annual Meeting 2026",
-  description: "Meet the chief guests, keynote speakers, IAUP leadership, and expert panelists at the IAUP Semi-Annual Meeting 2026 in Dhaka, Bangladesh.",
+  description: "Meet the chief guests, keynote speaker, IAUP leadership, and panel speakers at the IAUP Semi-Annual Meeting 2026 in Dhaka, Bangladesh.",
 };
 
-// Enriched speakers list with institutional tags, detailed roles, and verified credentials
-const speakerCategories = [
+const chiefGuests = [
   {
-    id: "chief-guests",
-    title: "Chief Guests",
-    subtitle: "Distinguished government dignitaries and national higher education leaders presiding over major meeting milestones.",
-    showDownload: false,
-    featured: true,
-    speakers: [
-      {
-        name: "A. N. M. Ehsanul Hoque Milan",
-        role: "Chief Guest",
-        titleLines: ["Hon'ble Minister", "Ministry of Education"],
-        organization: "Ministry of Education, Government of Bangladesh",
-        country: "Bangladesh",
-        sessionTitle: "Chief Guest, Opening Ceremony",
-        bio: "Hon'ble Minister for the Ministry of Education, Government of Bangladesh, presiding as Chief Guest during the grand Opening Ceremony of the IAUP Semi-Annual Meeting 2026.",
-        photoUrl: "/milan-edu-minister.jpeg",
-        profileUrl: "",
-        cardUrl: "",
-        tags: ["Ministry of Education", "Government of Bangladesh", "Opening Ceremony"],
-      },
-      {
-        name: "Professor Dr. Mamun Ahmed",
-        role: "Chief Guest",
-        titleLines: ["Chairman", "University Grants Commission (UGC) of Bangladesh"],
-        organization: "University Grants Commission (UGC)",
-        country: "Bangladesh",
-        sessionTitle: "Chief Guest, Book Launching & Cultural Night",
-        bio: "Chairman of the University Grants Commission of Bangladesh, leading national university accreditation and policy, joining as Chief Guest for the prestigious Book Launching and Bangladesh Cultural Night.",
-        photoUrl: "/mamun-ahmed.jpeg",
-        profileUrl: "",
-        cardUrl: "",
-        tags: ["UGC Bangladesh", "Higher Education Leadership", "Cultural Night"],
-      },
-      {
-        name: "Chief Guest",
-        role: "Chief Guest",
-        titleLines: [],
-        organization: "",
-        country: "Bangladesh",
-        sessionTitle: "Chief Guest, Special Plenary Session",
-        bio: "",
-        isTba: true,
-        tbaNote: "The distinguished Chief Guest presiding over this special conference session will be officially announced shortly.",
-        photoUrl: "",
-        profileUrl: "",
-        cardUrl: "",
-        tags: ["Announcement Pending", "Special Plenary"],
-      },
-    ],
+    name: "A. N. M. Ehsanul Hoque Milan",
+    role: "Hon'ble Minister",
+    institution: "Ministry of Education, Government of Bangladesh",
+    position: "Chief Guest, Opening Ceremony",
+    image: "/milan-edu-minister.jpeg",
   },
   {
-    id: "keynote",
-    title: "Keynote Speaker",
-    subtitle: "World-renowned international development leader sharing visionary perspectives on global higher education.",
-    showDownload: false,
-    featured: true,
-    speakers: [
-      {
-        name: "Mr. Alexander A. Mejia",
-        role: "Keynote Speaker",
-        titleLines: [
-          "Director, Division for People and Social Development",
-          "Managing Director, CIFAL Global Network",
-          "United Nations Institute for Training and Research (UNITAR)",
-        ],
-        organization: "UNITAR",
-        country: "United Nations / Switzerland",
-        sessionTitle: "Keynote Address",
-        bio: "Director of the Division for People and Social Development and Managing Director of the CIFAL Global Network at the United Nations Institute for Training and Research (UNITAR), championing worldwide sustainable development training and capacity building.",
-        photoUrl: "/Alexander.jpeg",
-        profileUrl: "https://unitar.org",
-        cardUrl: "",
-        tags: ["UNITAR", "United Nations", "CIFAL Global Network"],
-      },
-    ],
+    name: "Professor Dr. Mamun Ahmed",
+    role: "Chairman",
+    institution: "University Grants Commission (UGC) of Bangladesh",
+    position: "Chief Guest, Book Launching & Cultural Night",
+    image: "/mamun-ahmed.jpeg",
   },
   {
-    id: "iaup-leadership",
-    title: "IAUP Leadership",
-    subtitle: "Distinguished academic presidents shaping the strategic trajectory of higher education worldwide.",
-    showDownload: true,
-    featured: true,
-    speakers: [
-      {
-        name: "Devorah Lieberman, PhD",
-        role: "IAUP Leadership",
-        designation: "President Emerita",
-        organization: "University of La Verne",
-        country: "USA",
-        sessionTitle: "IAUP Leadership & Thematic Sessions",
-        bio: "Dr. Devorah Lieberman is President Emerita of the University of La Verne and an active executive leader in the International Association of University Presidents (IAUP), recognized internationally for inclusive academic excellence.",
-        photoUrl: "/Devorah-Lieberman.jpg",
-        profileUrl: "https://laverne.edu",
-        cardUrl: "",
-        tags: ["IAUP Leadership", "University of La Verne", "USA"],
-      },
-    ],
+    isTba: true,
+    position: "Chief Guest, Special Plenary Session",
+    tbaNote: "The distinguished Chief Guest presiding over this special conference session will be officially announced shortly.",
   },
 ];
 
-// Static Tailwind classes for compilation safety
-const CATEGORY_STYLES = {
-  "chief-guests": {
-    icon: Crown,
-    badge: "border-primary/20 bg-primary/10 text-primary",
-    glow: "from-primary/35 via-secondary/20 to-primary/35",
-    ring: "border-primary/25 ring-primary/10",
-    avatarRing: "ring-primary/25",
-    session: "text-primary",
-    dot: "bg-primary",
-    section: "bg-white",
-    blob: "bg-primary/10",
-  },
-  keynote: {
-    icon: Sparkles,
-    badge: "border-amber-500/25 bg-amber-500/10 text-amber-600",
-    glow: "from-amber-400/40 via-amber-300/20 to-primary/25",
-    ring: "border-amber-400/35 ring-amber-400/15",
-    avatarRing: "ring-amber-400/35",
-    session: "text-amber-600",
-    dot: "bg-amber-500",
-    section: "bg-slate-50/60",
-    blob: "bg-amber-400/15",
-  },
-  "iaup-leadership": {
-    icon: Users,
-    badge: "border-secondary/25 bg-secondary/10 text-secondary",
-    glow: "from-secondary/35 via-emerald-300/20 to-secondary/35",
-    ring: "border-secondary/25 ring-secondary/15",
-    avatarRing: "ring-secondary/25",
-    session: "text-secondary",
-    dot: "bg-secondary",
-    section: "bg-white",
-    blob: "bg-secondary/10",
-  },
-};
+function ChiefGuestComingSoonCard({ position, tbaNote }) {
+  return (
+    <div className="group relative bg-white rounded-3xl overflow-hidden shadow-sm border border-border aspect-4/5 flex items-center justify-center transition-all duration-500 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30 hover:-translate-y-2">
+      <div className="absolute inset-0 transition-opacity duration-500 bg-linear-to-br from-slate-50 to-slate-100 opacity-100 group-hover:opacity-80" />
 
-const DEFAULT_CATEGORY_STYLE = {
-  icon: PartyPopper,
-  badge: "border-slate-300 bg-slate-100 text-slate-600",
-  glow: "from-slate-300/30 via-slate-200/15 to-slate-300/30",
-  ring: "border-slate-300 ring-slate-200",
-  avatarRing: "ring-slate-200",
-  session: "text-slate-600",
-  dot: "bg-slate-400",
-  section: "bg-white",
-  blob: "bg-slate-200/40",
-};
+      <div className="relative z-10 flex flex-col items-center text-center p-8 w-full h-full justify-center">
+        <div className="w-32 h-32 rounded-full bg-slate-200 mb-8 flex items-center justify-center border-4 border-white shadow-sm overflow-hidden relative group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+          <UserSquare2 className="text-slate-400 w-12 h-12" />
+          <div className="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm">
+            <span className="text-primary font-bold text-sm tracking-widest uppercase">Soon</span>
+          </div>
+        </div>
 
-function categorySpeakerCount(category) {
-  return category.speakers.reduce((total, s) => total + (s.tba ? s.count || 1 : 1), 0);
+        <h4 className="font-display font-bold text-2xl text-dark mb-3 group-hover:text-primary transition-colors duration-300">
+          To Be Announced
+        </h4>
+        <p className="text-primary font-semibold text-sm mb-3">{position}</p>
+        <div className="w-12 h-1 bg-primary/20 rounded-full mx-auto mb-5 group-hover:bg-primary group-hover:w-20 transition-all duration-500 ease-out" />
+        <p className="text-muted text-sm leading-relaxed px-4">{tbaNote}</p>
+      </div>
+    </div>
+  );
 }
+
+function ChiefGuestCard({ guest }) {
+  return (
+    <div className="group relative bg-white rounded-3xl overflow-hidden shadow-xl shadow-primary/15 border-2 border-primary/30 aspect-4/5 flex items-center justify-center transition-all duration-500 hover:shadow-2xl hover:shadow-primary/25 hover:border-primary/60 hover:-translate-y-2">
+      <div className="absolute inset-0 transition-opacity duration-500 bg-linear-to-br from-primary/5 via-white to-emerald-500/5 opacity-100 group-hover:opacity-90" />
+
+      <div className="absolute -top-12 -right-12 w-28 h-28 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-all duration-500 pointer-events-none" />
+      <div className="absolute -bottom-12 -left-12 w-28 h-28 bg-emerald-500/20 rounded-full blur-2xl group-hover:bg-emerald-500/30 transition-all duration-500 pointer-events-none" />
+
+      <div className="relative z-10 flex flex-col items-center text-center p-8 w-full h-full justify-center">
+        <div className="w-32 h-32 rounded-full bg-slate-200 mb-5 flex items-center justify-center border-4 border-white shadow-md overflow-hidden relative ring-4 ring-primary/25 group-hover:ring-primary/60 group-hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+          <Image
+            src={guest.image}
+            alt={guest.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 128px, 128px"
+          />
+        </div>
+
+        <h4 className="font-display font-bold text-xl text-dark mb-1 group-hover:text-primary transition-colors duration-300">
+          {guest.name}
+        </h4>
+        <p className="text-primary font-semibold text-sm mb-1">{guest.position}</p>
+        <p className="text-muted text-sm leading-relaxed px-4">
+          {guest.role}
+          {guest.institution ? ` · ${guest.institution}` : ""}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ChiefGuestsSection() {
+  return (
+    <section id="chief-guests" className="py-24 lg:py-32 bg-slate-50 relative border-t border-slate-200/80">
+      <div className="max-w-340 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16 reveal">
+          <span className="inline-block text-primary font-semibold tracking-wide uppercase text-sm mb-4">
+            Distinguished Guests
+          </span>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-dark mb-6">
+            Chief <span className="gradient-text">Guests</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          {chiefGuests.map((guest, index) => (
+            <div key={guest.name || guest.position} className="reveal" style={{ transitionDelay: `${index * 100}ms` }}>
+              {guest.isTba ? (
+                <ChiefGuestComingSoonCard position={guest.position} tbaNote={guest.tbaNote} />
+              ) : (
+                <ChiefGuestCard guest={guest} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const QUICK_NAV = [
+  { id: "chief-guests", label: "Chief Guests", dot: "bg-primary" },
+  { id: "iaup-leadership", label: "IAUP Leadership", dot: "bg-secondary" },
+  { id: "keynote-speaker", label: "Keynote Speaker", dot: "bg-amber-500" },
+  { id: "distinguished-speakers", label: "Panel Speakers", dot: "bg-primary" },
+];
 
 export default function SpeakersPage() {
   return (
@@ -173,19 +134,16 @@ export default function SpeakersPage() {
       <nav className="fixed inset-x-0 top-16 z-30 h-[62px] border-b border-slate-200 bg-white/95 shadow-xs backdrop-blur-md sm:top-20">
         <div className="mx-auto flex h-full max-w-340 items-center justify-between gap-2 overflow-x-auto px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
-            {speakerCategories.map((category) => {
-              const style = CATEGORY_STYLES[category.id] || DEFAULT_CATEGORY_STYLE;
-              return (
-                <a
-                  key={category.id}
-                  href={`#${category.id}`}
-                  className="flex shrink-0 items-center gap-2 rounded-full border border-slate-300/80 bg-white px-4 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs transition-all hover:border-primary hover:text-primary hover:shadow-xs"
-                >
-                  <span className={`h-2 w-2 rounded-full ${style.dot}`} aria-hidden="true" />
-                  {category.title}
-                </a>
-              );
-            })}
+            {QUICK_NAV.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="flex shrink-0 items-center gap-2 rounded-full border border-slate-300/80 bg-white px-4 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs transition-all hover:border-primary hover:text-primary hover:shadow-xs"
+              >
+                <span className={`h-2 w-2 rounded-full ${item.dot}`} aria-hidden="true" />
+                {item.label}
+              </a>
+            ))}
           </div>
 
           <div className="hidden md:flex items-center gap-2">
@@ -214,7 +172,6 @@ export default function SpeakersPage() {
                 Guests &amp; <span className="gradient-text">Speakers</span>
               </h1>
 
-              {/* Event Metadata Highlights */}
               <div className="mt-1 flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-700 sm:text-base">
                 <span className="inline-flex items-center gap-1.5 text-primary">
                   <Calendar className="h-4 w-4 text-primary" />
@@ -238,84 +195,9 @@ export default function SpeakersPage() {
           </div>
         </section>
 
-        {/* Categories & Speaker Cards */}
-        {speakerCategories.map((category, index) => {
-          const count = categorySpeakerCount(category);
-          const style = CATEGORY_STYLES[category.id] || DEFAULT_CATEGORY_STYLE;
-          const Icon = style.icon;
-
-          return (
-            <section
-              key={category.id}
-              id={category.id}
-              className={`relative scroll-mt-36 overflow-hidden py-16 sm:py-24 ${style.section} ${
-                index > 0 ? "border-t border-slate-200/90" : ""
-              }`}
-            >
-              <div className={`pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full ${style.blob} blur-3xl`} />
-              <div className={`pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full ${style.blob} blur-3xl`} />
-
-              <div className="relative mx-auto max-w-340 px-4 sm:px-6 lg:px-8">
-                {/* Category Header */}
-                <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/70 pb-6">
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <span className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border ${style.badge} shadow-xs`}>
-                        <Icon className="h-6 w-6" aria-hidden="true" />
-                      </span>
-                      <h2 className="font-display text-2xl font-bold text-slate-900 sm:text-4xl">
-                        {category.title}
-                      </h2>
-                    </div>
-                    {category.subtitle && (
-                      <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl">
-                        {category.subtitle}
-                      </p>
-                    )}
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 self-start sm:self-auto">
-                    {count} {count === 1 ? "Profile" : "Profiles"}
-                  </span>
-                </div>
-
-                {/* Speaker Cards Grid */}
-                <div
-                  className={
-                    category.speakers.length === 1
-                      ? "mx-auto max-w-xl"
-                      : "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 items-stretch"
-                  }
-                >
-                  {category.speakers.map((speaker, speakerIndex) =>
-                    speaker.tba ? (
-                      <SpeakerPlaceholderCard
-                        key={`${category.id}-${speakerIndex}`}
-                        count={speaker.count}
-                        role={category.title}
-                        accent={style}
-                      />
-                    ) : (
-                      <SpeakerCard
-                        key={`${category.id}-${speakerIndex}`}
-                        speaker={speaker}
-                        showDownload={category.showDownload}
-                        size={category.featured ? "lg" : "md"}
-                        accent={{
-                          ring: style.ring,
-                          glow: style.glow,
-                          session: style.session,
-                          avatarRing: style.avatarRing,
-                          badge: style.badge,
-                          dot: style.dot,
-                        }}
-                      />
-                    )
-                  )}
-                </div>
-              </div>
-            </section>
-          );
-        })}
+        <ChiefGuestsSection />
+        <IaupLeadersSection />
+        <EventSpeakers />
 
         {/* Bottom Call to Action Section */}
         <section className="relative overflow-hidden bg-slate-900 py-20 text-white">

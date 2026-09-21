@@ -15,7 +15,7 @@ export default function Footer() {
     { href: "/#about", label: "About IAUP" },
     { href: "/#about-diu", label: "About DIU" },
     { href: "/program-schedule", label: "Program Schedule" },
-    { href: "/#speakers", label: "Speakers" },
+    { href: "/speakers", label: "Speakers" },
   ];
 
   const resources = [
