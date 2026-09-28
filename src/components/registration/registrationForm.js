@@ -503,7 +503,12 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
         updated.memberAffiliation = "";
       }
 
-      if (name === "hasFamilyMembers" && nextValue !== "Yes") {
+      // Local participants can't bring family members: hide the question and force "No".
+      if (name === "isLocalParticipant") {
+        updated.hasFamilyMembers = nextValue === "Yes" ? "No" : "";
+      }
+
+      if (updated.hasFamilyMembers !== "Yes") {
         updated.familyMembersCount = "";
         updated.familyMembersOther = "";
       }
@@ -1346,15 +1351,17 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
               />
             )}
 
-            <OptionGroup
-              legend="Will any of your family members join the event?"
-              name="hasFamilyMembers"
-              options={YES_NO_OPTIONS}
-              value={formValues.hasFamilyMembers}
-              onChange={handleChange}
-              error={errors.hasFamilyMembers}
-              required
-            />
+            {formValues.isLocalParticipant !== "Yes" && (
+              <OptionGroup
+                legend="Will any of your family members join the event?"
+                name="hasFamilyMembers"
+                options={YES_NO_OPTIONS}
+                value={formValues.hasFamilyMembers}
+                onChange={handleChange}
+                error={errors.hasFamilyMembers}
+                required
+              />
+            )}
 
             {formValues.hasFamilyMembers === "Yes" && (
               <fieldset className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-4">

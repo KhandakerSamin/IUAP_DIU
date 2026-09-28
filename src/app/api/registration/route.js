@@ -53,9 +53,11 @@ export async function POST(request) {
     return Response.json({ error: "Passport or NID front page scan is required." }, { status: 400 });
   }
 
-  const hasFamilyMembers = pickText(form, "hasFamilyMembers");
-  const familyMembersCount = pickText(form, "familyMembersCount");
-  const familyMembersOther = pickText(form, "familyMembersOther");
+  // Local participants can't register family members.
+  const isLocal = pickText(form, "isLocalParticipant") === "Yes";
+  const hasFamilyMembers = isLocal ? "No" : pickText(form, "hasFamilyMembers");
+  const familyMembersCount = isLocal ? "" : pickText(form, "familyMembersCount");
+  const familyMembersOther = isLocal ? "" : pickText(form, "familyMembersOther");
 
   let familyMemberCount = 0;
   if (hasFamilyMembers === "Yes") {
