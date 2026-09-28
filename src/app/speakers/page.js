@@ -4,6 +4,7 @@ import Footer from "@/components/global/footer";
 import Nev from "@/components/global/nev";
 import IaupLeadersSection from "@/components/homepage/iaupLeadersSection";
 import EventSpeakers from "@/components/homepage/EventSpeakers";
+import HomeEffects from "@/components/homepage/homeEffects";
 import { UserSquare2, Sparkles, Calendar, MapPin, ArrowRight, BookOpen } from "lucide-react";
 
 export const metadata = {
@@ -121,6 +122,7 @@ function ChiefGuestsSection() {
 export default function SpeakersPage() {
   return (
     <>
+      <HomeEffects />
       <Nev />
 
       <main className="min-h-screen pt-20">
