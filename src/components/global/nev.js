@@ -25,6 +25,10 @@ const callForContributionLinks = [
     href: "/call-for-contributions#poster-presentation",
     label: "Call For Poster Presentation",
   },
+  {
+    href: "/call-for-contributions#call-for-book-chapters",
+    label: "Call For Book Chapters",
+  },
 ];
 
 import logoImg from "../../../public/navLogo.png";

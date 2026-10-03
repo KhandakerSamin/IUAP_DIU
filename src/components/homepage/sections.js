@@ -2,6 +2,7 @@ import HeroSection from "@/components/homepage/heroSection";
 import AboutIaupSection from "@/components/homepage/aboutIaupSection";
 import AboutDiuSection from "@/components/homepage/aboutDiuSection";
 import Iaup2026Section from "@/components/homepage/iaup2026Section";
+import WelcomeMessagesSection from "@/components/homepage/welcomeMessagesSection";
 import AboutDhakaSection from "@/components/homepage/aboutDhakaSection";
 import ImportantDatesSection from "@/components/homepage/importantDatesSection";
 // import TentativeProgramSection from "@/components/homepage/tentativeProgramSection";
@@ -18,6 +19,7 @@ const homeSections = [
   { id: "about-iaup", Component: AboutIaupSection },
   { id: "about-diu", Component: AboutDiuSection },
   { id: "iaup-2026", Component: Iaup2026Section },
+  { id: "welcome-messages", Component: WelcomeMessagesSection },
   { id: "about-dhaka", Component: AboutDhakaSection },
   // { id: "tentative-program", Component: TentativeProgramSection },
   { id: "post-event", Component: PostEventSection },

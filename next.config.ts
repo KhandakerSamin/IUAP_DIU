@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "z-cdn-media.chatglm.cn",
       },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
     ],
   },
   serverExternalPackages: ["better-sqlite3", "@react-pdf/renderer", "nodemailer"],
