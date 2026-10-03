@@ -612,7 +612,7 @@ export default function BookChaptersSection() {
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm">
                     <span className="font-bold text-slate-900">Deadline:</span>
-                    <span className="text-slate-600">30 September 2026</span>
+                    <span className="text-slate-600">15th October 2026</span>
                   </div>
                 </div>
 

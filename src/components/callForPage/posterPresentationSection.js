@@ -1,18 +1,10 @@
 import { Award, CalendarDays, CheckCircle2, Download, ExternalLink, Printer } from "lucide-react";
 
-const themes = [
-  "Higher Education Innovation and Transformation",
-  "Internationalization of Higher Education",
-  "Climate Change and Sustainability Initiatives",
-  "Research and Innovation Ecosystems",
-  "Student Success and Employability",
-  "Entrepreneurship and Innovation",
-  "Quality Assurance and Academic Excellence",
-  "Sustainable Development Goals (SDGs)",
-  "Digital Transformation and AI in Education",
-  "Industry-Academia Collaboration",
-  "Community Engagement and Social Impact",
-  "Global Partnerships and Leadership",
+const thematicAreas = [
+  "AI-Enhanced Pedagogies and Learning Innovation",
+  "Leadership, Governance, and Institutional Transformation in Higher Education",
+  "Higher Education Contributions to Sustainability and SDG Implementation",
+  "Entrepreneurial Universities, Innovation Hubs, and Industry Partnerships",
 ];
 
 // The practical constraints presenters need before they start designing. The
@@ -81,7 +73,7 @@ export default function PosterPresentationSection() {
             <div className="bg-slate-50 text-lg rounded-2xl p-5 mt-6 border border-slate-200">
               <div className="flex items-center gap-3 text-slate-800 font-medium">
                 <CalendarDays className="w-5 h-5 text-primary" />
-                <span>Deadline: 30 September 2026</span>
+                <span>Deadline: 15th October 2026</span>
               </div>
             </div>
 
@@ -109,16 +101,16 @@ export default function PosterPresentationSection() {
           <div className="reveal reveal-delay-2 mt-8 lg:mt-0">
             <h3 className="text-2xl font-bold tracking-[0.18em] uppercase text-primary mb-6 flex items-center gap-3">
               <span className="inline-block w-1.5  h-5 bg-primary" />
-              Suggested Themes
+              Thematic Areas
             </h3>
             <div className="space-y-3">
-              {themes.map((theme) => (
+              {thematicAreas.map((area) => (
                 <div
-                  key={theme}
+                  key={area}
                   className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                  <span className="text-base leading-snug">{theme}</span>
+                  <span className="text-base leading-snug">{area}</span>
                 </div>
               ))}
             </div>

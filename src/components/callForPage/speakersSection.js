@@ -505,7 +505,7 @@ export default function SpeakersSection() {
               <div className="bg-slate-50 text-lg rounded-2xl p-5 my-6 border border-slate-200">
                 <div className="flex items-center gap-3 text-slate-800 font-medium">
                   <CalendarDays className="w-5 h-5 text-primary" />
-                  <span>Deadline: 30th September 2026</span>
+                  <span>Deadline: 15th October 2026</span>
                 </div>
               </div>
             </div>
