@@ -8,8 +8,7 @@ function CountryFlag({ iso2, name = "", className = "w-6 h-4.5" }) {
   const code = iso2.toLowerCase();
   return (
     <img
-      src={`https://flagcdn.com/w40/${code}.png`}
-      srcSet={`https://flagcdn.com/w80/${code}.png 2x`}
+      src={`https://flagcdn.com/${code}.svg`}
       width={24}
       height={16}
       alt={name ? `${name} flag` : iso2}
