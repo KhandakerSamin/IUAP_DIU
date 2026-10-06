@@ -19,8 +19,9 @@ export default async function AdminCouponsPage() {
       <div className="mb-6">
         <h1 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Coupons</h1>
         <p className="mt-1 text-sm text-slate-600">
-          Create a code to let a guest register for $0. Share it directly, or hand out the link — it
-          auto-applies the code on the registration form. &quot;Max people&quot; counts everyone on a
+          Create a percentage or fixed-amount (USD) discount code; 100% makes the registration free.
+          Fixed-amount codes don&apos;t apply to local (BDT) registrations. Share the code directly, or
+          hand out the link — it auto-applies the code on the registration form. &quot;Max people&quot; counts everyone on a
           registration, including family members, so a 2-person coupon is spent after one registrant
           plus one family member.
         </p>

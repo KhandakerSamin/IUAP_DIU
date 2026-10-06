@@ -44,8 +44,9 @@ const MESSAGES = [
       "Managing Director, CIFAL Global Network",
       "United Nations Institute for Training and Research (UNITAR)",
     ],
-    youtubeUrl: "https://www.youtube.com/@daffodiluniversity",
-    videoId: null, // Welcome address preview
+    youtubeUrl: "https://youtube.com/shorts/dncWzP62UW8?si=r1ddPcw4ZLcimn0J",
+    videoId: "dncWzP62UW8",
+    isShort: true,
     thumbnail: "/Alexander.jpeg",
     badge: "Keynote Speaker",
   },

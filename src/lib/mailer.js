@@ -345,7 +345,7 @@ Optional Post-Event Tour: ${registration.post_event_tour || "No"}
 Payment Method: ${registration.payment_method || "N/A"}
 Payment Status: ${registration.payment_status || "pending"}
 Registration Fee: ${feeDisplay}
-${registration.coupon_code ? `\n*** COUPON USED: ${registration.coupon_code} — this registration was complimentary ***\n` : ""}
+${registration.coupon_code ? `\n*** COUPON USED: ${registration.coupon_code} — ${registration.payment_method === "coupon" ? "this registration was complimentary" : `discount applied: ${registration.discount_amount || 0} ${registration.payment_currency || ""}`} ***\n` : ""}
 Accompanying Family Members (${familyMembers.length}):
 ${familyListText}
 
@@ -387,7 +387,7 @@ ${getEmailSignatureText()}`;
       ${
         registration.coupon_code
           ? `<div style="background:#f5f3ff; border:1px solid #ddd6fe; border-left:4px solid #7c3aed; border-radius:6px; padding:10px 14px; margin-bottom:14px; font-size:13px; color:#4c1d95;">
-               <strong>Coupon used:</strong> <code style="background:#ede9fe; padding:2px 6px; border-radius:4px;">${registration.coupon_code}</code> — this registration was complimentary (no payment collected).
+               <strong>Coupon used:</strong> <code style="background:#ede9fe; padding:2px 6px; border-radius:4px;">${registration.coupon_code}</code> — ${registration.payment_method === "coupon" ? "this registration was complimentary (no payment collected)." : `discount applied: ${registration.discount_amount || 0} ${registration.payment_currency || ""}.`}
              </div>`
           : ""
       }

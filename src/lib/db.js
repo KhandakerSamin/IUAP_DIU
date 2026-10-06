@@ -1,6 +1,7 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
 import path from "node:path";
+import { applyCouponDiscount } from "@/lib/pricing";
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS registrations (
@@ -130,6 +131,9 @@ const MIGRATIONS = [
   `ALTER TABLE registrations ADD COLUMN is_local_participant TEXT`,
   `ALTER TABLE registrations ADD COLUMN member_affiliation TEXT`,
   `ALTER TABLE registrations ADD COLUMN coupon_code TEXT`,
+  `ALTER TABLE registrations ADD COLUMN discount_amount TEXT`,
+  `ALTER TABLE coupons ADD COLUMN discount_type TEXT NOT NULL DEFAULT 'percent'`,
+  `ALTER TABLE coupons ADD COLUMN discount_value REAL NOT NULL DEFAULT 100`,
   `ALTER TABLE registrations ADD COLUMN city_tour TEXT`,
 ];
 
@@ -191,14 +195,14 @@ export function insertRegistration(row) {
       phone, whatsapp, email, alternative_email, tshirt_size, food_requirement, other_food,
       is_local_participant, is_member_university, member_affiliation, has_family_members,
       family_members_count, family_members_other, needs_invitation_letter, city_tour, post_event_tour,
-      payment_method, profile_photo_path, passport_scan_path, coupon_code
+      payment_method, profile_photo_path, passport_scan_path, coupon_code, discount_amount
     ) VALUES (
       @reg_id, @title, @other_title, @given_name, @surname, @gender, @passport_no, @nationality,
       @date_of_birth, @organization, @position, @department, @address, @zip_code, @city, @country,
       @phone, @whatsapp, @email, @alternative_email, @tshirt_size, @food_requirement, @other_food,
       @is_local_participant, @is_member_university, @member_affiliation, @has_family_members,
       @family_members_count, @family_members_other, @needs_invitation_letter, @city_tour, @post_event_tour,
-      @payment_method, @profile_photo_path, @passport_scan_path, @coupon_code
+      @payment_method, @profile_photo_path, @passport_scan_path, @coupon_code, @discount_amount
     )
   `);
   const result = stmt.run(row);
@@ -606,17 +610,20 @@ export function listCoupons() {
   return db.prepare("SELECT * FROM coupons ORDER BY id DESC").all();
 }
 
-export function insertCoupon({ code, note, max_uses, expires_at }) {
+export function insertCoupon({ code, note, max_uses, expires_at, discount_type, discount_value }) {
   const db = getDatabase();
   const result = db
     .prepare(
-      `INSERT INTO coupons (code, note, max_uses, expires_at) VALUES (@code, @note, @max_uses, @expires_at)`
+      `INSERT INTO coupons (code, note, max_uses, expires_at, discount_type, discount_value)
+       VALUES (@code, @note, @max_uses, @expires_at, @discount_type, @discount_value)`
     )
     .run({
       code,
       note: note || null,
       max_uses: max_uses ?? null,
       expires_at: expires_at || null,
+      discount_type,
+      discount_value,
     });
   return result.lastInsertRowid;
 }
@@ -631,4 +638,19 @@ export function setCouponActive(id, active) {
 export function deleteCoupon(id) {
   const db = getDatabase();
   return db.prepare("DELETE FROM coupons WHERE id = ?").run(id);
+}
+
+// Amount actually owed after any coupon. Recomputed from the coupon so a tier
+// change between registering and paying keeps a percent coupon honest; falls
+// back to the discount frozen at registration if the coupon was since deleted.
+export function resolveAmountDue(registration, pricing) {
+  if (!registration?.coupon_code) return pricing.totalFee;
+  const applied = applyCouponDiscount(
+    pricing.totalFee,
+    pricing.currency,
+    getCouponByCode(registration.coupon_code)
+  );
+  if (applied) return applied.due;
+  const stored = Number(registration.discount_amount) || 0;
+  return Math.max(0, pricing.totalFee - stored);
 }

@@ -234,7 +234,18 @@ function InvoiceDoc({ registration, familyMembers }) {
   // the Discount line below always cancels it exactly, so the coupon Total
   // is unaffected either way.
   const familyFee = isLocal ? 0 : familyCount * FAMILY_MEMBER_FEE_USD;
-  const baseFee = couponCode ? pricing.baseFee : Number(amount) - familyFee;
+  const storedDiscount =
+    couponCode && registration.discount_amount != null && registration.discount_amount !== ""
+      ? Number(registration.discount_amount)
+      : null;
+  // Registrations with a recorded discount reconcile exactly: subtotal = billed + discount.
+  const baseFee = couponCode
+    ? storedDiscount != null
+      ? Number(amount) + storedDiscount - familyFee
+      : pricing.baseFee
+    : Number(amount) - familyFee;
+  const discountAmount = couponCode ? (storedDiscount ?? baseFee + familyFee) : 0;
+  const isComplimentary = couponCode && Number(amount) === 0;
 
   const baseLabel = isLocal
     ? `IAUP Semi-Annual Meeting 2026 — Registration (Local Participant · ${periodLabel})`
@@ -327,7 +338,7 @@ function InvoiceDoc({ registration, familyMembers }) {
               {couponCode ? (
                 <View style={styles.totalsRow}>
                   <Text style={styles.totalsLabel}>Discount (Coupon: {couponCode})</Text>
-                  <Text>-{formatAmount(baseFee + (isLocal ? 0 : familyFee), feeCurrency)}</Text>
+                  <Text>-{formatAmount(discountAmount, feeCurrency)}</Text>
                 </View>
               ) : null}
               <View style={styles.totalsDivider} />
@@ -398,7 +409,7 @@ function InvoiceDoc({ registration, familyMembers }) {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Payment details</Text>
             <View style={styles.paymentGrid}>
-              {couponCode ? null : (
+              {isComplimentary ? null : (
                 <View style={styles.paymentItem}>
                   <Text style={styles.paymentLabel}>Transaction ID</Text>
                   <Text style={styles.paymentValue}>{tranId}</Text>
@@ -411,7 +422,7 @@ function InvoiceDoc({ registration, familyMembers }) {
               <View style={styles.paymentItem}>
                 <Text style={styles.paymentLabel}>Method</Text>
                 <Text style={styles.paymentValue}>
-                  {couponCode ? `Complimentary (Coupon: ${couponCode})` : "Online Payment · 1Card"}
+                  {isComplimentary ? `Complimentary (Coupon: ${couponCode})` : "Online Payment · 1Card"}
                 </Text>
               </View>
               <View style={styles.paymentItem}>

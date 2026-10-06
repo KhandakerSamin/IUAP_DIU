@@ -5,6 +5,7 @@ import {
   getRegistrationByRegId,
   getRegistrationByReffId,
   releaseInvoiceSendClaim,
+  resolveAmountDue,
   setInvoicePath,
 } from "@/lib/db";
 import { writeInvoiceToDisk, getInvoiceNumber } from "@/lib/invoice";
@@ -114,7 +115,7 @@ async function runWireFinalize(regId) {
     attachReffIdToRegistration(
       regId,
       regId,
-      String(pricing.totalFee),
+      String(resolveAmountDue(existing, pricing)),
       pricing.currency,
       pricing.period.key
     );

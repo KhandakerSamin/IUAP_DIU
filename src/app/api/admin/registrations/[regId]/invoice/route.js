@@ -1,5 +1,5 @@
 import { isAdminAuthenticated } from "@/lib/adminAuth";
-import { getFamilyMembersForRegistration, getRegistrationByRegId } from "@/lib/db";
+import { getFamilyMembersForRegistration, getRegistrationByRegId, resolveAmountDue } from "@/lib/db";
 import { generateInvoiceBuffer, readInvoiceFromDisk } from "@/lib/invoice";
 import { calculatePricing } from "@/lib/pricing";
 
@@ -30,7 +30,7 @@ export async function GET(_request, ctx) {
       isMember: effectiveReg.is_member_university === "Yes",
       familyMembersCount: familyMembers.length,
     });
-    effectiveReg.payment_amount = String(pricing.totalFee);
+    effectiveReg.payment_amount = String(resolveAmountDue(registration, pricing));
     effectiveReg.payment_currency = pricing.currency;
     effectiveReg.registration_period = pricing.period.key;
   }

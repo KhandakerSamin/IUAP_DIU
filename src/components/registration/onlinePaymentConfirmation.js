@@ -69,6 +69,9 @@ export default function OnlinePaymentConfirmation() {
     [registration]
   );
 
+  // Display only; the amount charged is recomputed server-side.
+  const couponDiscount = Number(registration?.couponDiscount) || 0;
+
   const handlePay = async () => {
     if (!regId) {
       setError("Registration reference is missing. Please submit the form again.");
@@ -198,10 +201,18 @@ export default function OnlinePaymentConfirmation() {
                 </dd>
               </div>
             </dl>
+            {couponDiscount > 0 && (
+              <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3 text-sm">
+                <span className="text-slate-500">Coupon discount</span>
+                <span className="font-semibold text-emerald-700">
+                  −{formatCurrency(couponDiscount, pricing.currency)}
+                </span>
+              </div>
+            )}
             <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
               <span className="text-sm font-semibold text-slate-900">Total</span>
               <span className="font-display text-xl font-bold text-primary">
-                {formatCurrency(pricing.totalFee, pricing.currency)}
+                {formatCurrency(Math.max(0, pricing.totalFee - couponDiscount), pricing.currency)}
               </span>
             </div>
           </div>

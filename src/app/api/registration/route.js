@@ -1,7 +1,7 @@
-import { attachReffIdToRegistration, consumeCoupon, insertFamilyMember, insertRegistration, markPaymentStatus, runInTransaction } from "@/lib/db";
+import { attachReffIdToRegistration, consumeCoupon, getCouponByCode, insertFamilyMember, insertRegistration, markPaymentStatus, runInTransaction } from "@/lib/db";
 import { saveUpload } from "@/lib/fileStorage";
 import { finalizePaidPayment, finalizeWireRegistration } from "@/lib/paymentFinalize";
-import { calculatePricing } from "@/lib/pricing";
+import { applyCouponDiscount, calculatePricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -180,11 +180,19 @@ export async function POST(request) {
     needs_invitation_letter: pickText(form, "needsInvitationLetter") || null,
     city_tour: pickText(form, "cityTour") || null,
     post_event_tour: pickText(form, "postEventTour") || null,
-    payment_method: couponCode ? "coupon" : pickText(form, "paymentMethod") || null,
+    payment_method: pickText(form, "paymentMethod") || null,
     profile_photo_path: profilePhotoPath,
     passport_scan_path: passportScanPath,
     coupon_code: couponCode || null,
+    discount_amount: null,
   };
+
+  // Price is always decided server-side; the client-supplied amount is never used.
+  const pricing = calculatePricing({
+    isLocal: registrationRow.is_local_participant === "Yes",
+    isMember: registrationRow.is_member_university === "Yes",
+    familyMembersCount: familyUploads.length,
+  });
 
   let insertedId = null;
   try {
@@ -193,8 +201,19 @@ export async function POST(request) {
       // coupon use is only ever spent on a registration that actually
       // lands — anything that fails validation above never reaches this
       // point, and a DB failure below rolls the use back too.
-      if (couponCode && !consumeCoupon(couponCode, familyUploads.length + 1)) {
-        throw new Error("COUPON_INVALID");
+      if (couponCode) {
+        if (!consumeCoupon(couponCode, familyUploads.length + 1)) {
+          throw new Error("COUPON_INVALID");
+        }
+        const applied = applyCouponDiscount(pricing.totalFee, pricing.currency, getCouponByCode(couponCode));
+        if (!applied) throw new Error("COUPON_INVALID");
+        registrationRow.discount_amount = String(applied.discount);
+        // A coupon that covers everything skips the gateway; otherwise the
+        // registrant still has to pick how to pay the remainder.
+        if (applied.due === 0) registrationRow.payment_method = "coupon";
+      }
+      if (!["coupon", "online-payment", "wire-transfer"].includes(registrationRow.payment_method)) {
+        throw new Error("PAYMENT_METHOD_REQUIRED");
       }
       insertedId = insertRegistration(registrationRow);
       for (const fm of familyUploads) {
@@ -214,6 +233,9 @@ export async function POST(request) {
       }
     });
   } catch (err) {
+    if (err?.message === "PAYMENT_METHOD_REQUIRED") {
+      return Response.json({ error: "Please select a payment method." }, { status: 400 });
+    }
     if (err?.message === "COUPON_INVALID") {
       return Response.json(
         { error: "Invalid, expired, or fully-used coupon code." },
@@ -228,17 +250,11 @@ export async function POST(request) {
   // only once the registration has actually reached a final state (paid via
   // coupon/gateway, or recorded for wire transfer) — never here at submit
   // time, so nobody sees a "paid" invoice for a payment that hasn't happened.
-  const pricing = calculatePricing({
-    isLocal: registrationRow.is_local_participant === "Yes",
-    isMember: registrationRow.is_member_university === "Yes",
-    familyMembersCount: familyUploads.length,
-  });
-
-  // A valid coupon skips the gateway entirely: mark paid immediately and
+  // A coupon covering the full fee skips the gateway entirely: mark paid immediately and
   // reuse the same finalize path the online-payment flow uses once 1Card
   // confirms a charge, keyed by reg_id doubling as the payment reff_id
   // (same trick the wire-transfer path below uses).
-  if (registrationRow.coupon_code) {
+  if (registrationRow.payment_method === "coupon") {
     attachReffIdToRegistration(regId, regId, "0", pricing.currency, pricing.period.key);
     markPaymentStatus(regId, "paid");
     const result = await finalizePaidPayment(regId).catch((err) => {

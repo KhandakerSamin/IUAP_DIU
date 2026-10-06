@@ -7,7 +7,7 @@ import logoImg from "../../../public/navLogo.png";
 import diuLogoImg from "../../../public/diuLogo.png";
 import { useEffect, useMemo, useState } from "react";
 import PhoneInputField from "@/components/registration/phoneInputField";
-import { calculatePricing, formatCurrency, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
+import { applyCouponDiscount, calculatePricing, formatCurrency, formatUsd, FAMILY_MEMBER_FEE_USD } from "@/lib/pricing";
 
 const STORAGE_KEY = "iaup_registration";
 
@@ -358,13 +358,14 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
   const [wireModalData, setWireModalData] = useState(null);
   const [couponStatus, setCouponStatus] = useState("idle"); // idle | checking | valid | invalid
   const [couponMessage, setCouponMessage] = useState("");
+  const [couponInfo, setCouponInfo] = useState(null); // { discount_type, discount_value } once validated
 
   const checkCoupon = async (rawCode) => {
     const code = String(rawCode || "").trim().toUpperCase();
     if (!code) {
       setCouponStatus("idle");
       setCouponMessage("");
-      setFormValues((prev) => (prev.paymentMethod === "coupon" ? { ...prev, paymentMethod: "" } : prev));
+      setCouponInfo(null);
       return;
     }
     setCouponStatus("checking");
@@ -377,12 +378,13 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
       const payload = await res.json().catch(() => ({}));
       if (payload?.valid) {
         setCouponStatus("valid");
-        setCouponMessage("Coupon applied — registration fee waived.");
-        setFormValues((prev) => ({ ...prev, couponCode: code, paymentMethod: "coupon" }));
+        setCouponMessage("");
+        setCouponInfo({ discount_type: payload.discount_type, discount_value: payload.discount_value });
+        setFormValues((prev) => ({ ...prev, couponCode: code }));
       } else {
         setCouponStatus("invalid");
         setCouponMessage(payload?.reason || "Invalid coupon code.");
-        setFormValues((prev) => (prev.paymentMethod === "coupon" ? { ...prev, paymentMethod: "" } : prev));
+        setCouponInfo(null);
       }
     } catch {
       setCouponStatus("invalid");
@@ -461,6 +463,26 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
       }),
     [formValues.isLocalParticipant, formValues.isMemberUniversity, familyMembers.length]
   );
+
+  // Display only — the server recomputes the discount from the coupon on submit.
+  const couponDiscount = useMemo(
+    () =>
+      couponStatus === "valid" && couponInfo
+        ? applyCouponDiscount(pricing.totalFee, pricing.currency, couponInfo)
+        : null,
+    [couponStatus, couponInfo, pricing.totalFee, pricing.currency]
+  );
+  const couponNotApplicable = couponStatus === "valid" && couponInfo && !couponDiscount;
+  const isFree = Boolean(couponDiscount && couponDiscount.due === 0);
+  const amountDue = couponDiscount ? couponDiscount.due : pricing.totalFee;
+
+  // A fully-covered registration has no payment step; "coupon" stands in for the method.
+  useEffect(() => {
+    setFormValues((prev) => {
+      if (isFree) return prev.paymentMethod === "coupon" ? prev : { ...prev, paymentMethod: "coupon" };
+      return prev.paymentMethod === "coupon" ? { ...prev, paymentMethod: "" } : prev;
+    });
+  }, [isFree]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -779,6 +801,7 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
             ...normalized,
             fullName: `${normalized.givenName} ${normalized.surname}`.trim(),
             regId: payload.reg_id,
+            couponDiscount: couponDiscount?.discount || 0,
           })
         );
       } catch {
@@ -1612,9 +1635,12 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                   type="text"
                   name="couponCode"
                   value={formValues.couponCode}
-                  onChange={(e) =>
-                    setFormValues((prev) => ({ ...prev, couponCode: e.target.value.toUpperCase() }))
-                  }
+                  onChange={(e) => {
+                    setFormValues((prev) => ({ ...prev, couponCode: e.target.value.toUpperCase() }));
+                    setCouponStatus("idle");
+                    setCouponMessage("");
+                    setCouponInfo(null);
+                  }}
                   placeholder="e.g. IAUP-VIP"
                   className="w-full max-w-xs rounded-xl border border-slate-300 px-3 py-2 text-sm uppercase tracking-wide focus:border-primary focus:outline-none"
                 />
@@ -1627,14 +1653,23 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                   {couponStatus === "checking" ? "Checking…" : "Apply"}
                 </button>
               </div>
-              {couponMessage && (
-                <p className={`mt-2 text-sm ${couponStatus === "valid" ? "text-emerald-700" : "text-red-600"}`}>
-                  {couponMessage}
+              {couponMessage && <p className="mt-2 text-sm text-red-600">{couponMessage}</p>}
+              {couponDiscount && (
+                <p className="mt-2 text-sm text-emerald-700">
+                  Coupon applied —{" "}
+                  {isFree
+                    ? "registration fee waived."
+                    : `${formatCurrency(couponDiscount.discount, pricing.currency)} off your registration.`}
+                </p>
+              )}
+              {couponNotApplicable && (
+                <p className="mt-2 text-sm text-red-600">
+                  This coupon is a USD amount and can&apos;t be applied to a local (BDT) registration.
                 </p>
               )}
             </fieldset>
 
-            {couponStatus === "valid" ? (
+            {isFree ? (
               <div className="sm:col-span-2 rounded-xl border border-emerald-300 bg-emerald-50 p-5 text-sm text-emerald-900">
                 <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Registration fee</p>
                 <div className="mt-3 flex items-center justify-between">
@@ -1709,10 +1744,18 @@ export default function RegistrationForm({ initialCouponCode = "" }) {
                       </dd>
                     </div>
                   </dl>
+                  {couponDiscount && (
+                    <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3 text-sm">
+                      <span className="text-slate-500">Coupon discount ({formValues.couponCode})</span>
+                      <span className="font-semibold text-emerald-700">
+                        −{formatCurrency(couponDiscount.discount, pricing.currency)}
+                      </span>
+                    </div>
+                  )}
                   <div className="mt-3 flex items-center justify-between border-t border-primary/20 pt-3">
                     <span className="text-sm font-semibold text-slate-900">Total payable</span>
                     <span className="font-display text-xl font-bold text-primary">
-                      {formatCurrency(pricing.totalFee, pricing.currency)}
+                      {formatCurrency(amountDue, pricing.currency)}
                     </span>
                   </div>
                   {!pricing.isLocal && pricing.period.isClosed && (

@@ -6,6 +6,14 @@ import { useState } from "react";
 const TH = "px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500";
 const TD = "px-3 py-2 align-top text-sm text-slate-700";
 
+const EMPTY_FORM = { code: "", note: "", discount_type: "percent", discount_value: "100", max_uses: "", expires_at: "" };
+
+function describeDiscount(row) {
+  const v = Number(row.discount_value);
+  if (row.discount_type === "fixed") return `USD ${v} off`;
+  return v >= 100 ? "100% (free)" : `${v}% off`;
+}
+
 function couponStatus(row) {
   if (!row.active) return { label: "Disabled", cls: "bg-slate-100 text-slate-700" };
   if (row.expires_at && new Date(row.expires_at) <= new Date()) {
@@ -27,7 +35,7 @@ function formatDate(iso) {
 
 export default function CouponsTable({ rows, baseUrl }) {
   const router = useRouter();
-  const [form, setForm] = useState({ code: "", note: "", max_uses: "", expires_at: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
@@ -57,7 +65,7 @@ export default function CouponsTable({ rows, baseUrl }) {
         setError(data?.error || "Could not create coupon.");
         return;
       }
-      setForm({ code: "", note: "", max_uses: "", expires_at: "" });
+      setForm(EMPTY_FORM);
       router.refresh();
     } catch {
       setError("Network error.");
@@ -123,6 +131,32 @@ export default function CouponsTable({ rows, baseUrl }) {
           />
         </div>
         <div>
+          <label className="mb-1 block text-xs font-semibold text-slate-500">Discount type</label>
+          <select
+            value={form.discount_type}
+            onChange={(e) => setForm((prev) => ({ ...prev, discount_type: e.target.value }))}
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-none"
+          >
+            <option value="percent">Percentage (%)</option>
+            <option value="fixed">Fixed amount (USD)</option>
+          </select>
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-slate-500">
+            {form.discount_type === "fixed" ? "Amount off (USD)" : "Percent off"}
+          </label>
+          <input
+            type="number"
+            required
+            min="0.01"
+            max={form.discount_type === "fixed" ? 5000 : 100}
+            step="0.01"
+            value={form.discount_value}
+            onChange={(e) => setForm((prev) => ({ ...prev, discount_value: e.target.value }))}
+            className="w-28 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-primary focus:outline-none"
+          />
+        </div>
+        <div>
           <label className="mb-1 block text-xs font-semibold text-slate-500">Max people</label>
           <input
             type="number"
@@ -157,6 +191,7 @@ export default function CouponsTable({ rows, baseUrl }) {
           <thead className="bg-slate-50">
             <tr>
               <th className={TH}>Code</th>
+              <th className={TH}>Discount</th>
               <th className={TH}>People used</th>
               <th className={TH}>Status</th>
               <th className={TH}>Created</th>
@@ -167,7 +202,7 @@ export default function CouponsTable({ rows, baseUrl }) {
           <tbody className="divide-y divide-slate-100">
             {rows.length === 0 && (
               <tr>
-                <td className={`${TD} text-slate-500`} colSpan={6}>
+                <td className={`${TD} text-slate-500`} colSpan={7}>
                   No coupons yet.
                 </td>
               </tr>
@@ -181,6 +216,7 @@ export default function CouponsTable({ rows, baseUrl }) {
                     <div className="font-mono font-semibold text-slate-900">{row.code}</div>
                     {row.note && <div className="text-xs text-slate-500">{row.note}</div>}
                   </td>
+                  <td className={`${TD} whitespace-nowrap`}>{describeDiscount(row)}</td>
                   <td className={TD}>
                     {row.uses_count}/{row.max_uses ?? "∞"}
                   </td>

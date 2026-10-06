@@ -139,6 +139,24 @@ export function calculatePricing({ isLocal, isMember, familyMembersCount = 0, no
   };
 }
 
+// Coupon math shared by server (charge) and client (displayed price).
+// `percent` works in any currency; `fixed` is a USD amount, so it can't apply
+// to BDT (local participant) registrations — returns null for that case.
+export function applyCouponDiscount(totalFee, currency, coupon) {
+  const total = Number(totalFee) || 0;
+  const value = Number(coupon?.discount_value);
+  if (!coupon || !Number.isFinite(value) || value <= 0) return null;
+  let discount;
+  if (coupon.discount_type === "fixed") {
+    if (currency !== "USD") return null;
+    discount = value;
+  } else {
+    discount = (total * Math.min(value, 100)) / 100;
+  }
+  discount = Math.min(total, Math.round(discount * 100) / 100);
+  return { discount, due: Math.round((total - discount) * 100) / 100 };
+}
+
 export function formatUsd(value) {
   const n = Number(value) || 0;
   return `USD ${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;

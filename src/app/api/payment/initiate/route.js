@@ -2,6 +2,7 @@ import {
   attachReffIdToRegistration,
   getFamilyMembersForRegistration,
   getRegistrationByRegId,
+  resolveAmountDue,
 } from "@/lib/db";
 import { calculatePricing } from "@/lib/pricing";
 
@@ -17,13 +18,13 @@ function trimBaseUrl(url) {
   return (url || "").replace(/\/+$/, "");
 }
 
-function resolveAmount(pricing) {
+function resolveAmount(registration, pricing) {
   const forced = process.env.IAUP_DEV_FORCE_AMOUNT;
   if (process.env.NODE_ENV !== "production" && forced) {
     const currency = (process.env.IAUP_DEV_FORCE_CURRENCY || "BDT").toUpperCase();
     return { amount: String(forced), currency, source: "dev-override" };
   }
-  return { amount: String(pricing.totalFee), currency: pricing.currency, source: "pricing" };
+  return { amount: String(resolveAmountDue(registration, pricing)), currency: pricing.currency, source: "pricing" };
 }
 
 export async function POST(request) {
@@ -67,7 +68,7 @@ export async function POST(request) {
     familyMembersCount: familyMembers.length,
   });
 
-  const { amount, currency } = resolveAmount(pricing);
+  const { amount, currency } = resolveAmount(registration, pricing);
   const reffId = buildReffId();
   const name = `${registration.given_name || ""} ${registration.surname || ""}`.trim() || "Participant";
 
