@@ -54,8 +54,8 @@ src/
 | Tier | Member | Non-member | Window |
 |---|---|---|---|
 | Early Bird | $400 | $500 | on/before 20 Sep 2026 |
-| General | $500 | $600 | 21 Sep – 10 Oct 2026 |
-| Late | $600 | $700 | 11 – 30 Oct 2026 |
+| General | $500 | $600 | 21 Sep – 20 Oct 2026 |
+| Late | $600 | $700 | 21 – 30 Oct 2026 |
 
 Family member: **+$400 each**. Tier is decided server-side from the current date — never trust a client-supplied price.
 
