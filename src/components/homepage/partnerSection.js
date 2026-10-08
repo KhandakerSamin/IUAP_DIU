@@ -347,7 +347,7 @@ export default function PartnerSection() {
         </div>
 
         {/* Partner Logos */}
-        <div className="grid grid-cols-3 items-center justify-items-center gap-4 sm:gap-8 md:gap-12 mt-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-4 sm:gap-8 md:gap-12 mt-8 max-w-4xl mx-auto">
           <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
             <Image
               src="/partner.jpg"
@@ -368,6 +368,14 @@ export default function PartnerSection() {
             <Image
               src="/partner3.jpg"
               alt="Eurasian Universities Union (EURAS)"
+              className="object-contain"
+              fill
+            />
+          </div>
+          <div className="relative w-full h-24 sm:h-32 md:h-40 max-w-[240px] md:max-w-[280px]">
+            <Image
+              src="/partner4.png"
+              alt="The Phoenix Philanthropy Group"
               className="object-contain"
               fill
             />
