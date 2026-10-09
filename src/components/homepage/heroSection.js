@@ -62,7 +62,7 @@ export default function HeroSection() {
         poster="/heroBG.jpg"
       >
         <source
-          src="https://res.cloudinary.com/dkdqgprea/video/upload/v1789983308/Copy_of_IAUP_Semi-Annual_Meeting_2026_website_video_without_any_text_logos_1_awpksu.mp4"
+          src="https://res.cloudinary.com/gwvoiq8e/video/upload/Copy_of_IAUP_Semi-Annual_Meeting_2026_website_video_without_any_text_logos.mp4"
           type="video/mp4"
         />
       </video>
