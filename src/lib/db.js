@@ -138,6 +138,19 @@ const MIGRATIONS = [
 ];
 
 function applyMigrations(db) {
+  // Admin notifications used to go out only alongside a successful invoice
+  // email, so rows that already have invoice_sent_at were already notified.
+  // Backfill only when the column is first added, so later rows keep their
+  // own retry state.
+  try {
+    db.exec(`ALTER TABLE registrations ADD COLUMN admin_notified_at TEXT`);
+    db.exec(`UPDATE registrations SET admin_notified_at = invoice_sent_at WHERE invoice_sent_at IS NOT NULL`);
+  } catch (err) {
+    if (!String(err?.message || "").includes("duplicate column")) {
+      console.warn("[db] migration skipped:", err?.message);
+    }
+  }
+
   for (const sql of MIGRATIONS) {
     try {
       db.exec(sql);
@@ -318,6 +331,27 @@ export function releaseInvoiceSendClaim(reffId) {
   const db = getDatabase();
   return db
     .prepare(`UPDATE registrations SET invoice_sent_at = NULL WHERE payment_reff_id = ?`)
+    .run(reffId);
+}
+
+// Same claim/release pattern as the invoice email, tracked separately so the
+// admin hears about a registration even when the participant's email fails.
+export function claimAdminNotification(reffId) {
+  const db = getDatabase();
+  const result = db
+    .prepare(
+      `UPDATE registrations
+         SET admin_notified_at = datetime('now'), updated_at = datetime('now')
+       WHERE payment_reff_id = ? AND admin_notified_at IS NULL`
+    )
+    .run(reffId);
+  return result.changes === 1;
+}
+
+export function releaseAdminNotificationClaim(reffId) {
+  const db = getDatabase();
+  return db
+    .prepare(`UPDATE registrations SET admin_notified_at = NULL WHERE payment_reff_id = ?`)
     .run(reffId);
 }
 

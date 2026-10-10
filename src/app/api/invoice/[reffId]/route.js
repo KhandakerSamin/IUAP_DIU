@@ -21,7 +21,9 @@ export async function GET(_request, ctx) {
     return new Response("Payment not completed.", { status: 403 });
   }
 
-  if (!row.invoice_path) {
+  // Also re-run finalize when an email is still outstanding, so opening the
+  // invoice link retries a send that failed earlier (e.g. SMTP was down).
+  if (!row.invoice_path || !row.invoice_sent_at || !row.admin_notified_at) {
     if (isWire) {
       await finalizeWireRegistration(row.reg_id).catch(() => null);
     } else {

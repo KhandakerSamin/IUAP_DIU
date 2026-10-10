@@ -1,9 +1,11 @@
 import {
   attachReffIdToRegistration,
+  claimAdminNotification,
   claimInvoiceSend,
   getFamilyMembersForRegistration,
   getRegistrationByRegId,
   getRegistrationByReffId,
+  releaseAdminNotificationClaim,
   releaseInvoiceSendClaim,
   resolveAmountDue,
   setInvoicePath,
@@ -15,6 +17,31 @@ import { calculatePricing } from "@/lib/pricing";
 // In-flight deduplication so concurrent calls (IPN + payment-result page load)
 // don't both generate the invoice and double-send emails.
 const inFlight = new Map();
+
+// Admin only hears about a registration once it has actually gone through —
+// a coupon redemption, a confirmed gateway charge, or a recorded wire
+// transfer — never at submit time, so a pending payment can't be mistaken for
+// a completed one. Independent of the participant's email: a bad participant
+// address or an SMTP hiccup on that send must not hide the registration from
+// the secretariat. The coupon code (if any) rides along on `registration` so
+// admin sees it was a complimentary entry.
+async function notifyAdminOnce({ registration, familyMembers, pdfBuffer, logTag }) {
+  const reffId = registration.payment_reff_id;
+  if (registration.admin_notified_at || !claimAdminNotification(reffId)) return;
+  try {
+    const result = await sendRegistrationAdminNotification({ registration, familyMembers, pdfBuffer });
+    if (!result.sent) releaseAdminNotificationClaim(reffId);
+  } catch (err) {
+    console.error(`[${logTag}] admin notification failed`, reffId, err);
+    releaseAdminNotificationClaim(reffId);
+  }
+}
+
+async function loadPdf(pdfBuffer, invoicePath) {
+  if (pdfBuffer || !invoicePath) return pdfBuffer;
+  const { readInvoiceFromDisk } = await import("@/lib/invoice");
+  return readInvoiceFromDisk(invoicePath).catch(() => null);
+}
 
 async function runFinalize(reffId) {
   const registration = getRegistrationByReffId(reffId);
@@ -44,10 +71,7 @@ async function runFinalize(reffId) {
 
   if (!registration.invoice_sent_at && claimInvoiceSend(reffId)) {
     try {
-      if (!pdfBuffer && invoicePath) {
-        const { readInvoiceFromDisk } = await import("@/lib/invoice");
-        pdfBuffer = await readInvoiceFromDisk(invoicePath).catch(() => null);
-      }
+      pdfBuffer = await loadPdf(pdfBuffer, invoicePath);
       const invoiceNumber = getInvoiceNumber(registration);
       const result = await sendInvoiceEmail({
         to: registration.email,
@@ -60,22 +84,16 @@ async function runFinalize(reffId) {
       });
       if (!result.sent) {
         releaseInvoiceSendClaim(reffId);
-      } else {
-        // Admin only hears about a registration once it has actually gone
-        // through — a coupon redemption or a confirmed gateway charge —
-        // never at submit time, so a pending payment can't be mistaken for
-        // a completed one. The coupon code (if any) rides along on
-        // `registration` so admin sees it was a complimentary entry.
-        sendRegistrationAdminNotification({
-          registration,
-          familyMembers,
-          pdfBuffer,
-        }).catch((err) => console.error("[finalize] admin notification failed", reffId, err));
       }
     } catch (err) {
       console.error("[finalize] email send failed", reffId, err);
       releaseInvoiceSendClaim(reffId);
     }
+  }
+
+  if (!registration.admin_notified_at) {
+    pdfBuffer = await loadPdf(pdfBuffer, invoicePath);
+    await notifyAdminOnce({ registration, familyMembers, pdfBuffer, logTag: "finalize" });
   }
 
   return { state: "ok", invoice_path: invoicePath };
@@ -143,10 +161,7 @@ async function runWireFinalize(regId) {
   let emailSent = Boolean(registration.invoice_sent_at);
   if (!registration.invoice_sent_at && claimInvoiceSend(registration.payment_reff_id)) {
     try {
-      if (!pdfBuffer && invoicePath) {
-        const { readInvoiceFromDisk } = await import("@/lib/invoice");
-        pdfBuffer = await readInvoiceFromDisk(invoicePath).catch(() => null);
-      }
+      pdfBuffer = await loadPdf(pdfBuffer, invoicePath);
       const pricing = calculatePricing({
         isMember: registration.is_member_university === "Yes",
         familyMembersCount: familyMembers.length,
@@ -166,17 +181,16 @@ async function runWireFinalize(regId) {
       emailSent = result.sent === true;
       if (!result.sent) {
         releaseInvoiceSendClaim(registration.payment_reff_id);
-      } else {
-        sendRegistrationAdminNotification({
-          registration,
-          familyMembers,
-          pdfBuffer,
-        }).catch((err) => console.error("[finalize:wire] admin notification failed", regId, err));
       }
     } catch (err) {
       console.error("[finalize:wire] email send failed", regId, err);
       releaseInvoiceSendClaim(registration.payment_reff_id);
     }
+  }
+
+  if (!registration.admin_notified_at) {
+    pdfBuffer = await loadPdf(pdfBuffer, invoicePath);
+    await notifyAdminOnce({ registration, familyMembers, pdfBuffer, logTag: "finalize:wire" });
   }
 
   return { state: "ok", invoice_path: invoicePath, email_sent: emailSent };
