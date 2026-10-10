@@ -7,7 +7,7 @@ const accommodations = [
     image: "/venue1.png",
     alt: "Hotel Sheraton",
     bookingUrl:
-      "https://drive.google.com/file/d/1SqHQpCIUsCcQ3Z0LS5mKe5ednIX4fwxn/view?usp=sharing",
+      "https://drive.google.com/file/d/1I7GYRllOw5Wq3Bqvd0uSgXsTqGOTb6Zp/view?usp=drivesdk",
   },
   {
     name: "Hotel Sarina",
