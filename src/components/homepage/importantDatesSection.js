@@ -16,7 +16,8 @@ export default function ImportantDatesSection() {
       step: "02",
       phase: "General",
       label: "General Registration Deadline",
-      date: "October 20, 2026 (extended)",
+      date: "October 20, 2026",
+      note: "Extended",
       desc: "Regular registration window for all participants",
       badge: "Standard Rate",
       badgeClass: "bg-slate-700/70 text-slate-200 border-slate-600",
@@ -151,6 +152,11 @@ export default function ImportantDatesSection() {
                     }`}
                   >
                     {item.date}
+                    {item.note && (
+                      <span className="ml-2 align-middle text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
+                        {item.note}
+                      </span>
+                    )}
                   </p>
                   <p
                     className={`text-xs mt-2 leading-relaxed min-h-8 ${
@@ -218,6 +224,11 @@ export default function ImportantDatesSection() {
                     }`}
                   >
                     {item.date}
+                    {item.note && (
+                      <span className="ml-2 align-middle text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
+                        {item.note}
+                      </span>
+                    )}
                   </p>
                   <p
                     className={`text-xs mt-1.5 ${
