@@ -153,7 +153,7 @@ export default function ImportantDatesSection() {
                   >
                     {item.date}
                     {item.note && (
-                      <span className="ml-2 align-middle text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
+                      <span className="block w-fit mt-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
                         {item.note}
                       </span>
                     )}
@@ -225,7 +225,7 @@ export default function ImportantDatesSection() {
                   >
                     {item.date}
                     {item.note && (
-                      <span className="ml-2 align-middle text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
+                      <span className="block w-fit mt-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
                         {item.note}
                       </span>
                     )}
