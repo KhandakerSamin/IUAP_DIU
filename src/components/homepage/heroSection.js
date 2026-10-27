@@ -58,11 +58,11 @@ export default function HeroSection() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         poster="/heroBG.jpg"
       >
         <source
-          src="https://res.cloudinary.com/gwvoiq8e/video/upload/Copy_of_IAUP_Semi-Annual_Meeting_2026_website_video_without_any_text_logos.mp4"
+          src="/video-small.mp4"
           type="video/mp4"
         />
       </video>
