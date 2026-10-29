@@ -16,7 +16,7 @@ export default function ImportantDatesSection() {
       step: "02",
       phase: "General",
       label: "General Registration Deadline",
-      date: "October 20, 2026",
+      date: "November 7, 2026",
       note: "Extended",
       desc: "Regular registration window for all participants",
       badge: "Standard Rate",
