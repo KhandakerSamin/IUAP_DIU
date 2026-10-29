@@ -27,7 +27,7 @@ export default function ImportantDatesSection() {
       step: "03",
       phase: "Late",
       label: "Late Registration Deadline",
-      date: "October 30, 2026",
+      date: "After November 7, 2026",
       desc: "Final registration window before the conference",
       badge: "Final Call",
       badgeClass: "bg-amber-500/20 text-amber-300 border-amber-400/40",

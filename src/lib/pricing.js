@@ -24,14 +24,14 @@ export const REGISTRATION_PERIODS = [
   {
     key: "general",
     label: "General Registration",
-    range: "21 Sep – 20 Oct 2026",
-    endsISO: "2026-10-20T23:59:59+06:00",
+    range: "21 Sep – 7 Nov 2026",
+    endsISO: "2026-11-07T23:59:59+06:00",
   },
   {
     key: "late",
     label: "Late Registration",
-    range: "21 – 30 Oct 2026",
-    endsISO: "2026-10-30T23:59:59+06:00",
+    range: "from 8 Nov 2026",
+    endsISO: "2026-12-31T23:59:59+06:00",
   },
 ];
 
