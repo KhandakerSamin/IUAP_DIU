@@ -31,7 +31,7 @@ export default function ImportantDatesSection() {
       badge: "Final Call",
       note: "Extended",
       badgeClass: "bg-amber-500/20 text-amber-300 border-amber-400/40",
-      active: true,
+      active: false,
     },
     {
       step: "04",
@@ -132,6 +132,11 @@ export default function ImportantDatesSection() {
                   >
                     {item.label}
                   </h3>
+                  {item.note && (
+                    <span className="block w-fit text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
+                      {item.note}
+                    </span>
+                  )}
                 </div>
 
                 <div
@@ -145,11 +150,6 @@ export default function ImportantDatesSection() {
                       }`}
                   >
                     {item.date}
-                    {item.note && (
-                      <span className="block w-fit mt-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-400/10 border border-emerald-400/30 rounded-full px-2 py-0.5">
-                        {item.note}
-                      </span>
-                    )}
                   </p>
                   <p
                     className={`text-xs mt-2 leading-relaxed min-h-8 ${item.featured ? "text-emerald-200/80" : "text-slate-300"
