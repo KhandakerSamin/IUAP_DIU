@@ -25,7 +25,7 @@ export const REGISTRATION_PERIODS = [
     key: "general",
     label: "General Registration",
     range: "21 Sep – 29 Oct 2026",
-    endsISO: "2026-10-29T23:59:59+06:00", // ponytail: card on homepage still shows 7 Nov by request
+    endsISO: "2026-10-29T23:59:59+06:00",
   },
   {
     key: "late",
