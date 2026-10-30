@@ -25,16 +25,6 @@ export default function ImportantDatesSection() {
     },
     {
       step: "03",
-      phase: "Late",
-      label: "Late Registration Deadline",
-      date: "After November 7, 2026",
-      desc: "Final registration window before the conference",
-      badge: "Final Call",
-      badgeClass: "bg-amber-500/20 text-amber-300 border-amber-400/40",
-      active: false,
-    },
-    {
-      step: "04",
       phase: "Conference",
       label: "Program & Conference Date",
       date: "19–21 November 2026",
@@ -76,7 +66,7 @@ export default function ImportantDatesSection() {
           {/* Horizontal Connecting Progress Line */}
           <div className="relative mb-14">
             <div className="absolute top-[26px] -translate-y-1/2 left-[12.5%] right-[12.5%] h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-teal-400 rounded-full z-0 shadow-[0_0_12px_rgba(52,211,153,0.3)]" />
-            <div className="grid grid-cols-4 gap-6 relative z-10">
+            <div className="grid grid-cols-3 gap-6 relative z-10">
               {timelineSteps.map((item, idx) => (
                 <div key={idx} className="flex flex-col items-center">
                   {/* Step Node */}
@@ -102,7 +92,7 @@ export default function ImportantDatesSection() {
           </div>
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-3 gap-6">
             {timelineSteps.map((item, idx) => (
               <div
                 key={idx}
