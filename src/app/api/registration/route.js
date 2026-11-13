@@ -1,7 +1,7 @@
 import { attachReffIdToRegistration, consumeCoupon, getCouponByCode, insertFamilyMember, insertRegistration, markPaymentStatus, runInTransaction } from "@/lib/db";
 import { saveUpload } from "@/lib/fileStorage";
 import { finalizePaidPayment, finalizeWireRegistration } from "@/lib/paymentFinalize";
-import { applyCouponDiscount, calculatePricing } from "@/lib/pricing";
+import { applyCouponDiscount, calculatePricing, REGISTRATION_CLOSED_MESSAGE, REGISTRATION_OPEN } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,10 @@ function pickText(form, name) {
 }
 
 export async function POST(request) {
+  if (!REGISTRATION_OPEN) {
+    return Response.json({ error: REGISTRATION_CLOSED_MESSAGE }, { status: 403 });
+  }
+
   let form;
   try {
     form = await request.formData();

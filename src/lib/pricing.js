@@ -14,6 +14,10 @@ export const NON_MEMBER_FEES_USD = {
 
 export const FAMILY_MEMBER_FEE_USD = 400;
 
+// Master switch for new registrations. Set to true to reopen the form.
+export const REGISTRATION_OPEN = false;
+export const REGISTRATION_CLOSED_MESSAGE = "No longer accepting registration.";
+
 export const REGISTRATION_PERIODS = [
   {
     key: "early",
