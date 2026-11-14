@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Sparkles, X } from "lucide-react";
 
 const links = [
   { href: "/", label: "Home" },
@@ -109,10 +109,10 @@ export default function Nev() {
             </div>
           </div>
 
-          <div className="hidden min-[1400px]:flex items-center justify-end w-48 shrink-0">
-            <Link href="/#registration" className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-sm hover:bg-primary-dark hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
+          <div className="hidden min-[1400px]:flex items-center justify-end w-52 shrink-0">
+            <Link href="/gallary" className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-sm hover:bg-primary-dark hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
               <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-linear-to-b from-transparent via-transparent to-black"></span>
-              <span className="relative">Register Now</span>
+              <span className="relative inline-flex items-center gap-1.5"><Sparkles className="h-4 w-4" aria-hidden="true" />AI Photo Gallery</span>
             </Link>
           </div>
 
@@ -143,8 +143,8 @@ export default function Nev() {
           <Link href="/call-for-contributions" onClick={closeMenu} className="py-2 text-slate-800 font-medium hover:text-secondary transition-colors">
             Call for Contributions
           </Link>
-          <Link href="/#registration" onClick={closeMenu} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-all text-center mt-2 shadow-sm">
-            Register Now
+          <Link href="/gallary" onClick={closeMenu} className="px-6 py-3 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-all text-center mt-2 shadow-sm">
+            <span className="inline-flex items-center justify-center gap-2"><Sparkles className="h-4 w-4" aria-hidden="true" />AI Photo Gallery</span>
           </Link>
         </div>
       </div>
