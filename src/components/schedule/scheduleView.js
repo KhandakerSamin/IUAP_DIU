@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { CalendarDays, Clock, MapPin } from "lucide-react";
+import { CalendarDays, Clock, MapPin, UserRound } from "lucide-react";
 
 // dot = timeline marker, bar = card accent. Colour only; text is never altered.
 const TONE = {
@@ -44,7 +44,7 @@ function Md({ children }) {
 
 // The source has no line breaks inside cells; split at known labels purely for layout.
 // Words are untouched; `**` is re-balanced so bold pairs survive the split.
-const BREAK = /\s+(?=(?:\*\*)?(?:Venues?:|Welcome by |Welcome remarks|Welcome Performance|Panelists?:|Moderator:|Presented by|Buffet Dinner|National Anthem|Address by |Special Address|Conference Inauguration|Country Representation|Pickup Time|Route-\d|Not Attending|Closing Remarks|Vote of Thanks|Thematic|Token of))/u;
+const BREAK = /(?<!Special)\s+(?=(?:\*\*)?(?:Venues?:|Welcome by |Welcome remarks|Welcome Performance|Panelists?:|Moderator:|Presented by|Buffet Dinner|National Anthem|Address by |Special Address|Conference Inauguration|Country Representation|Pickup Time|Route-\d|Not Attending|Closing Remarks|Vote of Thanks|Thematic|Token of))/u;
 const PERSON_BREAK = /(?<=[\p{L})]\s+)(?=\*\*(?:Dr\.|Prof\.|Mr\.|Ms\.|Robert))/u;
 
 function segments(text) {
@@ -62,9 +62,12 @@ function segments(text) {
   });
 }
 
+const ROLE = /^[^*]{3,90}:\s+\*\*/;
+
 function kindOf(seg) {
   if (/^\**Venues?:/.test(seg)) return "venue";
-  if (/^(Welcome by |Buffet Dinner|Welcome Performance)/.test(seg)) return "bullet";
+  if (ROLE.test(seg)) return "role";
+  if (/^(Buffet Dinner|Welcome Performance|National Anthem|Conference Inauguration|Country Representation)/.test(seg)) return "bullet";
   if (/^\**(Panelists?|Moderator):?/.test(seg) || /^\*\*(Dr\.|Prof\.|Mr\.|Ms\.|Robert)/.test(seg)) return "person";
   return "line";
 }
@@ -72,13 +75,81 @@ function kindOf(seg) {
 const BLOCK = {
   venue: "mt-2.5 flex items-start gap-2 rounded-lg bg-primary/5 px-3 py-2 text-[14.5px] text-slate-800",
   bullet: "mt-1.5 flex gap-2.5 text-[15px] before:mt-[9px] before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-primary/60 before:content-['']",
+  role: "mt-2 rounded-xl bg-slate-50 px-3.5 py-2.5 ring-1 ring-slate-100",
   person: "mt-1.5 border-l-2 border-primary/25 pl-3 text-[14.5px]",
   line: "mt-1.5 text-[15px]",
 };
 
+const EYEBROW = /^\*\*((?:Global Leaders Dialogue|Panel \d|Keynote Presentation|Parallel Session \d):)\s+(.*)$/s;
+const PERSON = /^\*\*(Panelists?:|Moderator:)(?:\*\*)?\s+(?:\*\*)?(.*)$/s;
+
+// Splits a speaker segment into label / name / affiliation; null if it doesn't fit.
+function parsePerson(seg) {
+  let label = "";
+  let body = seg;
+  const m = seg.match(PERSON);
+  if (m) {
+    label = m[1];
+    body = `**${m[2]}`;
+  }
+  const n = body.match(/^\*\*(.+?)\*\*(.*)$/s);
+  if (!n) return null;
+  return { label, name: n[1].replace(/,$/, ""), aff: n[2].replace(/^,?\s*/, "") };
+}
+
+function PersonCard({ p }) {
+  const mod = p.label === "Moderator:";
+  return (
+    <div className={`flex items-start gap-3 rounded-xl px-3.5 py-3 ring-1 ${mod ? "bg-primary/5 ring-primary/20" : "bg-slate-50 ring-slate-100"}`}>
+      <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${mod ? "bg-primary text-white" : "bg-white text-primary ring-1 ring-slate-200"}`}>
+        <UserRound className="h-4 w-4" aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        {mod && <div className="text-[12px] font-semibold uppercase tracking-wide text-primary">{p.label}</div>}
+        <div className="text-[15px] font-bold leading-snug text-slate-950">{p.name}</div>
+        {p.aff && <div className="mt-0.5 text-[14px] leading-snug text-slate-600">{p.aff}</div>}
+      </div>
+    </div>
+  );
+}
+
+function SpeakerGroup({ label, people }) {
+  return (
+    <div className="mt-3">
+      {label && <div className="mb-2 text-[12px] font-semibold uppercase tracking-wide text-primary">{label}</div>}
+      <div className="grid gap-2.5 sm:grid-cols-2">
+        {people.map((p, i) => (
+          <PersonCard key={i} p={p} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Item({ time, text }) {
   const [title, ...rest] = segments(text);
   const tone = TONE[typeOf(`${time} ${text}`)];
+  const em = (title || "").match(EYEBROW);
+  const titleEyebrow = em ? em[1] : "";
+  const titleMain = em ? `**${em[2]}` : title;
+
+  // Group consecutive panelists into one grid; everything else stays a single block.
+  const blocks = [];
+  for (const seg of rest) {
+    const kind = kindOf(seg);
+    const person = kind === "person" ? parsePerson(seg) : null;
+    if (!person) {
+      blocks.push({ seg, kind });
+      continue;
+    }
+    const last = blocks[blocks.length - 1];
+    if (person.label !== "Moderator:" && last?.people && !last.mod) {
+      last.people.push(person);
+    } else {
+      blocks.push({ people: [person], label: /^Panelists?:/.test(person.label) ? person.label : "", mod: person.label === "Moderator:" });
+    }
+  }
+  for (const b of blocks) if (b.people && b.label) b.people[0].label = "";
   // Mirrors the bullets in the original document.
   const titleBullet = /^(Networking Hour|\*\*IAUP (Executive|Board))/.test(title || "");
   return (
@@ -92,20 +163,31 @@ function Item({ time, text }) {
           {time && (
             <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary/10 px-3.5 py-1.5 text-[13.5px] font-bold tracking-tight text-primaryDark">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-              {time.replace(/\*\*/g, "")}
+              {time.replace(/\*\*|\\/g, "")}
             </span>
           )}
         </div>
         <div
           className={`flex-1 rounded-2xl border border-l-4 border-slate-200 bg-white p-5 font-medium leading-relaxed text-slate-700 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200 ${tone.bar}`}
         >
+          {titleEyebrow && <div className="mb-1 text-[12px] font-semibold uppercase tracking-wide text-primary">{titleEyebrow}</div>}
           {title && (
             <div className={`text-[17px] font-bold leading-snug text-slate-950 sm:text-[19px] [&_strong]:font-bold ${titleBullet ? "flex gap-2.5 before:mt-[11px] before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-primary before:content-['']" : ""}`}>
-              <Md>{title}</Md>
+              <Md>{titleMain}</Md>
             </div>
           )}
-          {rest.map((seg, i) => {
-            const kind = kindOf(seg);
+          {blocks.map((b, i) => {
+            if (b.people) return <SpeakerGroup key={i} label={b.label} people={b.people} />;
+            const { seg, kind } = b;
+            if (kind === "role") {
+              const at = seg.indexOf(": **") + 1;
+              return (
+                <div key={i} className={BLOCK.role}>
+                  <div className="text-[12px] font-semibold uppercase tracking-wide text-primary">{seg.slice(0, at)}</div>
+                  <div className="mt-0.5 text-[15px]"><Md>{seg.slice(at).trim()}</Md></div>
+                </div>
+              );
+            }
             return (
               <div key={i} className={BLOCK[kind]}>
                 {kind === "venue" && <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />}
@@ -121,7 +203,7 @@ function Item({ time, text }) {
 
 function Label({ text }) {
   return (
-    <li className="relative pb-5 pl-9 pt-4 sm:pl-12">
+    <li className="relative flex justify-center pb-6 pt-4">
       <h3 className="inline-block rounded-full bg-linear-to-r from-primary to-secondary px-5 py-2 text-[16px] font-bold text-white shadow-md sm:text-[18px] [&_strong]:text-white">
         <Md>{text}</Md>
       </h3>
