@@ -17,6 +17,8 @@ export default function EventPage() {
           src={EVENT_URL}
           title="IAUP Semi-Annual Meeting 2026 event page"
           className="block w-full h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] border-0"
+          allow="camera; microphone; fullscreen"
+          allowFullScreen
           loading="lazy"
         />
         <p className="py-3 text-center text-sm text-slate-500">
