@@ -265,11 +265,10 @@ export default function ScheduleView({ intro, days }) {
               key={d.label}
               onClick={() => setActive(i)}
               aria-pressed={active === i}
-              className={`flex shrink-0 cursor-pointer items-baseline gap-2.5 rounded-full border px-5 py-2.5 text-[14px] font-bold transition-all duration-200 ${
-                active === i
+              className={`flex shrink-0 cursor-pointer items-baseline gap-2.5 rounded-full border px-5 py-2.5 text-[14px] font-bold transition-all duration-200 ${active === i
                   ? "border-transparent bg-linear-to-r from-primary to-primaryDark text-white shadow-lg shadow-primary/30"
                   : "border-slate-200 bg-white text-slate-800 hover:border-primary hover:text-primary"
-              }`}
+                }`}
             >
               {d.label}
               <span className={`font-semibold ${active === i ? "text-white/85" : "text-slate-500"}`}>{d.date}</span>

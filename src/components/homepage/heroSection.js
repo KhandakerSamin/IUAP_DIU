@@ -72,7 +72,7 @@ export default function HeroSection() {
       <div className="absolute inset-x-0 top-0 z-0 hidden h-48 bg-linear-to-b from-slate-950/70 to-transparent md:block" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 w-full flex flex-col items-center justify-center min-h-dvh">
-        
+
 
         <h1 className="font-display mt-25 text-4xl lg:text-[55px] font-extrabold leading-tight mb-4 tracking-tight text-white reveal reveal-delay-1 drop-shadow-sm max-w-7xl mx-auto">
           IAUP Semi-Annual{" "}
@@ -91,19 +91,19 @@ export default function HeroSection() {
           </span>
         </p>
 
-       
+
 
         <div className="text-base sm:text-lg text-slate-200 mb-8 max-w-2xl reveal reveal-delay-2 flex flex-col items-center gap-1 md:gap-1 font-medium ">
           <p className="font-bold text-white text-lg">Daffodil International University</p>
           <p className="text-sm md:text-normal">Daffodil Smart City, Birulia, Savar, Dhaka – 1216, Bangladesh</p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 reveal reveal-delay-3 mb-10">
+        {/* <div className="flex flex-wrap justify-center gap-4 reveal reveal-delay-3 mb-10">
           <Link href="/#registration" className="group relative inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 text-base sm:text-lg font-bold text-white transition-all duration-200 bg-primary border border-transparent rounded-full shadow-lg hover:bg-primary-dark hover:shadow-primary/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary overflow-hidden">
             <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-linear-to-b from-transparent via-transparent to-black"></span>
             <span className="relative">Register Now</span>
           </Link>
-        </div>
+        </div> */}
 
         {/* Modern Countdown Timer */}
         <div className="reveal reveal-delay-4 flex justify-center gap-3 sm:gap-5 mt-2 w-full">
