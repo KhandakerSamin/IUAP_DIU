@@ -6,7 +6,7 @@ import ScheduleView from "@/components/schedule/scheduleView";
 
 export const metadata = {
   title: "Program Schedule | IAUP Semi-Annual Meeting 2026",
-  description: "Tentative program schedule for the IAUP Semi-Annual Meeting 2026.",
+  description: "Program schedule for the IAUP Semi-Annual Meeting 2026.",
 };
 
 // Source of truth: src/content/schedule.md — wording is rendered verbatim.
