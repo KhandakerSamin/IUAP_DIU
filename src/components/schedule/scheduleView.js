@@ -45,7 +45,7 @@ function Md({ children }) {
 // The source has no line breaks inside cells; split at known labels purely for layout.
 // Words are untouched; `**` is re-balanced so bold pairs survive the split.
 const BREAK = /(?<!Special)\s+(?=(?:\*\*)?(?:Venues?:|Welcome by |Welcome remarks|Welcome Performance|Panelists?:|Moderator:|Presented by|Buffet Dinner|National Anthem|Address by |Special Address|Conference Inauguration|Country Representation|Pickup Time|Route-\d|Not Attending|Closing Remarks|Vote of Thanks|Thematic|Token of))/u;
-const PERSON_BREAK = /(?<=[\p{L})]\s+)(?=\*\*(?:Dr\.|Prof\.|Mr\.|Ms\.|Robert))/u;
+const PERSON_BREAK = /(?<=[\p{L}).]\s+)(?=\*\*(?:Dr\.|Prof(?:\.|essor)|Mr\.|Ms\.|Robert))/u;
 
 function segments(text) {
   const raw = text
@@ -68,7 +68,7 @@ function kindOf(seg) {
   if (/^\**Venues?:/.test(seg)) return "venue";
   if (ROLE.test(seg)) return "role";
   if (/^(Buffet Dinner|Welcome Performance|National Anthem|Conference Inauguration|Country Representation)/.test(seg)) return "bullet";
-  if (/^\**(Panelists?|Moderator):?/.test(seg) || /^\*\*(Dr\.|Prof\.|Mr\.|Ms\.|Robert)/.test(seg)) return "person";
+  if (/^\**(Panelists?|Moderator):?/.test(seg) || /^\*\*(Dr\.|Prof(?:\.|essor)|Mr\.|Ms\.|Robert)/.test(seg)) return "person";
   return "line";
 }
 
