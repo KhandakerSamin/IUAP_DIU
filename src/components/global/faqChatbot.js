@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Mail, MessageCircle, Phone, RotateCcw, Send, X } from "lucide-react";
+import { Mail, Phone, RotateCcw, Send, X } from "lucide-react";
 import Image from "next/image";
 import faq from "@/lib/faq";
 import logo from "../../../public/iauplogo.jpg";
@@ -163,7 +163,7 @@ export default function FaqChatbot() {
         aria-label={open ? "Close FAQ chat" : "Open FAQ chat"}
         className={`${open ? "max-sm:hidden" : ""} group flex h-14 items-center gap-2 rounded-full bg-gradient-to-br from-primary to-primaryDark px-4 text-white shadow-xl transition hover:scale-105`}
       >
-        {open ? <X size={26} /> : <MessageCircle size={26} />}
+        {open ? <X size={26} /> : <Logo size={36} />}
         {!open && <span className="hidden pr-1 text-sm font-semibold sm:inline">Ask us</span>}
       </button>
     </div>
