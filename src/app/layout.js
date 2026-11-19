@@ -1,6 +1,7 @@
 import { Roboto, Montserrat } from "next/font/google";
 import "./globals.css";
 import TestModeBanner from "@/components/global/testModeBanner";
+import FaqChatbot from "@/components/global/faqChatbot";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full" suppressHydrationWarning>
         <TestModeBanner />
         {children}
+        <FaqChatbot />
       </body>
     </html>
   );

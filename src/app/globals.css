@@ -349,3 +349,6 @@ button:focus-visible {
   background-color: #94a3b8;
 }
 
+
+@keyframes faq-pop { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+.faq-pop { animation: faq-pop .2s ease-out; }
