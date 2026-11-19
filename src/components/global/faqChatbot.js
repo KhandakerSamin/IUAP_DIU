@@ -1,7 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Bot, Mail, MessageCircle, Phone, RotateCcw, Send, X } from "lucide-react";
+import { Mail, MessageCircle, Phone, RotateCcw, Send, X } from "lucide-react";
+import Image from "next/image";
 import faq from "@/lib/faq";
+import logo from "../../../public/iauplogo.jpg";
+
+const Logo = ({ size }) => <Image src={logo} alt="IAUP" width={size} height={size} className="rounded-full bg-white object-contain" style={{ width: size, height: size }} />;
 
 const STOP = new Set("the a an is are do i can how what when where to of in for my me and or it be on at we you your".split(" "));
 const words = (s) => s.toLowerCase().match(/[a-z0-9]+/g)?.filter((w) => !STOP.has(w)) ?? [];
@@ -99,7 +103,7 @@ export default function FaqChatbot() {
         >
           <header className="flex items-center gap-3 bg-gradient-to-r from-primaryDark to-primary px-4 py-3 text-white">
             <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white/15">
-              <Bot size={22} />
+              <Logo size={40} />
               <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-primary" />
             </span>
             <div className="min-w-0 flex-1 leading-tight">
@@ -113,7 +117,7 @@ export default function FaqChatbot() {
           <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-3 text-sm" aria-live="polite">
             {msgs.map((m, i) => (
               <div key={i} className={`flex items-end gap-2 ${m.bot ? "" : "justify-end"}`}>
-                {m.bot && <span className="mb-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Bot size={16} /></span>}
+                {m.bot && <span className="mb-0.5 shrink-0"><Logo size={28} /></span>}
                 <div className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 leading-relaxed shadow-sm ${m.bot ? "rounded-bl-sm bg-white text-slate-800" : "rounded-br-sm bg-primary text-white [&_a]:text-white"} ${m.bot ? "[&_a]:text-primary" : ""}`}>
                   <Rich text={m.t} />
                 </div>
@@ -121,7 +125,7 @@ export default function FaqChatbot() {
             ))}
             {busy && (
               <div className="flex items-end gap-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary"><Bot size={16} /></span>
+                <Logo size={28} />
                 <div className="flex gap-1 rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm" aria-label="Typing">
                   {[0, 150, 300].map((d) => <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: `${d}ms` }} />)}
                 </div>

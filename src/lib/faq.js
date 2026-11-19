@@ -2,6 +2,19 @@
 // schedule.md and the call-for-contributions page — update here when those change.
 // ponytail: static list, no LLM. Swap in Claude API + this list as context if free-text answers are needed.
 const faq = [
+  // Day 2 / Day 3 first: the first six entries are the chatbot's opening suggestion chips.
+  { q: "What is on the Day 2 program (20 Nov)?", k: "day 2 20 november friday opening ceremony keynote panel sheraton ballroom gala dinner cultural night",
+    a: "Day 2 is at the Ballroom, Hotel Sheraton, Dhaka:\n- 08:00am Registration and networking\n- 09:00am Opening Ceremony\n- 10:30am Keynote: Universities After AI (Alexander Mejia, UNITAR)\n- 11:15am Global Leaders Dialogue\n- 02:10pm Panel 1: Entrepreneurial Universities\n- 03:00pm Panel 2: Women in an AI-Driven World\n- 04:00pm Panel 3: Sustainable Universities\n- 06:30pm Bangladesh Cultural Night and Gala Dinner\nSee the Program Schedule page for full details." },
+  { q: "What is on the Day 3 program (21 Nov)?", k: "day 3 21 november saturday daffodil smart city campus tour panel 4 closing ceremony mou farewell lunch",
+    a: "Day 3 is at Daffodil Smart City (DIU campus):\n- 08:00am Hotel pickup\n- 08:45am Campus tour and Oitijjher Haat inauguration\n- 10:30am Panel 4: Open Science, AI and Academic Research\n- 11:15am Three parallel sessions\n- 12:01pm Closing Ceremony\n- 12:30pm MoU Signing Ceremony\n- 01:20pm Farewell Lunch\n- 02:30pm Optional City Tour" },
+  { q: "When is the opening ceremony and who speaks?", k: "opening ceremony inauguration chief guest minister speakers anthem 9am day 2",
+    a: "Day 2, 09:00am–10:30am at the Hotel Sheraton Ballroom. Speakers: Dr. Md. Sabur Khan (DIU), Prof. Dr. Mustafa Aydın (EURAS), Dr. Shawn Chen (IAUP) and Chief Guest Dr. A.N.M. Ehsanul Hoque Milon, Minister of Education, followed by the inauguration, group photo and cultural performances." },
+  { q: "What time is the Gala Dinner and Cultural Night?", k: "gala dinner cultural night evening day 2 time dinner 6:30",
+    a: "Day 2 (20 Nov), starting 06:30pm at Hotel Sheraton, with special addresses and the Token of Appreciation handover. The Cultural Night and Gala Dinner runs 08:00pm–09:00pm. It is included in registration." },
+  { q: "How do I get to Daffodil Smart City on Day 3?", k: "transfer pickup hotel bus transport day 3 smart city birulia savar campus",
+    a: "Transfer buses pick up delegates from the hotels at 08:00am on 21 Nov and arrive by 08:45am. Venue: Daffodil Smart City, Birulia, Savar. Most Day 3 sessions are in the Knowledge Tower." },
+  { q: "What happens at the Day 3 closing, MoU signing and city tour?", k: "closing ceremony mou signing farewell lunch city tour aarong red fort military museum day 3",
+    a: "Closing Ceremony 12:01pm, MoU Signing 12:30pm (Student Lounge, Knowledge Tower), Farewell Lunch 01:20pm at Green Garden. Optional city tour 02:30pm–06:30pm for international delegates (Red Fort or Military Museum, plus shopping at Aarong), then drop-off to hotels." },
   { q: "What is the IAUP Semi-Annual Meeting 2026?", k: "about event what iaup meeting conference overview",
     a: "A gathering of university presidents, rectors and vice chancellors hosted by Daffodil International University (DIU) in Dhaka, with IAUP Executive Committee and Board meetings, keynotes, plenaries, parallel sessions, cultural programs and MoU signing. 200–250 delegates are expected, and it coincides with DIU's 25th anniversary." },
   { q: "When and where is the conference?", k: "when date dates where location city venue held",
