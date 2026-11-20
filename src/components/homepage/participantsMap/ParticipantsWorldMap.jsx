@@ -236,6 +236,89 @@ function StatCard({ icon, label, value, suffix, accent, run, delay = 0 }) {
   );
 }
 
+function StatsPanel({ variant, stats }) {
+  const { total, countries, hostCount, host, internationalCount, internationalCountries, hostShare, inView } = stats;
+  const overlay = variant === "overlay";
+  return (
+    <div
+      className={
+        overlay
+          ? "absolute bottom-2 left-2 z-10 hidden w-[19%] min-w-[150px] max-w-[230px] space-y-1.5 rounded-xl border border-border bg-white/90 p-2 shadow-lg shadow-primary/10 backdrop-blur md:block sm:space-y-2 sm:p-3"
+          : "mt-3 grid grid-cols-2 gap-x-3 gap-y-4 rounded-2xl border border-border bg-white p-4 shadow-sm md:hidden"
+      }
+    >
+<StatCard
+            icon="users"
+            label="Total participants"
+            value={total}
+            accent="bg-dark/5 text-dark ring-dark/10"
+            run={inView}
+          />
+          <StatCard
+            icon="globe"
+            label="Countries represented"
+            value={countries.length}
+            accent="bg-accent/20 text-amber-700 ring-accent/40"
+            run={inView}
+            delay={100}
+          />
+          <StatCard
+            icon="home"
+            label={`From ${host?.name ?? "host country"}`}
+            value={hostCount}
+            accent="bg-secondary/10 text-secondaryDark ring-secondary/30"
+            run={inView}
+            delay={200}
+          />
+          <StatCard
+            icon="plane"
+            label={`International · ${internationalCountries} countries`}
+            value={internationalCount}
+            accent="bg-primary/10 text-primary ring-primary/25"
+            run={inView}
+            delay={300}
+          />
+                <div className={overlay ? "border-t border-border pt-1.5 sm:pt-2" : "col-span-2 border-t border-border pt-3"}>
+                  <div className="flex items-baseline justify-between gap-2 text-[10px] sm:text-xs">
+                    <span className="font-semibold text-dark">Participant mix</span>
+                  </div>
+                  <div
+                    className="mt-1.5 flex h-2 overflow-hidden rounded-full bg-light sm:h-2.5"
+                    role="img"
+                    aria-label={`${formatPercent(hostShare)} from ${
+                      host?.name ?? "host country"
+                    }, ${formatPercent(100 - hostShare)} international`}
+                  >
+                    <div
+                      className="h-full bg-gradient-to-r from-secondaryDark to-secondary transition-[width] duration-1000 ease-out motion-reduce:transition-none"
+                      style={{ width: inView ? `${hostShare}%` : "0%" }}
+                    />
+                    <div
+                      className="h-full bg-gradient-to-r from-primary to-primaryDark transition-[width] delay-150 duration-1000 ease-out motion-reduce:transition-none"
+                      style={{ width: inView ? `${100 - hostShare}%` : "0%" }}
+                    />
+                  </div>
+                  <div className="mt-1.5 flex justify-between gap-2 text-[10px] text-muted sm:text-xs">
+                    <span className="inline-flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
+                      {host?.name ?? "Host"}
+                      <b className="font-semibold text-dark tabular-nums">
+                        {formatPercent(hostShare)}
+                      </b>
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      Intl.
+                      <b className="font-semibold text-dark tabular-nums">
+                        {formatPercent(100 - hostShare)}
+                      </b>
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    </span>
+                  </div>
+                </div>
+    </div>
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Main component                                                             */
 /* -------------------------------------------------------------------------- */
@@ -251,9 +334,8 @@ export default function ParticipantsWorldMap({
   const [activeCode, setActiveCode] = useState(null);
   const mapRef = useRef(null);
   const scrollRef = useRef(null);
-  const statsRef = useRef(null);
   const mapHeight = useElementHeight(mapRef);
-  const statsInView = useInView(statsRef);
+  const statsInView = useInView(mapRef);
 
   const { countries, total, hostCount, host } = useMemo(() => {
     const sorted = [...data].sort(
@@ -277,6 +359,16 @@ export default function ParticipantsWorldMap({
   const internationalCount = total - hostCount;
   const internationalCountries = countries.length - (host ? 1 : 0);
   const hostShare = total ? (hostCount / total) * 100 : 0;
+  const stats = {
+    total,
+    countries,
+    hostCount,
+    host,
+    internationalCount,
+    internationalCountries,
+    hostShare,
+    inView: statsInView,
+  };
 
   
   // Close an open tooltip with Escape.
@@ -347,8 +439,8 @@ export default function ParticipantsWorldMap({
                 Participating countries
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <span className="h-3 w-5 rounded-[3px] bg-[#e6ebf1] ring-1 ring-black/10" />
-                No participants
+                <span className="h-3 w-5 rounded-[3px] bg-[#c3c8d0] ring-1 ring-black/10" />
+                Other countries
               </span>
             </div>
             <p className="text-xs text-muted md:hidden">Swipe to explore →</p>
@@ -382,7 +474,7 @@ export default function ParticipantsWorldMap({
                           ? activeColor(idx)
                           : data
                           ? baseColor(idx)
-                          : "#e6ebf1",
+                          : "#c3c8d0",
                         cursor: data ? "pointer" : "default",
                         transition: "fill 180ms ease",
                       }}
@@ -423,80 +515,11 @@ export default function ParticipantsWorldMap({
                 })}
               </svg>
 
-              {/* Statistics — sit in the empty ocean at the bottom-left of the map */}
-              <div
-                ref={statsRef}
-                className="absolute bottom-2 left-2 z-10 w-[19%] min-w-[150px] max-w-[230px] space-y-1.5 rounded-xl border border-border bg-white/90 p-2 shadow-lg shadow-primary/10 backdrop-blur sm:space-y-2 sm:p-3"
-              >
-<StatCard
-            icon="users"
-            label="Total participants"
-            value={total}
-            accent="bg-dark/5 text-dark ring-dark/10"
-            run={statsInView}
-          />
-          <StatCard
-            icon="globe"
-            label="Countries represented"
-            value={countries.length}
-            accent="bg-accent/20 text-amber-700 ring-accent/40"
-            run={statsInView}
-            delay={100}
-          />
-          <StatCard
-            icon="home"
-            label={`From ${host?.name ?? "host country"}`}
-            value={hostCount}
-            accent="bg-secondary/10 text-secondaryDark ring-secondary/30"
-            run={statsInView}
-            delay={200}
-          />
-          <StatCard
-            icon="plane"
-            label={`International · ${internationalCountries} countries`}
-            value={internationalCount}
-            accent="bg-primary/10 text-primary ring-primary/25"
-            run={statsInView}
-            delay={300}
-          />
-                <div className="border-t border-border pt-1.5 sm:pt-2">
-                  <div className="flex items-baseline justify-between gap-2 text-[10px] sm:text-xs">
-                    <span className="font-semibold text-dark">Participant mix</span>
-                  </div>
-                  <div
-                    className="mt-1.5 flex h-2 overflow-hidden rounded-full bg-light sm:h-2.5"
-                    role="img"
-                    aria-label={`${formatPercent(hostShare)} from ${
-                      host?.name ?? "host country"
-                    }, ${formatPercent(100 - hostShare)} international`}
-                  >
-                    <div
-                      className="h-full bg-gradient-to-r from-secondaryDark to-secondary transition-[width] duration-1000 ease-out motion-reduce:transition-none"
-                      style={{ width: statsInView ? `${hostShare}%` : "0%" }}
-                    />
-                    <div
-                      className="h-full bg-gradient-to-r from-primary to-primaryDark transition-[width] delay-150 duration-1000 ease-out motion-reduce:transition-none"
-                      style={{ width: statsInView ? `${100 - hostShare}%` : "0%" }}
-                    />
-                  </div>
-                  <div className="mt-1.5 flex justify-between gap-2 text-[10px] text-muted sm:text-xs">
-                    <span className="inline-flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                      {host?.name ?? "Host"}
-                      <b className="font-semibold text-dark tabular-nums">
-                        {formatPercent(hostShare)}
-                      </b>
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      Intl.
-                      <b className="font-semibold text-dark tabular-nums">
-                        {formatPercent(100 - hostShare)}
-                      </b>
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                    </span>
-                  </div>
-                </div>
-                      </div>
+              {/* Statistics — in the empty ocean on larger screens */}
+              <StatsPanel
+                variant="overlay"
+                stats={stats}
+              />
 
               <div className="pointer-events-none absolute inset-0">
                 {active && (
@@ -513,6 +536,7 @@ export default function ParticipantsWorldMap({
               </div>
             </div>
           </div>
+          <StatsPanel variant="inline" stats={stats} />
         </div>
       </div>
     </section>
