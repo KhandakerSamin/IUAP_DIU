@@ -20,7 +20,8 @@ export default function HeroSection() {
     setMounted(true);
     const targetDate = new Date("2026-11-19T00:00:00").getTime();
 
-    const interval = setInterval(() => {
+    let interval;
+    const tick = () => {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
@@ -37,7 +38,11 @@ export default function HeroSection() {
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((distance % (1000 * 60)) / 1000),
       });
-    }, 1000);
+    };
+
+    // Run once immediately so the "Happening Now" state shows without a 1s delay.
+    tick();
+    interval = setInterval(tick, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -109,7 +114,7 @@ export default function HeroSection() {
 
         {/* Modern Countdown Timer */}
         {live ? (
-          <div className="reveal reveal-delay-4 mt-2 flex flex-col items-center gap-4">
+          <div className="mt-2 flex flex-col items-center gap-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md">
               <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-red-500" />
               Happening Now
