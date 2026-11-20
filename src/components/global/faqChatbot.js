@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Mail, Phone, RotateCcw, Send, X } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import faq from "@/lib/faq";
 import logo from "../../../public/iauplogo.jpg";
 
@@ -57,6 +58,7 @@ function Rich({ text }) {
 }
 
 export default function FaqChatbot() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState([GREETING]);
   const [input, setInput] = useState("");
@@ -92,6 +94,9 @@ export default function FaqChatbot() {
   const asked = new Set(msgs.map((m) => m.t));
   const chips = faq.filter((f) => !asked.has(f.q)).slice(0, msgs.length === 1 ? 6 : 3);
   const lastIsContact = msgs.at(-1).bot && msgs.at(-1).t.includes("secretariat");
+
+  // ponytail: its button covers the gallery iframe's scan button
+  if (pathname.startsWith("/gallary")) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50 font-sans sm:bottom-6 sm:right-6">

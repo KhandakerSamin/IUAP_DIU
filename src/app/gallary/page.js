@@ -16,7 +16,7 @@ export default function EventPage() {
         <iframe
           src={EVENT_URL}
           title="IAUP Semi-Annual Meeting 2026 event page"
-          className="block w-full h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] border-0"
+          className="block w-full h-[calc(100dvh-4rem)] min-h-[600px] sm:h-[calc(100dvh-5rem)] border-0"
           allow="camera; microphone; fullscreen"
           allowFullScreen
           loading="lazy"
