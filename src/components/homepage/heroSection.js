@@ -13,6 +13,7 @@ const quickTrustStats = [
 export default function HeroSection() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [mounted, setMounted] = useState(false);
+  const [live, setLive] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -25,6 +26,7 @@ export default function HeroSection() {
 
       if (distance < 0) {
         clearInterval(interval);
+        setLive(true);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
@@ -106,6 +108,17 @@ export default function HeroSection() {
         </div> */}
 
         {/* Modern Countdown Timer */}
+        {live ? (
+          <div className="reveal reveal-delay-4 mt-2 flex flex-col items-center gap-4">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md">
+              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-red-500" />
+              Happening Now
+            </span>
+            <Link href="/gallary" className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-base font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-primary-dark">
+              Browse AI Photo Gallery
+            </Link>
+          </div>
+        ) : (
         <div className="reveal reveal-delay-4 flex justify-center gap-3 sm:gap-5 mt-2 w-full">
           {[
             { label: "Days", value: timeLeft.days },
@@ -123,6 +136,7 @@ export default function HeroSection() {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* <div className="absolute bottom-14 left-1/2 z-10 w-full max-w-6xl -translate-x-1/2 px-4 sm:px-6 lg:px-8">
