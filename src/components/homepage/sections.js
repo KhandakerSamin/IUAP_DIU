@@ -13,6 +13,7 @@ import AccommodationSection from "@/components/homepage/accommodationSection";
 import PartnerSection from "@/components/homepage/partnerSection";
 import ContactSection from "@/components/homepage/contactSection";
 import CtaSection from "@/components/homepage/ctaSection";
+import ParticipantsMapSection from "@/components/homepage/participantsMapSection";
 
 const homeSections = [
   { id: "hero", Component: HeroSection },
@@ -30,6 +31,7 @@ const homeSections = [
   { id: "partner", Component: PartnerSection },
   { id: "contact", Component: ContactSection },
   { id: "cta", Component: CtaSection },
+  { id: "participants-map", Component: ParticipantsMapSection },
 ];
 
 export default homeSections;
